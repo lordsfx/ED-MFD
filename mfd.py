@@ -57,7 +57,7 @@ class Button(object):
     TYPE_HOLD   = 3
     STATE_RELEASED = STATE_OFF = 0
     STATE_PUSHED   = STATE_ON  = STATE_HOLD = 1
-    TIMER_PUSH   = TIMER_STEP
+    TIMER_PUSH   = TIMER_STEP * 2
     TIMER_HOLD   = TIMER_STEP * 20
     TIMER_TOGGLE = -1
 
