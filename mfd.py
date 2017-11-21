@@ -10,25 +10,30 @@ if len(sys.argv) > 1:
 def scaled(n):
     return int(n*scale)
 
-# statics
-pygame.display.set_caption("Elite:Dangerous MFD")
+# color
+COLOR_ORANGE = (255, 153,  51)
+COLOR_GREEN  = ( 51, 255,  51)
+COLOR_WHITE  = (255, 255, 255)
 
+# set stage
+pygame.display.set_caption("Elite:Dangerous MFD")
 img_MFD = pygame.image.load('MFD-Display-BG3-wallpaper.png')
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
 
+blur_MFD = pygame.Surface(APP_SIZE)
+blur_MFD.fill(COLOR_WHITE)
+blur_MFD.set_alpha(20, RLEACCEL)
 img_BTN = pygame.image.load('MFD-Display-BG3-button.png').convert_alpha()
+
+img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(img_BTN, (0, 0))
 
 BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(110), scaled(50)
 TIMER_STEP = 5	# milliseconds
 TIMER_LOOP = TIMER_STEP * 10
-
-# color
-COLOR_ORANGE = (255, 153, 51)
-COLOR_GREEN  = ( 51, 255, 51)
 
 # MFD Layout
 #     X L C1 C2 C3 C4 C5 R       Y
