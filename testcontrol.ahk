@@ -1,1 +1,1 @@
-ControlSend, , 1234567890, Elite:Dangerous MFD
+ControlSend, , {Ctrl Down}abcdefghijklmno{Ctrl Up}, Elite:Dangerous MFD
