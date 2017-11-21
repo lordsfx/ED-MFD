@@ -16,7 +16,7 @@ pygame.display.set_caption("Elite:Dangerous MFD")
 img_MFD = pygame.image.load('MFD-Display-BG3-1024.png')
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
-mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF)
+mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
 
 BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(110), scaled(50)
@@ -152,7 +152,7 @@ bm1_MFD = [ None,	# 0
 #if scale != 1:
 #    img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
 mfd.blit(img_MFD, (0, 0))
-noframe = False
+noframe = True
 
 # user event timer
 pygame.time.set_timer(pygame.USEREVENT, TIMER_LOOP)
