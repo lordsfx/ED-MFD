@@ -13,7 +13,7 @@ def scaled(n):
 # color
 COLOR_ORANGE = (255, 153,  51)
 COLOR_GREEN  = ( 51, 255,  51)
-COLOR_WHITE  = (255, 255, 255)
+COLOR_GREY   = (128, 128, 128)
 
 # set stage
 pygame.display.set_caption("Elite:Dangerous MFD")
@@ -24,14 +24,14 @@ mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
 
 blur_MFD = pygame.Surface(APP_SIZE)
-blur_MFD.fill(COLOR_WHITE)
+blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
-img_BTN = pygame.image.load('MFD-Display-BG3-button.png').convert_alpha()
+layer_BTN = pygame.image.load('MFD-Display-BG3-button.png').convert_alpha()
 
 img_MFD.blit(blur_MFD, (0, 0))
-img_MFD.blit(img_BTN, (0, 0))
+img_MFD.blit(layer_BTN, (0, 0))
 
-BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(110), scaled(50)
+BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(112), scaled(50)
 TIMER_STEP = 5	# milliseconds
 TIMER_LOOP = TIMER_STEP * 10
 
@@ -47,6 +47,8 @@ TIMER_LOOP = TIMER_STEP * 10
 
 # Positions
 MFD_XL1 = 2
+MFD_XC1 = 100
+MFD_XC2 = 224
 MFD_XC3 = 346
 MFD_XC4 = 464
 MFD_XC5 = 582
@@ -56,6 +58,7 @@ MFD_YC2 = 270
 MFD_YC3 = 382
 MFD_YC4 = 490
 MFD_YC5 = 600
+MFD_YT1 = 12
 MFD_YB1 = 730
 
 # buttons
@@ -141,7 +144,11 @@ button_GREEN.fill(COLOR_GREEN)
 button_GREEN.set_alpha(90, RLEACCEL)
 
 bm1_MFD = [ None,	# 0
-    None, None, None, None, None,	# 1 - 5
+    Button('SYS Full'    , scaled(MFD_XC1), scaled(MFD_YT1), button_GREEN),	# 1
+    Button('ENG Full'    , scaled(MFD_XC2), scaled(MFD_YT1), button_GREEN),	# 2
+    Button('WEP Full'    , scaled(MFD_XC3), scaled(MFD_YT1), button_GREEN),	# 3
+    Button('ENG 4+SYS 2' , scaled(MFD_XC4), scaled(MFD_YT1), button_GREEN),	# 4
+    Button('WEP 4+SYS 2' , scaled(MFD_XC5), scaled(MFD_YT1), button_GREEN),	# 5
     Button('Heat Sink'   , scaled(MFD_XR1), scaled(MFD_YC1), button_GREEN),	# 6
     Button('Silent Run'  , scaled(MFD_XR1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
     Button('Chaff'       , scaled(MFD_XR1), scaled(MFD_YC3), button_GREEN),	# 8
@@ -174,26 +181,40 @@ while True:
     if event.type == KEYDOWN:
         mods = pygame.key.get_mods()
         button_pressed = None
-        if event.key == pygame.K_1:         # Heat Sink
+        if event.key == pygame.K_a:         # SYS - Full
+            button_pressed = bm1_MFD[1]
+        if event.key == pygame.K_b:         # ENG - Full
+            button_pressed = bm1_MFD[2]
+        if event.key == pygame.K_c:         # WEP - Full
+            button_pressed = bm1_MFD[3]
+        if event.key == pygame.K_d:         # ENG 4 + SYS 2
+            button_pressed = bm1_MFD[4]
+        if event.key == pygame.K_e:         # WEP 4 + SYS 2
+            button_pressed = bm1_MFD[5]
+
+        if event.key == pygame.K_f:         # Heat Sink
             button_pressed = bm1_MFD[6]
-        if event.key == pygame.K_2:         # Silent Run
+        if event.key == pygame.K_g:         # Silent Run
             button_pressed = bm1_MFD[7]
-        if event.key == pygame.K_3:         # Chaff
+        if event.key == pygame.K_h:         # Chaff
             button_pressed = bm1_MFD[8]
-        if event.key == pygame.K_4:         # Shield Cell
+        if event.key == pygame.K_i:         # Shield Cell
             button_pressed = bm1_MFD[9]
-        if event.key == pygame.K_5:         # Disco Scan
+        if event.key == pygame.K_j:         # Disco Scan
             button_pressed = bm1_MFD[10]
-        if event.key == pygame.K_6:         # Hard Points
+
+        if event.key == pygame.K_k:         # Hard Points
             button_pressed = bm1_MFD[20]
-        if event.key == pygame.K_7:         # Cargo Scoop
+        if event.key == pygame.K_l:         # Cargo Scoop
             button_pressed = bm1_MFD[19]
-        if event.key == pygame.K_8:         # Landing Gear
+
+        if event.key == pygame.K_m:         # Landing Gear
             button_pressed = bm1_MFD[13]
-        if event.key == pygame.K_9:         # Ship Lights
+        if event.key == pygame.K_n:         # Ship Lights
             button_pressed = bm1_MFD[12]
-        if event.key == pygame.K_0:         # Orbit Lines
+        if event.key == pygame.K_o:         # Orbit Lines
             button_pressed = bm1_MFD[11]
+
         if event.key == pygame.K_r:         # Ctrl-R : Reset all states
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
@@ -209,8 +230,9 @@ while True:
         if event.key == pygame.K_ESCAPE: sys.exit()
 
         if button_pressed:
-            button_pressed.update_state()
-            #print("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
+            if mods & pygame.KMOD_CTRL:
+                button_pressed.update_state()
+                #print("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
 
     if event.type == pygame.USEREVENT:
         tick_button_states(bm1_MFD)
