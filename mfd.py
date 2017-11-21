@@ -13,11 +13,14 @@ def scaled(n):
 # statics
 pygame.display.set_caption("Elite:Dangerous MFD")
 
-img_MFD = pygame.image.load('MFD-Display-BG3-1024.png')
+img_MFD = pygame.image.load('MFD-Display-BG3-wallpaper.png')
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
+
+img_BTN = pygame.image.load('MFD-Display-BG3-button.png').convert_alpha()
+img_MFD.blit(img_BTN, (0, 0))
 
 BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(110), scaled(50)
 TIMER_STEP = 5	# milliseconds
