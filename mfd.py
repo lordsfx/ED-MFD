@@ -66,11 +66,13 @@ class Button(object):
     TYPE_PUSH   = 1
     TYPE_TOGGLE = 2
     TYPE_HOLD   = 3
+    TYPE_SWITCH_1 = 11
     STATE_RELEASED = STATE_OFF = 0
     STATE_PUSHED   = STATE_ON  = STATE_HOLD = 1
     TIMER_PUSH   = TIMER_STEP * 2
     TIMER_HOLD   = TIMER_STEP * 20
     TIMER_TOGGLE = -1
+    TIMER_SWITCH_1 = -1
 
     def __init__(self, name, pos_x, pos_y, style, _type=TYPE_PUSH, state=STATE_OFF):
         self.name   = name
@@ -97,6 +99,9 @@ class Button(object):
         if self.type == self.TYPE_HOLD:
             self.state = self.STATE_ON
             self.timer = self.TIMER_HOLD
+        if self.type == self.TYPE_SWITCH_1:
+            self.state = (self.state + 1) % 2
+            self.timer = self.TIMER_SWITCH_1
 
     def reset_state(self):
         self.state = self.STATE_OFF
@@ -119,6 +124,14 @@ def show_button_states(buttons):
        else:
            print("0 ", end="")
     print(end="\r")
+
+def switch_group_states(this_button, buttons):
+    for b in buttons:
+       if b and b.type == this_button.type:
+          if b == this_button:
+             this_button.update_state()
+          else:
+             b.reset_state()
 
 def draw_button_states(surface, buttons):
     surface.blit(img_MFD, (0,0))
@@ -144,11 +157,11 @@ button_GREEN.fill(COLOR_GREEN)
 button_GREEN.set_alpha(90, RLEACCEL)
 
 bm1_MFD = [ None,	# 0
-    Button('SYS Full'    , scaled(MFD_XC1), scaled(MFD_YT1), button_GREEN),	# 1
-    Button('ENG Full'    , scaled(MFD_XC2), scaled(MFD_YT1), button_GREEN),	# 2
-    Button('WEP Full'    , scaled(MFD_XC3), scaled(MFD_YT1), button_GREEN),	# 3
-    Button('ENG 4+SYS 2' , scaled(MFD_XC4), scaled(MFD_YT1), button_GREEN),	# 4
-    Button('WEP 4+SYS 2' , scaled(MFD_XC5), scaled(MFD_YT1), button_GREEN),	# 5
+    Button('SYS Full'    , scaled(MFD_XC1), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button('ENG Full'    , scaled(MFD_XC2), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button('WEP Full'    , scaled(MFD_XC3), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button('ENG 4+SYS 2' , scaled(MFD_XC4), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button('WEP 4+SYS 2' , scaled(MFD_XC5), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
     Button('Heat Sink'   , scaled(MFD_XR1), scaled(MFD_YC1), button_GREEN),	# 6
     Button('Silent Run'  , scaled(MFD_XR1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
     Button('Chaff'       , scaled(MFD_XR1), scaled(MFD_YC3), button_GREEN),	# 8
@@ -231,7 +244,10 @@ while True:
 
         if button_pressed:
             if mods & pygame.KMOD_CTRL:
-                button_pressed.update_state()
+                if button_pressed.type == Button.TYPE_SWITCH_1:
+                    switch_group_states(button_pressed, bm1_MFD)
+                else:
+                    button_pressed.update_state()
                 #print("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
 
     if event.type == pygame.USEREVENT:
