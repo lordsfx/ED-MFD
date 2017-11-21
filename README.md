@@ -1,1 +1,2 @@
-Elite:Dangerous MFD
+Elite:Dangerous MFD (beta)
+

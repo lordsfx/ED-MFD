@@ -149,8 +149,8 @@ bm1_MFD = [ None,	# 0
 
 
 # set init background
-if scale != 1:
-    img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
+#if scale != 1:
+#    img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
 mfd.blit(img_MFD, (0, 0))
 noframe = False
 
