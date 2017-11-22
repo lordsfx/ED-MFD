@@ -295,6 +295,8 @@ while True:
                 else:
                     button_pressed.update_state()
                 #print("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
+            if mods & pygame.KMOD_ALT:
+                button_pressed.reset_state()
 
     if event.type == pygame.USEREVENT:
         tick_button_states(bm1_MFD)
