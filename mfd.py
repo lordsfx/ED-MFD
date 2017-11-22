@@ -238,39 +238,24 @@ while True:
     if event.type == KEYDOWN:
         mods = pygame.key.get_mods()
         button_pressed = None
-        if event.key == pygame.K_a:         # SYS - Full
-            button_pressed = bm1_MFD[1]
-        if event.key == pygame.K_b:         # ENG - Full
-            button_pressed = bm1_MFD[2]
-        if event.key == pygame.K_c:         # WEP - Full
-            button_pressed = bm1_MFD[3]
-        if event.key == pygame.K_d:         # ENG 4 + SYS 2
-            button_pressed = bm1_MFD[4]
-        if event.key == pygame.K_e:         # WEP 4 + SYS 2
-            button_pressed = bm1_MFD[5]
-
-        if event.key == pygame.K_f:         # Heat Sink
-            button_pressed = bm1_MFD[6]
-        if event.key == pygame.K_g:         # Silent Run
-            button_pressed = bm1_MFD[7]
-        if event.key == pygame.K_h:         # Chaff
-            button_pressed = bm1_MFD[8]
-        if event.key == pygame.K_i:         # Shield Cell
-            button_pressed = bm1_MFD[9]
-        if event.key == pygame.K_j:         # Disco Scan
-            button_pressed = bm1_MFD[10]
-
-        if event.key == pygame.K_k:         # Hard Points
-            button_pressed = bm1_MFD[20]
-        if event.key == pygame.K_l:         # Cargo Scoop
-            button_pressed = bm1_MFD[19]
-
-        if event.key == pygame.K_m:         # Landing Gear
-            button_pressed = bm1_MFD[13]
-        if event.key == pygame.K_n:         # Ship Lights
-            button_pressed = bm1_MFD[12]
-        if event.key == pygame.K_o:         # Orbit Lines
-            button_pressed = bm1_MFD[11]
+        joy_index = 0
+        if event.key == pygame.K_a:  joy_index = 1       # SYS - Full
+        if event.key == pygame.K_b:  joy_index = 2       # ENG - Full
+        if event.key == pygame.K_c:  joy_index = 3       # WEP - Full
+        if event.key == pygame.K_d:  joy_index = 4       # ENG 4 + SYS 2
+        if event.key == pygame.K_e:  joy_index = 5       # WEP 4 + SYS 2
+        if event.key == pygame.K_f:  joy_index = 6       # Heat Sink
+        if event.key == pygame.K_g:  joy_index = 7       # Silent Run
+        if event.key == pygame.K_h:  joy_index = 8       # Chaff
+        if event.key == pygame.K_i:  joy_index = 9       # Shield Cell
+        if event.key == pygame.K_j:  joy_index = 10      # Disco Scan
+        if event.key == pygame.K_k:  joy_index = 20      # Hard Points
+        if event.key == pygame.K_l:  joy_index = 19      # Cargo Scoop
+        if event.key == pygame.K_m:  joy_index = 13      # Landing Gear
+        if event.key == pygame.K_n:  joy_index = 12      # Ship Lights
+        if event.key == pygame.K_o:  joy_index = 11      # Orbit Lines
+        if joy_index > 0:
+            button_pressed = bm1_MFD[joy_index]
 
         if event.key == pygame.K_r:         # Ctrl-R : Reset all states
             if mods & pygame.KMOD_CTRL:
