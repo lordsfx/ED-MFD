@@ -1,4 +1,5 @@
 import sys, pygame
+import json
 from pygame.locals import *
 pygame.init()
 
@@ -14,6 +15,9 @@ def scaled(n):
 COLOR_ORANGE = (255, 153,  51)
 COLOR_GREEN  = ( 51, 255,  51)
 COLOR_GREY   = (128, 128, 128)
+
+# state file
+FN_MFD_STATE = "mfd.json"
 
 # set stage
 pygame.display.set_caption("Elite:Dangerous MFD")
@@ -61,7 +65,7 @@ MFD_YC5 = 600
 MFD_YT1 = 12
 MFD_YB1 = 730
 
-# buttons
+# class Button
 class Button(object):
     TYPE_PUSH   = 1
     TYPE_TOGGLE = 2
@@ -89,19 +93,26 @@ class Button(object):
     def get_rect(self):
         return (self.pos_x, self.pos_y, BTN1_WIDTH, BTN1_HEIGHT)
 
+    def default_timer(self):
+        if self.type == self.TYPE_PUSH:     self.timer = self.TIMER_PUSH
+        if self.type == self.TYPE_TOGGLE:   self.timer = self.TIMER_TOGGLE
+        if self.type == self.TYPE_HOLD:     self.timer = self.TIMER_HOLD
+        if self.type == self.TYPE_SWITCH_1: self.timer = self.TIMER_SWITCH_1
+
+    def set_state(self, state):
+        self.state = state
+        self.default_timer()
+
     def update_state(self):
         if self.type == self.TYPE_PUSH:
             self.state = self.STATE_PUSHED
-            self.timer = self.TIMER_PUSH
         if self.type == self.TYPE_TOGGLE:
             self.state = (self.state + 1) % 2
-            self.timer = self.TIMER_TOGGLE
         if self.type == self.TYPE_HOLD:
             self.state = self.STATE_ON
-            self.timer = self.TIMER_HOLD
         if self.type == self.TYPE_SWITCH_1:
             self.state = (self.state + 1) % 2
-            self.timer = self.TIMER_SWITCH_1
+        self.default_timer()
 
     def reset_state(self):
         self.state = self.STATE_OFF
@@ -149,6 +160,35 @@ def tick_button_states(buttons):
     for b in buttons:
         if b: b.tick()
 
+def load_button_states(buttons):
+    try:
+        with open(FN_MFD_STATE) as ifn:
+            js = json.load(ifn)
+            bi = 0
+            for state in js:
+                if buttons[bi]:
+                    buttons[bi].set_state(state)
+                bi += 1
+        return True
+    except EnvironmentError:
+        return False
+
+def save_button_states(buttons):
+    try:
+        states = []
+        for b in buttons:
+            if b:
+                states.append(b.state)
+            else:
+                states.append(0)
+        with open(FN_MFD_STATE, 'w') as ofn:
+            json.dump(states, ofn)
+        return True
+    except EnvironmentError:
+        return False
+
+# end class Button
+
 button_ORANGE = pygame.Surface(BTN1_SIZE)
 button_ORANGE.fill(COLOR_ORANGE)
 button_ORANGE.set_alpha(90, RLEACCEL)
@@ -177,10 +217,15 @@ bm1_MFD = [ None,	# 0
 
 
 # set init background
-#if scale != 1:
-#    img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
 mfd.blit(img_MFD, (0, 0))
 noframe = True
+
+# load last states, if any
+if load_button_states(bm1_MFD):
+    print("Loaded last states - ")
+    show_button_states(bm1_MFD)
+    draw_button_states(mfd, bm1_MFD)
+    pygame.display.flip()
 
 # user event timer
 pygame.time.set_timer(pygame.USEREVENT, TIMER_LOOP)
@@ -190,7 +235,6 @@ while True:
 
     event = pygame.event.wait()
 
-    if event.type == QUIT: sys.exit()
     if event.type == KEYDOWN:
         mods = pygame.key.get_mods()
         button_pressed = None
@@ -240,7 +284,9 @@ while True:
             else:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF)
                 noframe = True
-        if event.key == pygame.K_ESCAPE: sys.exit()
+        if event.type == QUIT or event.key == pygame.K_ESCAPE:
+            save_button_states(bm1_MFD)
+            sys.exit()
 
         if button_pressed:
             if mods & pygame.KMOD_CTRL:
