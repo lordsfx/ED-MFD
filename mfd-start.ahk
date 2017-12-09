@@ -1,3 +1,4 @@
+#NoEnv
 #Persistent
 SetTimer, app_monitor, 5000
 
