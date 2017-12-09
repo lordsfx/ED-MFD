@@ -1,5 +1,6 @@
 import sys, pygame
 import json
+from mfd_interface import *
 from pygame.locals import *
 pygame.init()
 
@@ -36,8 +37,7 @@ img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
 
 BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = scaled(112), scaled(50)
-TIMER_STEP = 5	# milliseconds
-TIMER_LOOP = TIMER_STEP * 10
+TIMER_LOOP = Button.TIMER_STEP * 10
 
 # MFD Layout
 #     X L C1 C2 C3 C4 C5 R       Y
@@ -64,69 +64,9 @@ MFD_YC4 = 490
 MFD_YC5 = 600
 MFD_YT1 = 12
 MFD_YB1 = 730
-
-# class Button
-class Button(object):
-    TYPE_PUSH   = 1
-    TYPE_TOGGLE = 2
-    TYPE_HOLD   = 3
-    TYPE_SWITCH_1 = 11
-    STATE_RELEASED = STATE_OFF = 0
-    STATE_PUSHED   = STATE_ON  = STATE_HOLD = 1
-    TIMER_PUSH   = TIMER_STEP * 2
-    TIMER_HOLD   = TIMER_STEP * 20
-    TIMER_TOGGLE = -1
-    TIMER_SWITCH_1 = -1
-
-    def __init__(self, name, pos_x, pos_y, style, _type=TYPE_PUSH, state=STATE_OFF):
-        self.name   = name
-        self.pos_x  = pos_x
-        self.pos_y  = pos_y
-        self.style  = style
-        self.type   = _type
-        self.state  = state
-        self.timer  = 0
-
-    def get_offset(self):
-        return (self.pos_x, self.pos_y)
-
-    def get_rect(self):
-        return (self.pos_x, self.pos_y, BTN1_WIDTH, BTN1_HEIGHT)
-
-    def default_timer(self):
-        if self.type == self.TYPE_PUSH:     self.timer = self.TIMER_PUSH
-        if self.type == self.TYPE_TOGGLE:   self.timer = self.TIMER_TOGGLE
-        if self.type == self.TYPE_HOLD:     self.timer = self.TIMER_HOLD
-        if self.type == self.TYPE_SWITCH_1: self.timer = self.TIMER_SWITCH_1
-
-    def set_state(self, state):
-        self.state = state
-        self.default_timer()
-
-    def update_state(self):
-        if self.type == self.TYPE_PUSH:
-            self.state = self.STATE_PUSHED
-        if self.type == self.TYPE_TOGGLE:
-            self.state = (self.state + 1) % 2
-        if self.type == self.TYPE_HOLD:
-            self.state = self.STATE_ON
-        if self.type == self.TYPE_SWITCH_1:
-            self.state = (self.state + 1) % 2
-        self.default_timer()
-
-    def reset_state(self):
-        self.state = self.STATE_OFF
-        self.timer = 0
-
-    def activated(self):
-        if self.state == self.STATE_ON: return True
-        else: return False
-
-    def tick(self):
-        if self.timer > 0:
-            self.timer -= 1
-        if self.timer == 0:
-            self.state = self.STATE_OFF
+MFD_RP_Y = 900
+MFD_RP_WIDTH = APP_WIDTH - MFD_RP_Y
+MFD_RP_HEIGHT = APP_HEIGHT
 
 def show_button_states(buttons):
     for b in buttons:
