@@ -22,16 +22,17 @@ FN_MFD_STATE = "mfd.json"
 
 # set stage
 pygame.display.set_caption("Elite:Dangerous MFD")
-img_MFD = pygame.image.load('MFD-Display-BG3-wallpaper.png')
+img_MFD = pygame.image.load("MFD-Display-BG3-wallpaper.png")
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
+font = pygame.font.Font("Andale Mono.ttf", 16)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
-layer_BTN = pygame.image.load('MFD-Display-BG3-button.png').convert_alpha()
+layer_BTN = pygame.image.load("MFD-Display-BG3-button.png").convert_alpha()
 
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
@@ -65,8 +66,17 @@ MFD_YC5 = 600
 MFD_YT1 = 12
 MFD_YB1 = 730
 MFD_RP_Y = 900
-MFD_RP_WIDTH = APP_WIDTH - MFD_RP_Y
-MFD_RP_HEIGHT = APP_HEIGHT
+MFD_RP_WIDTH = 380
+MFD_RP_HEIGHT = 790
+MFD_RP_SIZE = scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)
+MFD_RP_XY = scaled(MFD_RP_Y), scaled(Panel.MARGIN_TOP)
+
+# common functions
+
+def draw_background(surface):
+    surface.blit(img_MFD, (0,0))
+
+# Button actions
 
 def show_button_states(buttons):
     for b in buttons:
@@ -85,7 +95,6 @@ def switch_group_states(this_button, buttons):
              b.reset_state()
 
 def draw_button_states(surface, buttons):
-    surface.blit(img_MFD, (0,0))
     for b in buttons:
         if b and b.activated():
             if b.type == Button.TYPE_HOLD:
@@ -127,7 +136,7 @@ def save_button_states(buttons):
     except EnvironmentError:
         return False
 
-# end class Button
+# init buttons
 
 button_ORANGE = pygame.Surface(BTN1_SIZE)
 button_ORANGE.fill(COLOR_ORANGE)
@@ -137,24 +146,40 @@ button_GREEN.fill(COLOR_GREEN)
 button_GREEN.set_alpha(90, RLEACCEL)
 
 bm1_MFD = [ None,	# 0
-    Button('SYS Full'    , scaled(MFD_XC1), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button('ENG Full'    , scaled(MFD_XC2), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button('WEP Full'    , scaled(MFD_XC3), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
-    Button('ENG 4+SYS 2' , scaled(MFD_XC4), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
-    Button('WEP 4+SYS 2' , scaled(MFD_XC5), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
-    Button('Heat Sink'   , scaled(MFD_XR1), scaled(MFD_YC1), button_GREEN),	# 6
-    Button('Silent Run'  , scaled(MFD_XR1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
-    Button('Chaff'       , scaled(MFD_XR1), scaled(MFD_YC3), button_GREEN),	# 8
-    Button('Shield Cell' , scaled(MFD_XR1), scaled(MFD_YC4), button_GREEN),	# 9
-    Button('Disco Scan'  , scaled(MFD_XR1), scaled(MFD_YC5), button_ORANGE, Button.TYPE_HOLD),	# 10
-    Button('Orbit Lines' , scaled(MFD_XC5), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
-    Button('Ship Lights' , scaled(MFD_XC4), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
-    Button('Landing Gear', scaled(MFD_XC3), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
+    Button("SYS Full"    , scaled(MFD_XC1), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG Full"    , scaled(MFD_XC2), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP Full"    , scaled(MFD_XC3), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("ENG 4+SYS 2" , scaled(MFD_XC4), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button("WEP 4+SYS 2" , scaled(MFD_XC5), scaled(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
+    Button("Heat Sink"   , scaled(MFD_XR1), scaled(MFD_YC1), button_GREEN),	# 6
+    Button("Silent Run"  , scaled(MFD_XR1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
+    Button("Chaff"       , scaled(MFD_XR1), scaled(MFD_YC3), button_GREEN),	# 8
+    Button("Shield Cell" , scaled(MFD_XR1), scaled(MFD_YC4), button_GREEN),	# 9
+    Button("Disco Scan"  , scaled(MFD_XR1), scaled(MFD_YC5), button_ORANGE, Button.TYPE_HOLD),	# 10
+    Button("Orbit Lines" , scaled(MFD_XC5), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
+    Button("Ship Lights" , scaled(MFD_XC4), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
+    Button("Landing Gear", scaled(MFD_XC3), scaled(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
     None, None, None, None, None,	# 14 - 18
-    Button('Cargo Scoop' , scaled(MFD_XL1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
-    Button('Hard Points' , scaled(MFD_XL1), scaled(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
+    Button("Cargo Scoop" , scaled(MFD_XL1), scaled(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
+    Button("Hard Points" , scaled(MFD_XL1), scaled(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
+# Panel actions
+
+def draw_panel(surface, rp_info):
+    panel = pygame.Surface(MFD_RP_SIZE)
+    panel.fill(COLOR_GREY)
+    panel.set_alpha(50, RLEACCEL)
+    mfd.blit(panel, MFD_RP_XY)
+    for (_type, _info) in rp_info:
+        if _type == "text":
+            label = font.render(_info, True, COLOR_GREEN)
+            mfd.blit(label, MFD_RP_XY)
+
+# init panels
+
+rightPanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
+rp_MFD = [ ("text", "Elite:Dangerous MFD") ]
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -164,6 +189,7 @@ noframe = True
 if load_button_states(bm1_MFD):
     print("Loaded last states - ")
     show_button_states(bm1_MFD)
+    draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
     pygame.display.flip()
 
@@ -227,5 +253,7 @@ while True:
         tick_button_states(bm1_MFD)
 
     show_button_states(bm1_MFD)
+    draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
+    draw_panel(rightPanel, rp_MFD)
     pygame.display.flip()
