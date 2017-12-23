@@ -1,0 +1,4 @@
+# color
+COLOR_ORANGE = (255, 153,  51)
+COLOR_GREEN  = ( 51, 255,  51)
+COLOR_GREY   = (128, 128, 128)

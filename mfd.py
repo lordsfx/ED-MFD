@@ -12,11 +12,6 @@ if len(sys.argv) > 1:
 def scaled(n):
     return int(n*scale)
 
-# color
-COLOR_ORANGE = (255, 153,  51)
-COLOR_GREEN  = ( 51, 255,  51)
-COLOR_GREY   = (128, 128, 128)
-
 # state file
 FN_MFD_STATE = "mfd.json"
 
@@ -65,11 +60,12 @@ MFD_YC4 = 490
 MFD_YC5 = 600
 MFD_YT1 = 12
 MFD_YB1 = 730
-MFD_RP_Y = 900
+MFD_RP_X = 900
+MFD_RP_Y = 0
 MFD_RP_WIDTH = 380
-MFD_RP_HEIGHT = 790
+MFD_RP_HEIGHT = 800
 MFD_RP_SIZE = scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)
-MFD_RP_XY = scaled(MFD_RP_Y), scaled(Panel.MARGIN_TOP)
+MFD_RP_XY = scaled(MFD_RP_X), scaled(MFD_RP_Y)
 
 # common functions
 
@@ -166,20 +162,31 @@ bm1_MFD = [ None,	# 0
 
 # Panel actions
 
-def draw_panel(surface, rp_info):
-    panel = pygame.Surface(MFD_RP_SIZE)
-    panel.fill(COLOR_GREY)
-    panel.set_alpha(50, RLEACCEL)
-    mfd.blit(panel, MFD_RP_XY)
-    for (_type, _info) in rp_info:
-        if _type == "text":
-            label = font.render(_info, True, COLOR_GREEN)
-            mfd.blit(label, MFD_RP_XY)
+def draw_panel(surface, panel):
+    panelbox = pygame.Surface(MFD_RP_SIZE)
+    panelbox.fill(COLOR_GREY)
+    panelbox.set_alpha(50, RLEACCEL)
+    mfd.blit(panelbox, MFD_RP_XY)
+    panel.render_lines(mfd, font)
 
 # init panels
 
-rightPanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
-rp_MFD = [ ("text", "Elite:Dangerous MFD") ]
+rpanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
+init_msg = [ ("text", "Elite:Dangerous MFD") ]
+test_msg = [
+    ("text", "123456789012345678901234567890"),
+    ("text", "02"), ("text", "03"), ("text", "04"), ("text", "05"),
+    ("text", "06"), ("text", "07"), ("text", "08"), ("text", "09"), ("text", "10"),
+    ("text", "11"), ("text", "12"), ("text", "13"), ("text", "14"), ("text", "15"),
+    ("text", "16"), ("text", "17"), ("text", "18"), ("text", "19"), ("text", "20"),
+    ("text", "21"), ("text", "22"), ("text", "23"), ("text", "24"), ("text", "25"),
+    ("text", "26"), ("text", "27"), ("text", "28"), ("text", "29"), ("text", "30"),
+    ("text", "31"), ("text", "32"), ("text", "33"), ("text", "34"), ("text", "35"),
+    ("text", "36"), ("text", "37"), ("text", "38"), ("text", "39"), ("text", "40")
+]
+rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
+rp1_MFD.add_lines(test_msg)
+rp1_MFD.add_lines(init_msg)
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -255,5 +262,5 @@ while True:
     show_button_states(bm1_MFD)
     draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
-    draw_panel(rightPanel, rp_MFD)
+    draw_panel(rpanel, rp1_MFD)
     pygame.display.flip()

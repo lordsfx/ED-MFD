@@ -1,3 +1,5 @@
+from constants import *
+
 # class Button
 class Button(object):
     TYPE_PUSH   = 1
@@ -64,8 +66,31 @@ class Button(object):
 
 # class Panel
 class Panel(object):
-    MARGIN_TOP = MARGIN_BOTTOM = MARGIN_LEFT = MARGIN_RIGHT = 5
+    FONT_SIZE = 16
+    MAX_COLS  = 30
+    MAX_ROWS  = 40
 
-    def __init__(self, width, height):
+    def __init__(self, pos_x, pos_y, width, height):
+        self.pos_x  = pos_x
+        self.pos_y  = pos_y
         self.width  = width
         self.height = height
+        self.lines  = [ "" ] * self.MAX_ROWS
+
+    def get_offset(self):
+        return (self.pos_x, self_pos_y)
+
+    def add_lines(self, lines):
+        if len(lines) > self.MAX_ROWS: lines = lines[:self.MAX_ROWS]
+        self.lines = lines + self.lines[:(self.MAX_ROWS - len(lines))]
+
+    def shift_lines(self, num_lines):
+        if new_lines > self.MAX_ROWS: new_lines = self.MAX_ROWS
+        self.lines = [ "" ] * num_lines + self.lines[:(self.MAX_ROWS - num_lines)]
+
+    def render_lines(self, surface, font):
+        for row, (_type, _info) in enumerate(self.lines):
+            if _type == "text":
+                label = font.render(_info, True, COLOR_ORANGE)
+                surface.blit(label, (self.pos_x + 1, self.pos_y + row * 16))
+
