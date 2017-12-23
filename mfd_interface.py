@@ -1,3 +1,4 @@
+import pygame
 from constants import *
 
 # class Button
@@ -75,22 +76,37 @@ class Panel(object):
         self.pos_y  = pos_y
         self.width  = width
         self.height = height
-        self.lines  = [ "" ] * self.MAX_ROWS
+        self.lines  = [ ( "text", "" ) ] * self.MAX_ROWS
 
     def get_offset(self):
         return (self.pos_x, self_pos_y)
+
+    def add_text(self, text_lines):
+        for text in text_lines:
+            self.add_lines( [ ("text", text) ] )
 
     def add_lines(self, lines):
         if len(lines) > self.MAX_ROWS: lines = lines[:self.MAX_ROWS]
         self.lines = lines + self.lines[:(self.MAX_ROWS - len(lines))]
 
-    def shift_lines(self, num_lines):
-        if new_lines > self.MAX_ROWS: new_lines = self.MAX_ROWS
-        self.lines = [ "" ] * num_lines + self.lines[:(self.MAX_ROWS - num_lines)]
+    def shift_lines(self, num_lines, _type):
+        if num_lines > self.MAX_ROWS: num_lines = self.MAX_ROWS
+        self.lines = [ ( _type, "" ) ] * num_lines + self.lines[:(self.MAX_ROWS - num_lines)]
 
-    def render_lines(self, surface, font):
+    def add_image(self, imagename):
+        img = pygame.image.load(imagename)
+        num_rows = int((img.get_height() + self.FONT_SIZE - 1) / self.FONT_SIZE)
+        if num_rows:
+            self.lines = [ ( "image", imagename ) ] + self.lines[:(self.MAX_ROWS - 1)]
+            if num_rows > 1:
+                self.shift_lines(num_rows - 1, "text")
+
+    def render_panel(self, surface, font):
         for row, (_type, _info) in enumerate(self.lines):
             if _type == "text":
                 label = font.render(_info, True, COLOR_ORANGE)
-                surface.blit(label, (self.pos_x + 1, self.pos_y + row * 16))
+                surface.blit(label, (self.pos_x, self.pos_y + row * self.FONT_SIZE))
+            if _type == "image":
+                img = pygame.image.load(_info)
+                surface.blit(img, (self.pos_x + 5, self.pos_y))
 

@@ -138,26 +138,16 @@ def draw_panel(surface, panel):
     panelbox.fill(COLOR_GREY)
     panelbox.set_alpha(50, RLEACCEL)
     mfd.blit(panelbox, MFD_RP_XY)
-    panel.render_lines(mfd, font)
+    panel.render_panel(mfd, font)
 
 # init panels
 
 rpanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
-init_msg = [ ("text", "Elite:Dangerous MFD") ]
-test_msg = [
-    ("text", "123456789012345678901234567890"),
-    ("text", "02"), ("text", "03"), ("text", "04"), ("text", "05"),
-    ("text", "06"), ("text", "07"), ("text", "08"), ("text", "09"), ("text", "10"),
-    ("text", "11"), ("text", "12"), ("text", "13"), ("text", "14"), ("text", "15"),
-    ("text", "16"), ("text", "17"), ("text", "18"), ("text", "19"), ("text", "20"),
-    ("text", "21"), ("text", "22"), ("text", "23"), ("text", "24"), ("text", "25"),
-    ("text", "26"), ("text", "27"), ("text", "28"), ("text", "29"), ("text", "30"),
-    ("text", "31"), ("text", "32"), ("text", "33"), ("text", "34"), ("text", "35"),
-    ("text", "36"), ("text", "37"), ("text", "38"), ("text", "39"), ("text", "40")
-]
+init_msg = [ " --- Elite:Dangerous MFD --- " ]
+
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
-rp1_MFD.add_lines(test_msg)
-rp1_MFD.add_lines(init_msg)
+rp1_MFD.add_text(init_msg)
+rp1_MFD.add_image("coriolis-layout-075.png")
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -200,6 +190,7 @@ while True:
         if event.key == pygame.K_o:  joy_index = 11      # Orbit Lines
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
+            rp1_MFD.add_lines([("text","MFD button pressed")])
 
         if event.key == pygame.K_r:         # Ctrl-R : Reset all states
             if mods & pygame.KMOD_CTRL:
