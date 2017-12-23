@@ -17,17 +17,17 @@ FN_MFD_STATE = "mfd.json"
 
 # set stage
 pygame.display.set_caption("Elite:Dangerous MFD")
-img_MFD = pygame.image.load("MFD-Display-BG3-wallpaper.png")
+img_MFD = pygame.image.load("images/MFD-Display-BG3-wallpaper.png")
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
-font = pygame.font.Font("Andale Mono.ttf", 16)
+font = pygame.font.Font("fonts/Andale Mono.ttf", 16)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
-layer_BTN = pygame.image.load("MFD-Display-BG3-button.png").convert_alpha()
+layer_BTN = pygame.image.load("images/MFD-Display-BG3-button.png").convert_alpha()
 
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
@@ -147,7 +147,7 @@ init_msg = [ " --- Elite:Dangerous MFD --- " ]
 
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
 rp1_MFD.add_text(init_msg)
-rp1_MFD.add_image("coriolis-layout-075.png")
+rp1_MFD.add_image("images/coriolis-layout-075.png")
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
