@@ -108,5 +108,6 @@ class Panel(object):
                 surface.blit(label, (self.pos_x, self.pos_y + row * self.FONT_SIZE))
             if _type == "image":
                 img = pygame.image.load(_info)
-                surface.blit(img, (self.pos_x + 5, self.pos_y))
+                img.set_colorkey(COLOR_WHITE, pygame.RLEACCEL)
+                surface.blit(img, (self.pos_x + 3, self.pos_y))
 

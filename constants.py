@@ -2,6 +2,7 @@
 COLOR_ORANGE = (255, 153,  51)
 COLOR_GREEN  = ( 51, 255,  51)
 COLOR_GREY   = (128, 128, 128)
+COLOR_WHITE  = (255, 255, 255)
 
 # MFD Layout
 #     X L C1 C2 C3 C4 C5 R       Y

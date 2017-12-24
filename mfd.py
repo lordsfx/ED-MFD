@@ -147,7 +147,7 @@ init_msg = [ " --- Elite:Dangerous MFD --- " ]
 
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
 rp1_MFD.add_text(init_msg)
-rp1_MFD.add_image("images/coriolis-layout-075.png")
+rp1_MFD.add_image("images/coriolis-layout-077-t.png")
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
