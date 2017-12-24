@@ -95,19 +95,18 @@ class Panel(object):
 
     def add_image(self, imagename):
         img = pygame.image.load(imagename)
-        num_rows = int((img.get_height() + self.FONT_SIZE - 1) / self.FONT_SIZE)
-        if num_rows:
-            self.lines = [ ( "image", imagename ) ] + self.lines[:(self.MAX_ROWS - 1)]
-            if num_rows > 1:
-                self.shift_lines(num_rows - 1, "text")
+        if img.get_width() > 300:
+            s_height = int(300 * img.get_height() / img.get_width())
+            img = pygame.transform.smoothscale(img, (300, s_height))
+        num_rows = int((s_height + self.FONT_SIZE - 1) / self.FONT_SIZE)
+        self.shift_lines(num_rows, "empty")
+        self.lines = [ ( "image", img ) ] + self.lines[:(self.MAX_ROWS - 1)]
 
     def render_panel(self, surface, font):
-        for row, (_type, _info) in enumerate(self.lines):
+        for row, (_type, _content) in enumerate(self.lines):
             if _type == "text":
-                label = font.render(_info, True, COLOR_ORANGE)
+                label = font.render(_content, True, COLOR_ORANGE)
                 surface.blit(label, (self.pos_x, self.pos_y + row * self.FONT_SIZE))
             if _type == "image":
-                img = pygame.image.load(_info)
-                img.set_colorkey(COLOR_WHITE, pygame.RLEACCEL)
-                surface.blit(img, (self.pos_x + 3, self.pos_y))
+                surface.blit(_content, (self.pos_x, self.pos_y + row * self.FONT_SIZE))
 

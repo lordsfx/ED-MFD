@@ -143,11 +143,11 @@ def draw_panel(surface, panel):
 # init panels
 
 rpanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
-init_msg = [ " --- Elite:Dangerous MFD --- " ]
 
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
-rp1_MFD.add_text(init_msg)
-rp1_MFD.add_image("images/coriolis-layout-077-t.png")
+rp1_MFD.add_image("images/EliteDangerous_Logo.png")
+rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
+rp1_MFD.add_text([" --- Elite:Dangerous MFD ---  "])
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -162,7 +162,8 @@ if load_button_states(bm1_MFD):
     pygame.display.flip()
 
 # user event timer
-pygame.time.set_timer(pygame.USEREVENT, TIMER_LOOP)
+EVENT_APP_LOOP = pygame.USEREVENT
+pygame.time.set_timer(EVENT_APP_LOOP, TIMER_LOOP)
 
 # loop
 while True:
@@ -190,7 +191,6 @@ while True:
         if event.key == pygame.K_o:  joy_index = 11      # Orbit Lines
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
-            rp1_MFD.add_lines([("text","MFD button pressed")])
 
         if event.key == pygame.K_r:         # Ctrl-R : Reset all states
             if mods & pygame.KMOD_CTRL:
@@ -218,7 +218,7 @@ while True:
             if mods & pygame.KMOD_ALT:
                 button_pressed.reset_state()
 
-    if event.type == pygame.USEREVENT:
+    if event.type == EVENT_APP_LOOP:
         tick_button_states(bm1_MFD)
 
     show_button_states(bm1_MFD)
