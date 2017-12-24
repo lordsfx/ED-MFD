@@ -95,6 +95,7 @@ class Panel(object):
 
     def add_image(self, imagename):
         img = pygame.image.load(imagename)
+        s_height = img.get_height()
         if img.get_width() > 300:
             s_height = int(300 * img.get_height() / img.get_width())
             img = pygame.transform.smoothscale(img, (300, s_height))

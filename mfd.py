@@ -135,8 +135,8 @@ bm1_MFD = [ None,	# 0
 
 def draw_panel(surface, panel):
     panelbox = pygame.Surface(MFD_RP_SIZE)
-    panelbox.fill(COLOR_GREY)
-    panelbox.set_alpha(50, RLEACCEL)
+    panelbox.fill((64,64,64))
+    panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, MFD_RP_XY)
     panel.render_panel(mfd, font)
 
@@ -146,8 +146,9 @@ rpanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
 
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
 rp1_MFD.add_image("images/EliteDangerous_Logo.png")
-rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
+rp1_MFD.add_text(["", "Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text([" --- Elite:Dangerous MFD ---  "])
+rp1_MFD.add_image("images/coriolis-layout-1.png")
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
