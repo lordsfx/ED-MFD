@@ -67,8 +67,6 @@ class Button(object):
 
 # class Panel
 class Panel(object):
-    FONT_SIZE = 16
-    MAX_COLS  = 30
     MAX_ROWS  = 40
 
     def __init__(self, pos_x, pos_y, width, height):
@@ -100,7 +98,7 @@ class Panel(object):
         if img.get_width() > s_width:
             s_height = int(s_width * img.get_height() / img.get_width())
             img = pygame.transform.smoothscale(img, (s_width, s_height))
-        num_rows = int((s_height + self.FONT_SIZE - 1) / self.FONT_SIZE)
+        num_rows = int((s_height + FONT_SIZE - 1) / FONT_SIZE)
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "image", img ) ] + self.lines[:(self.MAX_ROWS - 1)]
 
@@ -108,10 +106,10 @@ class Panel(object):
         for row, (_type, _content) in enumerate(self.lines):
             if _type == "text":
                 label = font.render(_content, True, COLOR_ORANGE)
-                surface.blit(label, (self.pos_x, self.pos_y + row * self.FONT_SIZE))
+                surface.blit(label, (self.pos_x, self.pos_y + row * FONT_SIZE))
             if _type == "image":
                 x_offset = int((self.width - _content.get_width()) / 2)
-                num_rows = int((_content.get_height() + self.FONT_SIZE - 1) / self.FONT_SIZE)
-                y_offset = int((num_rows * self.FONT_SIZE - _content.get_height()) / 2)
-                surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * self.FONT_SIZE + y_offset))
+                num_rows = int((_content.get_height() + FONT_SIZE - 1) / FONT_SIZE)
+                y_offset = int((num_rows * FONT_SIZE - _content.get_height()) / 2)
+                surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * FONT_SIZE + y_offset))
 

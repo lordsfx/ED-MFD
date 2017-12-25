@@ -22,7 +22,7 @@ APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
-font = pygame.font.Font("fonts/Andale Mono.ttf", 16)
+font = pygame.font.Font("fonts/Eurostile.ttf", FONT_SIZE)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
@@ -146,8 +146,8 @@ rpanel = pygame.Surface( (scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT)) )
 
 rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled(MFD_RP_HEIGHT))
 rp1_MFD.add_image("images/EliteDangerous_Logo.png")
-rp1_MFD.add_text(["", "Created by CMDR Lord Shadowfax"])
-rp1_MFD.add_text([" --- Elite:Dangerous MFD ---  "])
+rp1_MFD.add_text(["", " Created by CMDR Lord Shadowfax"])
+rp1_MFD.add_text([" Elite:Dangerous MFD"])
 rp1_MFD.add_image("images/coriolis-layout-clean.png")
 
 # set init background
