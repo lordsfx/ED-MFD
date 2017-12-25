@@ -91,8 +91,8 @@ class Panel(object):
         if num_lines > self.MAX_ROWS: num_lines = self.MAX_ROWS
         self.lines = [ ( _type, "" ) ] * num_lines + self.lines[:(self.MAX_ROWS - num_lines)]
 
-    def add_image(self, imagename):
-        img = pygame.image.load(imagename)
+    def add_image(self, imagefile):
+        img = pygame.image.load(imagefile)
         s_height = img.get_height()
         s_width = self.width - 16
         if img.get_width() > s_width:
