@@ -148,7 +148,7 @@ rp1_MFD = Panel(scaled(MFD_RP_X), scaled(MFD_RP_Y), scaled(MFD_RP_WIDTH), scaled
 rp1_MFD.add_image("images/EliteDangerous_Logo.png")
 rp1_MFD.add_text(["", "Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text([" --- Elite:Dangerous MFD ---  "])
-rp1_MFD.add_image("images/coriolis-layout-1.png")
+rp1_MFD.add_image("images/coriolis-layout-clean.png")
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
