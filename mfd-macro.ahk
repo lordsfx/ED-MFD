@@ -54,7 +54,7 @@ WinActivate
 ;; XBox One controller
 
 F23::ESC
-F24::Tab
+F24::!Tab
 
 ;; Thrustmaster MFD
 
