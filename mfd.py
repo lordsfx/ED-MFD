@@ -157,7 +157,7 @@ noframe = True
 
 # load last states, if any
 if load_button_states(bm1_MFD):
-    print("Loaded last states - ")
+    #print("Loaded last states - ")
     #show_button_states(bm1_MFD)
     draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
@@ -198,7 +198,7 @@ while True:
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
                     if b: b.reset_state()
-                print("Reset all states - ")
+                rp1_MFD.add_text(["- reset all states"])
         if event.key == pygame.K_p:         # Ctrl-P : Coriolis Pad Test
             if mods & pygame.KMOD_CTRL:
                 last_pad += 1
