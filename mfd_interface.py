@@ -1,14 +1,22 @@
 import pygame
 from constants import *
+from library import *
 
-# class Scale
-class Scale:
+# class MFD
+class MFD:
     scale = 1
+    font = None
+
     @staticmethod
-    def set(_scale):
-        Scale.scale = _scale
-    def d(_dim):
-        return int(_dim * Scale.scale)
+    def set_scale(scale):
+        MFD.scale = scale
+
+    def set_font(font_file):
+        MFD.font = pygame.font.Font(font_file, FONT_SIZE)
+
+    def sd(dim):
+        return int(dim * MFD.scale)
+
 
 # class Button
 class Button(object):
@@ -85,7 +93,7 @@ class Coriolis:
 
     @staticmethod
     def init():
-        s_width = Scale.d(MFD_RP_WIDTH)
+        s_width = MFD.sd(MFD_RP_WIDTH)
         orig_width = Coriolis.layout.get_width()
         if orig_width > s_width:
             s_height = int(s_width * Coriolis.height / Coriolis.width)
@@ -94,6 +102,7 @@ class Coriolis:
             Coriolis.width = s_width
             Coriolis.height = s_height
             Coriolis.scale = s_width / orig_width
+
 
 # class Panel
 class Panel(object):
@@ -111,7 +120,9 @@ class Panel(object):
 
     def add_text(self, text_lines):
         for text in text_lines:
-            self.add_lines( [ ("text", text) ] )
+            wrapped_text = wrap_text(text, MFD.font, MFD.sd(MFD_RP_WIDTH))
+            for t in reversed(wrapped_text):
+                self.add_lines( [ ("text", t) ] )
 
     def add_lines(self, lines):
         if len(lines) > self.MAX_ROWS: lines = lines[:self.MAX_ROWS]
@@ -137,11 +148,11 @@ class Panel(object):
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "coriolis", pad ) ] + self.lines[:(self.MAX_ROWS - 1)]
 
-    def render_panel(self, surface, font):
+    def render_panel(self, surface):
         for row, (_type, _content) in enumerate(self.lines):
             if _type == "text":
                 # _content = text
-                label = font.render(_content, True, COLOR_ORANGE)
+                label = MFD.font.render(_content, True, COLOR_ORANGE)
                 surface.blit(label, (self.pos_x + 3, self.pos_y + row * FONT_SIZE))
             if _type == "image":
                 # _content = pygame surface

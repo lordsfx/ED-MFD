@@ -8,7 +8,6 @@ pygame.init()
 scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
-Scale.set(scale)
 
 # state file
 FN_MFD_STATE = "mfd.json"
@@ -20,7 +19,8 @@ APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
-font = pygame.font.Font("fonts/Eurostile.ttf", FONT_SIZE)
+MFD.set_font("fonts/Eurostile.ttf")
+MFD.set_scale(scale)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
@@ -30,11 +30,11 @@ layer_BTN = pygame.image.load("images/MFD-Display-BG3-button.png").convert_alpha
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
 
-BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = Scale.d(112), Scale.d(50)
+BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = MFD.sd(112), MFD.sd(50)
 TIMER_LOOP = Button.TIMER_STEP * 10
 
-MFD_RP_SIZE = Scale.d(MFD_RP_WIDTH), Scale.d(MFD_RP_HEIGHT)
-MFD_RP_XY = Scale.d(MFD_RP_X), Scale.d(MFD_RP_Y)
+MFD_RP_SIZE = MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)
+MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
 # common functions
 
@@ -111,22 +111,22 @@ button_GREEN.fill(COLOR_GREEN)
 button_GREEN.set_alpha(90, RLEACCEL)
 
 bm1_MFD = [ None,	# 0
-    Button("SYS Full"    , Scale.d(MFD_XC1), Scale.d(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button("ENG Full"    , Scale.d(MFD_XC2), Scale.d(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button("WEP Full"    , Scale.d(MFD_XC3), Scale.d(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
-    Button("ENG 4+SYS 2" , Scale.d(MFD_XC4), Scale.d(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
-    Button("WEP 4+SYS 2" , Scale.d(MFD_XC5), Scale.d(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
-    Button("Heat Sink"   , Scale.d(MFD_XR1), Scale.d(MFD_YC1), button_GREEN),	# 6
-    Button("Silent Run"  , Scale.d(MFD_XR1), Scale.d(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
-    Button("Chaff"       , Scale.d(MFD_XR1), Scale.d(MFD_YC3), button_GREEN),	# 8
-    Button("Shield Cell" , Scale.d(MFD_XR1), Scale.d(MFD_YC4), button_GREEN),	# 9
-    Button("Disco Scan"  , Scale.d(MFD_XR1), Scale.d(MFD_YC5), button_ORANGE, Button.TYPE_HOLD),	# 10
-    Button("Orbit Lines" , Scale.d(MFD_XC5), Scale.d(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
-    Button("Ship Lights" , Scale.d(MFD_XC4), Scale.d(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
-    Button("Landing Gear", Scale.d(MFD_XC3), Scale.d(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
+    Button("SYS Full"    , MFD.sd(MFD_XC1), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG Full"    , MFD.sd(MFD_XC2), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP Full"    , MFD.sd(MFD_XC3), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("ENG 4+SYS 2" , MFD.sd(MFD_XC4), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button("WEP 4+SYS 2" , MFD.sd(MFD_XC5), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
+    Button("Heat Sink"   , MFD.sd(MFD_XR1), MFD.sd(MFD_YC1), button_GREEN),	# 6
+    Button("Silent Run"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
+    Button("Chaff"       , MFD.sd(MFD_XR1), MFD.sd(MFD_YC3), button_GREEN),	# 8
+    Button("Shield Cell" , MFD.sd(MFD_XR1), MFD.sd(MFD_YC4), button_GREEN),	# 9
+    Button("Disco Scan"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC5), button_ORANGE, Button.TYPE_HOLD),	# 10
+    Button("Orbit Lines" , MFD.sd(MFD_XC5), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
+    Button("Ship Lights" , MFD.sd(MFD_XC4), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
+    Button("Landing Gear", MFD.sd(MFD_XC3), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
     None, None, None, None, None,	# 14 - 18
-    Button("Cargo Scoop" , Scale.d(MFD_XL1), Scale.d(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
-    Button("Hard Points" , Scale.d(MFD_XL1), Scale.d(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
+    Button("Cargo Scoop" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
+    Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
 # Panel actions
@@ -136,14 +136,15 @@ def draw_panel(surface, panel):
     panelbox.fill((64,64,64))
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, MFD_RP_XY)
-    panel.render_panel(mfd, font)
+    panel.render_panel(mfd)
 
 # init panels
 
-rpanel = pygame.Surface( (Scale.d(MFD_RP_WIDTH), Scale.d(MFD_RP_HEIGHT)) )
-rp1_MFD = Panel(Scale.d(MFD_RP_X), Scale.d(MFD_RP_Y), Scale.d(MFD_RP_WIDTH), Scale.d(MFD_RP_HEIGHT))
+rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
+rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT))
 rp1_MFD.add_image("images/EliteDangerous_Logo.png")
-rp1_MFD.add_text(["", "Created by CMDR Lord Shadowfax"])
+#rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
+rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text(["Elite:Dangerous MFD"])
 
 Coriolis.init()
