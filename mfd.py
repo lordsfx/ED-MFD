@@ -204,6 +204,9 @@ while True:
                 last_pad += 1
                 if last_pad > 45: last_pad = 0
                 rp1_MFD.add_coriolis(last_pad)
+        if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
+            if mods & pygame.KMOD_CTRL:
+                rp1_MFD.add_coriolis(0)
         if event.key == pygame.K_SPACE:
             if noframe:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
