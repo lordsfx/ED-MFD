@@ -1,50 +1,55 @@
 ﻿#NoEnv
 #Persistent
+#SingleInstance force
 #InstallKeybdHook
 #Warn
 SetWorkingDir %A_ScriptDir%
 SetKeyDelay, 30, 50
 SetTitleMatchMode, 2
 
-;; Elite G19s Companion Hotkeys
-#IfWinExist, Elite G19s Companion App
-{
-
-; Up
-2Joy25::
-   send, ^+{Up}
-   return
-
-; Down
-2Joy26::
-   send, ^+{Down}
-   return
-
-; OK
-2Joy16::
-   send, ^!{Insert}
-   return
-
-; Cancel
-2Joy17::
-   send, ^!{End}
-   return
-
-; Left
-2Joy15::
-   send, ^+{Left}
-   return
-
-; Right
-2Joy14::
-   send, ^+{Right}
-   return
-
-; Menu
-2Joy18::
-   send, ^!{Home}
-   return
-}
+;; ;; Elite G19s Companion Hotkeys
+;; #IfWinExist, Elite G19s Companion App
+;; {
+;; 
+;; ; Up
+;; 2Joy25::
+;;    ;send, ^+{Up}
+;;    send, ^+i
+;;    return
+;; 
+;; ; Down
+;; 2Joy26::
+;;    ;send, ^+{Down}
+;;    send, ^+k
+;;    return
+;; 
+;; ; OK
+;; 2Joy16::
+;;    send, ^!{Insert}
+;;    return
+;; 
+;; ; Cancel
+;; 2Joy17::
+;;    send, ^!{End}
+;;    return
+;; 
+;; ; Left
+;; 2Joy15::
+;;    ;send, ^+{Left}
+;;    send, ^+j
+;;    return
+;; 
+;; ; Right
+;; 2Joy14::
+;;    ;send, ^+{Right}
+;;    send, ^+l
+;;    return
+;; 
+;; ; Menu
+;; 2Joy18::
+;;    send, ^!{Home}
+;;    return
+;; }
 
 ;#IfWinExist, Untitled - Notepad
 #IfWInExist, Elite - Dangerous (CLIENT)
@@ -141,6 +146,42 @@ F24::!Tab
 ; Hard Points
 2Joy20::
    controlsend, , {Ctrl Down}k{Ctrl Up}, Elite:Dangerous MFD
+   return
+
+; Dock Request
+2Joy18::
+   controlsend, , {Ctrl Down}q{Ctrl Up}, Elite:Dangerous MFD
+   send, 1ee{Space}s{Space}qq1
+   return
+
+; NAV Panel
+2Joy17::
+   send, 1
+   return
+
+; COM Panel
+2Joy25::
+   send, 2
+   return
+
+; RDR Panel
+2Joy26::
+   send, 3
+   return
+
+; SYS Panel
+2Joy16::
+   send, 4
+   return
+
+; Previous Panel
+2Joy15::
+   send, q
+   return
+
+; Next Panel
+2Joy14::
+   send, e
    return
 
 }
