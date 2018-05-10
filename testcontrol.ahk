@@ -1,1 +1,1 @@
-ControlSend, , {Ctrl Down}abcdefghijklmno{Ctrl Up}, Elite:Dangerous MFD
+ControlSend, , {Ctrl Down}abcdefghijklmnoq{Ctrl Up}, Elite:Dangerous MFD
