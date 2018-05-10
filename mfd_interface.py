@@ -6,6 +6,10 @@ from library import *
 class MFD:
     scale = 1
     font = None
+    state_file = "mfd.json"
+    title = "Elite:Dangerous MFD"
+    image_wallpaper = "images/MFD-Display-wallpaper.png"
+    image_buttons = "images/MFD-Display-button.png"
 
     @staticmethod
     def set_scale(scale):

@@ -1,7 +1,10 @@
 import sys, pygame
 import json
 from mfd_interface import *
+from ed_journal import *
 from pygame.locals import *
+from watchdog.observers import Observer
+
 pygame.init()
 
 # param
@@ -9,12 +12,9 @@ scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
 
-# state file
-FN_MFD_STATE = "mfd.json"
-
 # set stage
-pygame.display.set_caption("Elite:Dangerous MFD")
-img_MFD = pygame.image.load("images/MFD-Display-BG3-wallpaper.png")
+pygame.display.set_caption(MFD.title)
+img_MFD = pygame.image.load(MFD.image_wallpaper)
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
 APP_SIZE = APP_WIDTH, APP_HEIGHT
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
@@ -25,7 +25,7 @@ MFD.set_scale(scale)
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
-layer_BTN = pygame.image.load("images/MFD-Display-BG3-button.png").convert_alpha()
+layer_BTN = pygame.image.load(MFD.image_buttons).convert_alpha()
 
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
@@ -76,7 +76,7 @@ def tick_button_states(buttons):
 
 def load_button_states(buttons):
     try:
-        with open(FN_MFD_STATE) as ifn:
+        with open(MFD.state_file) as ifn:
             js = json.load(ifn)
             bi = 0
             for state in js:
@@ -95,7 +95,7 @@ def save_button_states(buttons):
                 states.append(b.state)
             else:
                 states.append(0)
-        with open(FN_MFD_STATE, 'w') as ofn:
+        with open(MFD.state_file, 'w') as ofn:
             json.dump(states, ofn)
         return True
     except EnvironmentError:
@@ -124,7 +124,8 @@ bm1_MFD = [ None,	# 0
     Button("Orbit Lines" , MFD.sd(MFD_XC5), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
     Button("Ship Lights" , MFD.sd(MFD_XC4), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
     Button("Landing Gear", MFD.sd(MFD_XC3), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
-    None, None, None, None, None,	# 14 - 18
+    None, None, None, None, 							# 14 - 17
+    Button("Docking Req" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC3), button_ORANGE),	# 18
     Button("Cargo Scoop" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
     Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
@@ -163,6 +164,12 @@ if load_button_states(bm1_MFD):
     draw_button_states(mfd, bm1_MFD)
     pygame.display.flip()
 
+# journals
+journal_evh = JournalEventHandler()
+journal_obs = Observer()
+journal_obs.schedule(journal_evh, Journal.path, recursive=False)
+journal_obs.start()
+
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
 pygame.time.set_timer(EVENT_APP_LOOP, TIMER_LOOP)
@@ -191,6 +198,7 @@ while True:
         if event.key == pygame.K_m:  joy_index = 13      # Landing Gear
         if event.key == pygame.K_n:  joy_index = 12      # Ship Lights
         if event.key == pygame.K_o:  joy_index = 11      # Orbit Lines
+        if event.key == pygame.K_q:  joy_index = 18      # Docking Req
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
 
@@ -216,7 +224,8 @@ while True:
                 noframe = True
         if event.type == QUIT or event.key == pygame.K_ESCAPE:
             save_button_states(bm1_MFD)
-            sys.exit()
+            journal_obs.stop()
+            break
 
         if button_pressed:
             if mods & pygame.KMOD_CTRL:
@@ -231,8 +240,18 @@ while True:
     if event.type == EVENT_APP_LOOP:
         tick_button_states(bm1_MFD)
 
+    journal_updates = journal_evh.get_updates()
+    if journal_updates:
+        for j in journal_updates:
+            #print(j)
+            Journal.parser(j, rp1_MFD)
+
     #show_button_states(bm1_MFD)
     draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
     draw_panel(rpanel, rp1_MFD)
     pygame.display.flip()
+
+# End While
+
+journal_obs.join()
