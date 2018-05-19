@@ -61,6 +61,16 @@ WinActivate
 F23::ESC
 F24::!Tab
 
+; LB
+1Joy5::
+   send, q
+   return
+
+; RB
+1Joy6::
+   send, e
+   return
+
 ;; Thrustmaster MFD
 
 ; SYS Full
