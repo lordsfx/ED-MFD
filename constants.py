@@ -92,3 +92,8 @@ CORIOLIS_POS = [
     ( X[7], Y[10],  X[9], Y[11]),	# 44
     ( X[7],  Y[9],  X[8], Y[10]) 	# 45
 ]
+
+# EDDB data
+EDDB_SYSTEMS_DATA  = "eddb/systems_populated.json"
+EDDB_STATIONS_DATA = "eddb/stations_filtered.json"
+

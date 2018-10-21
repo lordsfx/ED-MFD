@@ -1,6 +1,7 @@
 import sys, pygame
 import json
 from mfd_interface import *
+from ed_object import *
 from ed_journal import *
 from pygame.locals import *
 from watchdog.observers import Observer
@@ -11,6 +12,8 @@ pygame.init()
 scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
+
+data_loaded = False
 
 # set stage
 pygame.display.set_caption(MFD.title)
@@ -170,6 +173,9 @@ journal_obs = Observer()
 journal_obs.schedule(journal_evh, Journal.path, recursive=False)
 journal_obs.start()
 
+# ED objects
+my_ship = Ship()
+
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
 pygame.time.set_timer(EVENT_APP_LOOP, TIMER_LOOP)
@@ -244,13 +250,18 @@ while True:
     if journal_updates:
         for j in journal_updates:
             #print(j)
-            Journal.parser(j, rp1_MFD)
+            Journal.parser(j, my_ship)
+        Journal.display(rp1_MFD, my_ship)
 
     #show_button_states(bm1_MFD)
     draw_background(mfd)
     draw_button_states(mfd, bm1_MFD)
     draw_panel(rpanel, rp1_MFD)
     pygame.display.flip()
+
+    if not data_loaded:
+        station_data = Station.load_stations(EDDB_STATIONS_DATA)
+        data_loaded = True
 
 # End While
 

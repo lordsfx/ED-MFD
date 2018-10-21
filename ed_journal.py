@@ -1,26 +1,44 @@
 import os, sys
 import time
 import json
+from ed_object import *
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class Journal:
     events_monitor = [ "SupercruiseExit", "Location", "DockingGranted" ]
+    show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = "./journals"
     pattern = "Journal.*.log"
-    last_system = ""
-    last_station = ""
-    show_coriolis_types = [ "Coriolis", "Orbis" ]
 
     @staticmethod
-    def parser(journal, panel):
-        if journal["event"] == "SupercruiseExit" and journal["BodyType"] == "Station":
-            Journal.last_system = journal["StarSystem"]
-            Journal.last_station = journal["Body"]
-        if journal["event"] == "DockingGranted":
-            if journal["StationType"] in Journal.show_coriolis_types:
-               panel.add_coriolis(journal["LandingPad"])
-            panel.add_text([ "Docking granted at %s pad %s" % (journal["StationName"], journal["LandingPad"]) ])
+    def parser(journal, ship):
+        if journal["event"] in Journal.events_monitor:
+            ship.update_event_memory(journal)
+
+    def display(panel, ship):
+        event_memory = ship.get_event_memory()
+        for em in event_memory:
+            if ship.event_is_updated(em):				# event is updated
+                print("%s has an update" % em)
+                emj = event_memory[em][1]				# retrieve journal content
+                # SupercruiseExit
+                if em == "SupercruiseExit":
+                    panel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
+                    ship.set_at_system(emj["StarSystem"])
+                    ship.set_at_station(emj["Body"])
+                    ship.mark_event_processed(em)
+                # Location
+                if em == "Location":
+                    ship.set_at_system(emj["StarSystem"])
+                    ship.set_at_station(emj["StationName"])
+                    ship.mark_event_processed(em)
+                # DockingGranted
+                if em == "DockingGranted":
+                    if emj["StationType"] in Journal.show_coriolis_types:
+                       panel.add_coriolis(emj["LandingPad"])
+                    panel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                    ship.mark_event_processed(em)
 
 class JournalEventHandler(FileSystemEventHandler):
 
@@ -35,7 +53,7 @@ class JournalEventHandler(FileSystemEventHandler):
             return None
  
         elif event.event_type == "modified":
-            print("%s modified" % event.src_path)
+            #print("%s modified" % event.src_path)
 
             if not self.jfh:
                 self.latest_journal = event.src_path
@@ -62,7 +80,7 @@ class JournalEventHandler(FileSystemEventHandler):
                     self.captured_events = []
                     self.have_update = True
                 self.captured_events.append(journal)
-                print(journal['event'])
+                print("%s is logged" % journal['event'])
                 sys.stdout.flush()
             jj = self.jfh.readline()
 
