@@ -10,6 +10,7 @@ class Journal:
     pattern = "Journal.*.log"
     last_system = ""
     last_station = ""
+    show_coriolis_types = [ "Coriolis", "Orbis" ]
 
     @staticmethod
     def parser(journal, panel):
@@ -17,8 +18,9 @@ class Journal:
             Journal.last_system = journal["StarSystem"]
             Journal.last_station = journal["Body"]
         if journal["event"] == "DockingGranted":
-            if Journal.last_system and Journal.last_station:
-                panel.add_text([ "%s, %s" % (Journal.last_station, Journal.last_system) ])
+            if journal["StationType"] in Journal.show_coriolis_types:
+               panel.add_coriolis(journal["LandingPad"])
+            panel.add_text([ "Docking granted at %s pad %s" % (journal["StationName"], journal["LandingPad"]) ])
 
 class JournalEventHandler(FileSystemEventHandler):
 
