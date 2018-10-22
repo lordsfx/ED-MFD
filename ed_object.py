@@ -1,4 +1,6 @@
 import json
+import errno
+from constants import *
 
 class Ship:
     def __init__(self):
@@ -21,12 +23,14 @@ class Ship:
 
     def set_at_system(self, system):
         self.at_system = system
+        print("At system: %s" % self.at_system)
 
     def get_at_system(self):
         return self.at_system
 
     def set_at_station(self, station):
         self.at_station = station
+        print("At station: %s" % self.at_station)
 
     def get_at_station(self):
         return self.at_station
@@ -40,11 +44,36 @@ class System:
     def load_systems(fn):
         print("Loading Systems...")
         systemObj = []
-        systemJSON = json.load(open(fn))
-        for s in systemJSON:
-            systemObj.append( System(s["id"], s["name"]) )
-        print("Loading completed.")
+        try:
+            systemJSON = json.load(open(fn))
+            for s in systemJSON:
+                systemObj.append( System(s["id"], s["name"]) )
+            print("Loading completed.")
+        except (OSError, IOError) as e:
+            if getattr(e, 'errno', 0) == errno.ENOENT:
+                print("File %s not found, ignored..." % fn)
         return systemObj
+
+class Universe:
+    def __init__(self):
+        self.loaded = False
+        self.delay_load = True
+        self.system_data = None
+        self.station_data = None
+
+    def load_data(self):
+        if not self.delay_load:
+            self.system_data  = System.load_systems(EDDB_SYSTEMS_DATA)
+            self.station_data = Station.load_stations(EDDB_STATIONS_DATA)
+            self.loaded = True
+        else:
+            self.delay_load = False
+
+    def get_station_data(self, _station, _system):
+        station = Station.find_station(self.station_data, self.system_data, _station, _system)
+        if station:
+            station.print_info()
+            return station
 
 class Station:
     COR_PAD_CLOCK = [ 0,                                   # direction at N o'clock
@@ -113,10 +142,14 @@ class Station:
     def load_stations(fn):
         print("Loading Stations...")
         stationObj = []
-        stationJSON = json.load(open(fn))
-        for s in stationJSON:
-            stationObj.append( Station(s["id"], s["name"], s["system_id"], s["type"], s["type_id"], s["is_planetary"]) )
-        print("Loading completed.")
+        try:
+            stationJSON = json.load(open(fn))
+            for s in stationJSON:
+                stationObj.append( Station(s["id"], s["name"], s["system_id"], s["type"], s["type_id"], s["is_planetary"]) )
+            print("Loading completed.")
+        except (OSError, IOError) as e:
+            if getattr(e, 'errno', 0) == errno.ENOENT:
+                print("File %s not found, ignored..." % fn)
         return stationObj
 
     def find_station(stn_data, sys_data, station, system):

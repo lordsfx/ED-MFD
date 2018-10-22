@@ -13,8 +13,6 @@ scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
 
-data_loaded = False
-
 # set stage
 pygame.display.set_caption(MFD.title)
 img_MFD = pygame.image.load(MFD.image_wallpaper)
@@ -150,6 +148,7 @@ rp1_MFD.add_image("images/EliteDangerous_Logo.png")
 #rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
 rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text(["Elite:Dangerous MFD"])
+#rp1_MFD.add_text(["Loading universe data ..."])
 
 Coriolis.init()
 last_pad = 0
@@ -175,6 +174,7 @@ journal_obs.start()
 
 # ED objects
 my_ship = Ship()
+milkyway = Universe()
 
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
@@ -251,7 +251,7 @@ while True:
         for j in journal_updates:
             #print(j)
             Journal.parser(j, my_ship)
-        Journal.display(rp1_MFD, my_ship)
+        Journal.display(rp1_MFD, my_ship, milkyway)
 
     #show_button_states(bm1_MFD)
     draw_background(mfd)
@@ -259,10 +259,9 @@ while True:
     draw_panel(rpanel, rp1_MFD)
     pygame.display.flip()
 
-    if not data_loaded:
-        station_data = Station.load_stations(EDDB_STATIONS_DATA)
-        data_loaded = True
+    if not milkyway.loaded:
+        milkyway.load_data()
+
 
 # End While
 
-journal_obs.join()

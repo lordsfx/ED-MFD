@@ -3,20 +3,20 @@ import time
 import json
 from ed_object import *
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import PatternMatchingEventHandler
 
 class Journal:
     events_monitor = [ "SupercruiseExit", "Location", "DockingGranted" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = "./journals"
-    pattern = "Journal.*.log"
+    patterns = [ path+"/Journal.*.log" ]
 
     @staticmethod
     def parser(journal, ship):
         if journal["event"] in Journal.events_monitor:
             ship.update_event_memory(journal)
 
-    def display(panel, ship):
+    def display(panel, ship, universe):
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
@@ -36,24 +36,33 @@ class Journal:
                 # DockingGranted
                 if em == "DockingGranted":
                     if emj["StationType"] in Journal.show_coriolis_types:
-                       panel.add_coriolis(emj["LandingPad"])
+                        panel.add_coriolis(emj["LandingPad"])
+                    else:
+                        station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
+                        pad_layout = station.docking_pad_layout()
+                        if pad_layout == 2:
+                            pad_info = station.outpost_pad_info()
+                            for p in pad_info:
+                                panel.add_image("images/" + p)
                     panel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
                     ship.mark_event_processed(em)
 
-class JournalEventHandler(FileSystemEventHandler):
+class JournalEventHandler(PatternMatchingEventHandler):
 
     def __init__(self):
+        PatternMatchingEventHandler.__init__(self, patterns=Journal.patterns)
         self.latest_journal = ""
         self.jfh = None
         self.have_update = False
         self.captured_events = []
 
     def on_any_event(self, event):
+        print("on_any_event")
         if event.is_directory:
             return None
  
         elif event.event_type == "modified":
-            #print("%s modified" % event.src_path)
+            print("%s modified" % event.src_path)
 
             if not self.jfh:
                 self.latest_journal = event.src_path
