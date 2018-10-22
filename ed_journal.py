@@ -57,12 +57,11 @@ class JournalEventHandler(PatternMatchingEventHandler):
         self.captured_events = []
 
     def on_any_event(self, event):
-        print("on_any_event")
         if event.is_directory:
             return None
  
         elif event.event_type == "modified":
-            print("%s modified" % event.src_path)
+            #print("%s modified" % event.src_path)
 
             if not self.jfh:
                 self.latest_journal = event.src_path
