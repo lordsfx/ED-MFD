@@ -23,7 +23,7 @@ class MFD:
 
 
 # class Button
-class Button(object):
+class Button:
     TYPE_PUSH   = 1
     TYPE_TOGGLE = 2
     TYPE_HOLD   = 3
@@ -40,7 +40,9 @@ class Button(object):
         self.name   = name
         self.pos_x  = pos_x
         self.pos_y  = pos_y
-        self.style  = style
+        self.width  = MFD.sd(BTN_WIDTH)
+        self.height = MFD.sd(BTN_HEIGHT)
+        self.style  = style	# color
         self.type   = _type
         self.state  = state
         self.timer  = 0
@@ -49,7 +51,10 @@ class Button(object):
         return (self.pos_x, self.pos_y)
 
     def get_rect(self):
-        return (self.pos_x, self.pos_y, BTN1_WIDTH, BTN1_HEIGHT)
+        return (self.pos_x, self.pos_y, self.width, self.height)
+
+    def get_size(self):
+        return (self.width, self.height)
 
     def default_timer(self):
         if self.type == self.TYPE_PUSH:     self.timer = self.TIMER_PUSH
@@ -109,7 +114,7 @@ class Coriolis:
 
 
 # class Panel
-class Panel(object):
+class Panel:
     MAX_ROWS  = 40
 
     def __init__(self, pos_x, pos_y, width, height):
@@ -120,7 +125,10 @@ class Panel(object):
         self.lines  = [ ( "text", "" ) ] * self.MAX_ROWS
 
     def get_offset(self):
-        return (self.pos_x, self_pos_y)
+        return (self.pos_x, self.pos_y)
+
+    def get_size(self):
+        return (self.width, self.height)
 
     def add_text(self, text_lines):
         for text in text_lines:

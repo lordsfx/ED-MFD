@@ -1,12 +1,16 @@
 import json
 import errno
 from constants import *
+from ed_status import *
 
 class Ship:
     def __init__(self):
+        self.status = Status()
         self.event_memory = {}
         self.at_system = None
         self.at_station = None
+        self.lights = None
+        self.landing_gear = None
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -34,6 +38,28 @@ class Ship:
 
     def get_at_station(self):
         return self.at_station
+
+    def update_status_flags(self, _flags):
+        self.status.update_flags(_flags)
+        if self.status.is_flagged("gear_down"):
+            self.landing_gear = True
+        else:
+            self.landing_gear = False
+
+    def update_status_pips(self, _pips):
+        self.status.update_pips(_pips)
+        return
+
+    def update_status_firegroup(self, _firegroup):
+        self.status.update_firegroup(_firegroup)
+        return
+
+    def update_status_guifocus(self, _guifocus):
+        self.status.update_guifocus(_guifocus)
+        return
+
+    def get_status(self):
+        return self.status
 
 class System:
     def __init__(self, _id, _name):

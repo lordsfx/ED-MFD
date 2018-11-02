@@ -1,5 +1,6 @@
 import sys, pygame
 import json
+from mfd_functions import *
 from mfd_interface import *
 from ed_object import *
 from ed_journal import *
@@ -31,83 +32,23 @@ layer_BTN = pygame.image.load(MFD.image_buttons).convert_alpha()
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
 
-BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = MFD.sd(112), MFD.sd(50)
+#BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = MFD.sd(112), MFD.sd(50)
 TIMER_LOOP = Button.TIMER_STEP * 10
+
+# display panels
 
 MFD_RP_SIZE = MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)
 MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
-# common functions
-
-def draw_background(surface):
-    surface.blit(img_MFD, (0,0))
-
-# Button actions
-
-def show_button_states(buttons):
-    for b in buttons:
-       if b:
-           print(str(b.state) + " ", end="")
-       else:
-           print("0 ", end="")
-    print(end="\r")
-
-def switch_group_states(this_button, buttons):
-    for b in buttons:
-       if b and b.type == this_button.type:
-          if b == this_button:
-             this_button.update_state()
-          else:
-             b.reset_state()
-
-def draw_button_states(surface, buttons):
-    for b in buttons:
-        if b and b.activated():
-            if b.type == Button.TYPE_HOLD:
-                _width = int(BTN1_WIDTH * (Button.TIMER_HOLD - b.timer) / (Button.TIMER_HOLD * 0.7))
-                if _width > BTN1_WIDTH: _width = BTN1_WIDTH
-                _style = b.style.subsurface( (0, 0), (_width, BTN1_HEIGHT) )
-                surface.blit(_style, b.get_offset())
-            else:
-                surface.blit(b.style, b.get_offset())
-
-def tick_button_states(buttons):
-    for b in buttons:
-        if b: b.tick()
-
-def load_button_states(buttons):
-    try:
-        with open(MFD.state_file) as ifn:
-            js = json.load(ifn)
-            bi = 0
-            for state in js:
-                if buttons[bi]:
-                    buttons[bi].set_state(state)
-                bi += 1
-        return True
-    except EnvironmentError:
-        return False
-
-def save_button_states(buttons):
-    try:
-        states = []
-        for b in buttons:
-            if b:
-                states.append(b.state)
-            else:
-                states.append(0)
-        with open(MFD.state_file, 'w') as ofn:
-            json.dump(states, ofn)
-        return True
-    except EnvironmentError:
-        return False
+MFD_MP_SIZE = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
+MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 # init buttons
 
-button_ORANGE = pygame.Surface(BTN1_SIZE)
+button_ORANGE = pygame.Surface((MFD.sd(BTN_WIDTH), MFD.sd(BTN_HEIGHT)))
 button_ORANGE.fill(COLOR_ORANGE)
 button_ORANGE.set_alpha(90, RLEACCEL)
-button_GREEN = pygame.Surface(BTN1_SIZE)
+button_GREEN = pygame.Surface((MFD.sd(BTN_WIDTH), MFD.sd(BTN_HEIGHT)))
 button_GREEN.fill(COLOR_GREEN)
 button_GREEN.set_alpha(90, RLEACCEL)
 
@@ -131,24 +72,22 @@ bm1_MFD = [ None,	# 0
     Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
-# Panel actions
-
-def draw_panel(surface, panel):
-    panelbox = pygame.Surface(MFD_RP_SIZE)
-    panelbox.fill((64,64,64))
-    panelbox.set_alpha(120, RLEACCEL)
-    mfd.blit(panelbox, MFD_RP_XY)
-    panel.render_panel(mfd)
-
-# init panels
+# init panel - right panel
 
 rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
 rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT))
-rp1_MFD.add_image("images/EliteDangerous_Logo.png")
+#rp1_MFD.add_image("images/EliteDangerous_Logo.png")
 #rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
 rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
-rp1_MFD.add_text(["Elite:Dangerous MFD"])
+rp1_MFD.add_text(["Elite:Dangerous MFD v1.1"])
 #rp1_MFD.add_text(["Loading universe data ..."])
+
+# init panel - middle panel
+
+mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
+mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT))
+mp1_MFD.add_image("images/EliteDangerous_Logo.png")
+mp1_MFD.add_text(["",""])
 
 Coriolis.init()
 last_pad = 0
@@ -162,7 +101,7 @@ noframe = True
 if load_button_states(bm1_MFD):
     #print("Loaded last states - ")
     #show_button_states(bm1_MFD)
-    draw_background(mfd)
+    draw_background(mfd, img_MFD)
     draw_button_states(mfd, bm1_MFD)
     pygame.display.flip()
 
@@ -189,22 +128,22 @@ while True:
         mods = pygame.key.get_mods()
         button_pressed = None
         joy_index = 0
-        if event.key == pygame.K_a:  joy_index = 1       # SYS - Full
-        if event.key == pygame.K_b:  joy_index = 2       # ENG - Full
-        if event.key == pygame.K_c:  joy_index = 3       # WEP - Full
-        if event.key == pygame.K_d:  joy_index = 4       # ENG 4 + SYS 2
-        if event.key == pygame.K_e:  joy_index = 5       # WEP 4 + SYS 2
-        if event.key == pygame.K_f:  joy_index = 6       # Heat Sink
-        if event.key == pygame.K_g:  joy_index = 7       # Silent Run
-        if event.key == pygame.K_h:  joy_index = 8       # Chaff
-        if event.key == pygame.K_i:  joy_index = 9       # Shield Cell
-        if event.key == pygame.K_j:  joy_index = 10      # Disco Scan
-        if event.key == pygame.K_k:  joy_index = 20      # Hard Points
-        if event.key == pygame.K_l:  joy_index = 19      # Cargo Scoop
-        if event.key == pygame.K_m:  joy_index = 13      # Landing Gear
-        if event.key == pygame.K_n:  joy_index = 12      # Ship Lights
-        if event.key == pygame.K_o:  joy_index = 11      # Orbit Lines
-        if event.key == pygame.K_q:  joy_index = 18      # Docking Req
+        if event.key == pygame.K_a:  joy_index = MFD_SYS_FULL	# SYS - Full
+        if event.key == pygame.K_b:  joy_index = MFD_ENG_FULL	# ENG - Full
+        if event.key == pygame.K_c:  joy_index = MFD_WEP_FULL	# WEP - Full
+        if event.key == pygame.K_d:  joy_index = MFD_ENG4_SYS2	# ENG 4 + SYS 2
+        if event.key == pygame.K_e:  joy_index = MFD_WEP4_SYS2	# WEP 4 + SYS 2
+        if event.key == pygame.K_f:  joy_index = MFD_HEATSINK	# Heat Sink
+        if event.key == pygame.K_g:  joy_index = MFD_SILENTRUN	# Silent Run
+        if event.key == pygame.K_h:  joy_index = MFD_CHAFF	# Chaff
+        if event.key == pygame.K_i:  joy_index = MFD_SHIELDCELL	# Shield Cell
+        if event.key == pygame.K_j:  joy_index = MFD_DISCOSCAN	# Disco Scan
+        if event.key == pygame.K_k:  joy_index = MFD_HARDPOINT	# Hard Points
+        if event.key == pygame.K_l:  joy_index = MFD_CARGOSCOOP	# Cargo Scoop
+        if event.key == pygame.K_m:  joy_index = MFD_LANDING	# Landing Gear
+        if event.key == pygame.K_n:  joy_index = MFD_LIGHTS	# Ship Lights
+        if event.key == pygame.K_o:  joy_index = MFD_ORBITLINES	# Orbit Lines
+        if event.key == pygame.K_q:  joy_index = MFD_DOCKINGREQ	# Docking Req
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
 
@@ -254,9 +193,10 @@ while True:
         Journal.display(rp1_MFD, my_ship, milkyway)
 
     #show_button_states(bm1_MFD)
-    draw_background(mfd)
+    draw_background(mfd, img_MFD)
     draw_button_states(mfd, bm1_MFD)
-    draw_panel(rpanel, rp1_MFD)
+    draw_panel(mfd, rpanel, rp1_MFD, True)
+    draw_panel(mfd, mpanel, mp1_MFD)
     pygame.display.flip()
 
     if not milkyway.loaded:

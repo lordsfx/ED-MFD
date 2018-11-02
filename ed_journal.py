@@ -2,14 +2,15 @@ import os, sys
 import time
 import json
 from ed_object import *
+from ed_status import *
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted" ]
+    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Status" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = "./journals"
-    patterns = [ path+"/Journal.*.log" ]
+    patterns = [ path+"/Journal.*.log", path+"/Status.json" ]
 
     @staticmethod
     def parser(journal, ship):
@@ -45,6 +46,20 @@ class Journal:
                             for p in pad_info:
                                 panel.add_image("images/" + p)
                     panel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                    ship.mark_event_processed(em)
+                # Status
+                if em == "Status":
+                    if emj["Flags"]:
+                        ship.update_status_flags(emj["Flags"])
+                        #for status_flag in Status.get_ship_flags():
+                        #    if ship.get_status().is_flagged(status_flag):
+                        #        panel.add_text([ "Status: %s" % status_flag ])
+                    if emj["Pips"]:
+                        ship.update_status_pips(emj["Pips"])
+                    if emj["FireGroup"]:
+                        ship.update_status_firegroup(emj["FireGroup"])
+                    if emj["GuiFocus"]:
+                        ship.update_status_guifocus(emj["GuiFocus"])
                     ship.mark_event_processed(em)
 
 class JournalEventHandler(PatternMatchingEventHandler):
