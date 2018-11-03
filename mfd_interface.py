@@ -39,8 +39,8 @@ class Button:
 
     def __init__(self, name, pos_x, pos_y, _color, _type=TYPE_PUSH, state=STATE_OFF):
         self.name   = name
-        self.pos_x  = pos_x
-        self.pos_y  = pos_y
+        self.pos_x  = MFD.sd(pos_x)
+        self.pos_y  = MFD.sd(pos_y)
         self.width  = MFD.sd(BTN_WIDTH)
         self.height = MFD.sd(BTN_HEIGHT)
         self.style  = pygame.Surface((self.width, self.height))

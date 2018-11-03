@@ -33,37 +33,33 @@ img_MFD.blit(layer_BTN, (0, 0))
 
 TIMER_LOOP = Button.TIMER_STEP * 10
 
-# display panels
-
-MFD_RP_SIZE = MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)
-MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
-
-MFD_MP_SIZE = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
-MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
-
 # init buttons
 
 bm1_MFD = [ None,	# 0
-    Button("SYS Full"    , MFD.sd(MFD_XC1), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button("ENG Full"    , MFD.sd(MFD_XC2), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button("WEP Full"    , MFD.sd(MFD_XC3), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
-    Button("ENG 4+SYS 2" , MFD.sd(MFD_XC4), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
-    Button("WEP 4+SYS 2" , MFD.sd(MFD_XC5), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
-    Button("Heat Sink"   , MFD.sd(MFD_XR1), MFD.sd(MFD_YC1), COLOR_GREEN),	# 6
-    Button("Silent Run"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC2), COLOR_GREEN, Button.TYPE_TOGGLE),	# 7
-    Button("Chaff"       , MFD.sd(MFD_XR1), MFD.sd(MFD_YC3), COLOR_GREEN),	# 8
-    Button("Shield Cell" , MFD.sd(MFD_XR1), MFD.sd(MFD_YC4), COLOR_GREEN),	# 9
-    Button("Disco Scan"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC5), COLOR_ORANGE, Button.TYPE_HOLD),	# 10
-    Button("Orbit Lines" , MFD.sd(MFD_XC5), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 11
-    Button("Ship Lights" , MFD.sd(MFD_XC4), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 12
-    Button("Landing Gear", MFD.sd(MFD_XC3), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 13
+    Button("SYS Full"    , MFD_XC1, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG Full"    , MFD_XC2, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP Full"    , MFD_XC3, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("ENG 4+SYS 2" , MFD_XC4, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button("WEP 4+SYS 2" , MFD_XC5, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
+    Button("Heat Sink"   , MFD_XR1, MFD_YC1, COLOR_GREEN),	# 6
+    Button("Silent Run"  , MFD_XR1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 7
+    Button("Chaff"       , MFD_XR1, MFD_YC3, COLOR_GREEN),	# 8
+    Button("Shield Cell" , MFD_XR1, MFD_YC4, COLOR_GREEN),	# 9
+    Button("Disco Scan"  , MFD_XR1, MFD_YC5, COLOR_ORANGE, Button.TYPE_HOLD),	# 10
+    Button("Orbit Lines" , MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
+    Button("Ship Lights" , MFD_XC4, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 12
+    Button("Landing Gear", MFD_XC3, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 13
     None, None, None, None, 							# 14 - 17
-    Button("Docking Req" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC3), COLOR_ORANGE),	# 18
-    Button("Cargo Scoop" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC2), COLOR_GREEN, Button.TYPE_TOGGLE),	# 19
-    Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 20
+    Button("Docking Req" , MFD_XL1, MFD_YC3, COLOR_ORANGE),	# 18
+    Button("Cargo Scoop" , MFD_XL1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 19
+    Button("Hard Points" , MFD_XL1, MFD_YC1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
-# init panel - right panel
+# init panels
+
+# right panel
+MFD_RP_SIZE = MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)
+MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
 rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
 rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT))
@@ -73,12 +69,16 @@ rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text(["Elite:Dangerous MFD v1.1"])
 #rp1_MFD.add_text(["Loading universe data ..."])
 
-# init panel - middle panel
+# mid panel
+MFD_MP_SIZE = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
+MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
 mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT))
 mp1_MFD.add_image("images/EliteDangerous_Logo.png")
 mp1_MFD.add_text(["",""])
+
+# misc init
 
 Coriolis.init()
 last_pad = 0
