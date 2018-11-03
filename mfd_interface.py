@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import *
 from constants import *
 from library import *
 
@@ -36,13 +37,15 @@ class Button:
     TIMER_TOGGLE = -1
     TIMER_SWITCH_1 = -1
 
-    def __init__(self, name, pos_x, pos_y, style, _type=TYPE_PUSH, state=STATE_OFF):
+    def __init__(self, name, pos_x, pos_y, _color, _type=TYPE_PUSH, state=STATE_OFF):
         self.name   = name
         self.pos_x  = pos_x
         self.pos_y  = pos_y
         self.width  = MFD.sd(BTN_WIDTH)
         self.height = MFD.sd(BTN_HEIGHT)
-        self.style  = style	# color
+        self.style  = pygame.Surface((self.width, self.height))
+        self.style.fill(_color)
+        self.style.set_alpha(90, RLEACCEL)
         self.type   = _type
         self.state  = state
         self.timer  = 0

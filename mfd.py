@@ -4,7 +4,6 @@ from mfd_functions import *
 from mfd_interface import *
 from ed_object import *
 from ed_journal import *
-from pygame.locals import *
 from watchdog.observers import Observer
 
 pygame.init()
@@ -32,7 +31,6 @@ layer_BTN = pygame.image.load(MFD.image_buttons).convert_alpha()
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
 
-#BTN1_SIZE = BTN1_WIDTH, BTN1_HEIGHT = MFD.sd(112), MFD.sd(50)
 TIMER_LOOP = Button.TIMER_STEP * 10
 
 # display panels
@@ -45,31 +43,24 @@ MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 # init buttons
 
-button_ORANGE = pygame.Surface((MFD.sd(BTN_WIDTH), MFD.sd(BTN_HEIGHT)))
-button_ORANGE.fill(COLOR_ORANGE)
-button_ORANGE.set_alpha(90, RLEACCEL)
-button_GREEN = pygame.Surface((MFD.sd(BTN_WIDTH), MFD.sd(BTN_HEIGHT)))
-button_GREEN.fill(COLOR_GREEN)
-button_GREEN.set_alpha(90, RLEACCEL)
-
 bm1_MFD = [ None,	# 0
-    Button("SYS Full"    , MFD.sd(MFD_XC1), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button("ENG Full"    , MFD.sd(MFD_XC2), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button("WEP Full"    , MFD.sd(MFD_XC3), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 3
-    Button("ENG 4+SYS 2" , MFD.sd(MFD_XC4), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 4
-    Button("WEP 4+SYS 2" , MFD.sd(MFD_XC5), MFD.sd(MFD_YT1), button_ORANGE, Button.TYPE_SWITCH_1),	# 5
-    Button("Heat Sink"   , MFD.sd(MFD_XR1), MFD.sd(MFD_YC1), button_GREEN),	# 6
-    Button("Silent Run"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 7
-    Button("Chaff"       , MFD.sd(MFD_XR1), MFD.sd(MFD_YC3), button_GREEN),	# 8
-    Button("Shield Cell" , MFD.sd(MFD_XR1), MFD.sd(MFD_YC4), button_GREEN),	# 9
-    Button("Disco Scan"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC5), button_ORANGE, Button.TYPE_HOLD),	# 10
-    Button("Orbit Lines" , MFD.sd(MFD_XC5), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 11
-    Button("Ship Lights" , MFD.sd(MFD_XC4), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 12
-    Button("Landing Gear", MFD.sd(MFD_XC3), MFD.sd(MFD_YB1), button_GREEN, Button.TYPE_TOGGLE),	# 13
+    Button("SYS Full"    , MFD.sd(MFD_XC1), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG Full"    , MFD.sd(MFD_XC2), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP Full"    , MFD.sd(MFD_XC3), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("ENG 4+SYS 2" , MFD.sd(MFD_XC4), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button("WEP 4+SYS 2" , MFD.sd(MFD_XC5), MFD.sd(MFD_YT1), COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
+    Button("Heat Sink"   , MFD.sd(MFD_XR1), MFD.sd(MFD_YC1), COLOR_GREEN),	# 6
+    Button("Silent Run"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC2), COLOR_GREEN, Button.TYPE_TOGGLE),	# 7
+    Button("Chaff"       , MFD.sd(MFD_XR1), MFD.sd(MFD_YC3), COLOR_GREEN),	# 8
+    Button("Shield Cell" , MFD.sd(MFD_XR1), MFD.sd(MFD_YC4), COLOR_GREEN),	# 9
+    Button("Disco Scan"  , MFD.sd(MFD_XR1), MFD.sd(MFD_YC5), COLOR_ORANGE, Button.TYPE_HOLD),	# 10
+    Button("Orbit Lines" , MFD.sd(MFD_XC5), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 11
+    Button("Ship Lights" , MFD.sd(MFD_XC4), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 12
+    Button("Landing Gear", MFD.sd(MFD_XC3), MFD.sd(MFD_YB1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 13
     None, None, None, None, 							# 14 - 17
-    Button("Docking Req" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC3), button_ORANGE),	# 18
-    Button("Cargo Scoop" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC2), button_GREEN, Button.TYPE_TOGGLE),	# 19
-    Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), button_GREEN, Button.TYPE_TOGGLE),	# 20
+    Button("Docking Req" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC3), COLOR_ORANGE),	# 18
+    Button("Cargo Scoop" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC2), COLOR_GREEN, Button.TYPE_TOGGLE),	# 19
+    Button("Hard Points" , MFD.sd(MFD_XL1), MFD.sd(MFD_YC1), COLOR_GREEN, Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
 # init panel - right panel
