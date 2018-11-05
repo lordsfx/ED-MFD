@@ -2,15 +2,23 @@ import json
 import errno
 from constants import *
 from ed_status import *
+from mfd_functions import *
+from mfd_interface import Button
+from library import *
 
 class Ship:
+    PIP_SYS = 0
+    PIP_ENG = 1
+    PIP_WEP = 2
+
     def __init__(self):
         self.status = Status()
         self.event_memory = {}
         self.at_system = None
         self.at_station = None
-        self.lights = None
-        self.landing_gear = None
+        self.pips = [0, 0, 0]
+        self.pips_set = 0
+        self.gui_focus = 0
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -39,23 +47,68 @@ class Ship:
     def get_at_station(self):
         return self.at_station
 
-    def update_status_flags(self, _flags):
+    def update_status_flags(self, _flags, buttons):
         self.status.update_flags(_flags)
-        if self.status.is_flagged("gear_down"):
-            self.landing_gear = True
+        print("update_status_flags:%s" % _flags)
+        # MFD_SILENTRUN
+        if self.status.is_flagged("silent_run"):
+            buttons[MFD_SILENTRUN].set_state(Button.STATE_ON)
         else:
-            self.landing_gear = False
+            buttons[MFD_SILENTRUN].set_state(Button.STATE_OFF)
+        # MFD_HARDPOINT
+        if self.status.is_flagged("hardpoint"):
+            buttons[MFD_HARDPOINT].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_HARDPOINT].set_state(Button.STATE_OFF)
+        # MFD_CARGOSCOOP
+        if self.status.is_flagged("cargo_scoop"):
+            buttons[MFD_CARGOSCOOP].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_CARGOSCOOP].set_state(Button.STATE_OFF)
+        # MFD_LANDING
+        if self.status.is_flagged("gear_down"):
+            buttons[MFD_LANDING].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_LANDING].set_state(Button.STATE_OFF)
+        # MFD_LIGHTS
+        if self.status.is_flagged("lights"):
+            buttons[MFD_LIGHTS].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_LIGHTS].set_state(Button.STATE_OFF)
 
-    def update_status_pips(self, _pips):
+    def update_status_pips(self, _pips, buttons):
         self.status.update_pips(_pips)
+        #print("update_status_pips:%s" % _pips)
+        self.pips = _pips
+        print("SYS:%d ENG:%d WEP:%d" % (self.pips[Ship.PIP_SYS], self.pips[Ship.PIP_ENG], self.pips[Ship.PIP_WEP]))
+        if self.pips[Ship.PIP_ENG] == 8 and self.pips[Ship.PIP_SYS] == 4:
+            self.pips_set = MFD_ENG4_SYS2
+        elif self.pips[Ship.PIP_WEP] == 8 and self.pips[Ship.PIP_SYS] == 4:
+            self.pips_set = MFD_WEP4_SYS2
+        elif self.pips[Ship.PIP_SYS] == 8:
+            self.pips_set = MFD_SYS_FULL
+        elif self.pips[Ship.PIP_ENG] == 8:
+            self.pips_set = MFD_ENG_FULL
+        elif self.pips[Ship.PIP_WEP] == 8:
+            self.pips_set = MFD_WEP_FULL
+        else:
+            if self.pips_set > 0:
+                buttons[self.pips_set].set_state(Button.STATE_OFF)
+                self.pips_set = 0
+
+        if self.pips_set > 0:
+            switch_group_states(buttons[self.pips_set], buttons)
         return
 
-    def update_status_firegroup(self, _firegroup):
+    def update_status_firegroup(self, _firegroup, buttons):
         self.status.update_firegroup(_firegroup)
+        print("update_status_firegroup:%s" % _firegroup)
         return
 
-    def update_status_guifocus(self, _guifocus):
+    def update_status_guifocus(self, _guifocus, buttons):
         self.status.update_guifocus(_guifocus)
+        print("update_status_guifocus:%s" % _guifocus)
+        self.gui_focus = _guifocus
         return
 
     def get_status(self):

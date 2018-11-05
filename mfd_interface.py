@@ -29,6 +29,7 @@ class Button:
     TYPE_TOGGLE = 2
     TYPE_HOLD   = 3
     TYPE_SWITCH_1 = 11
+    TYPE_SWITCH_2 = 21
     STATE_RELEASED = STATE_OFF = 0
     STATE_PUSHED   = STATE_ON  = STATE_HOLD = 1
     TIMER_STEP   = 5  # milliseconds
@@ -37,17 +38,22 @@ class Button:
     TIMER_TOGGLE = -1
     TIMER_SWITCH_1 = -1
 
-    def __init__(self, name, pos_x, pos_y, _color, _type=TYPE_PUSH, state=STATE_OFF):
-        self.name   = name
-        self.pos_x  = MFD.sd(pos_x)
-        self.pos_y  = MFD.sd(pos_y)
-        self.width  = MFD.sd(BTN_WIDTH)
-        self.height = MFD.sd(BTN_HEIGHT)
+    def __init__(self, _name, _joyidx, _pos_x, _pos_y, _color, _type=TYPE_PUSH, _state=STATE_OFF):
+        self.name   = _name
+        self.joyidx = _joyidx
+        if _type <= self.TYPE_SWITCH_1:		# TYPE_PUSH, TYPE_TOGGLE, TYPE_HOLD, TYPE_SWITCH_1
+            self.width  = MFD.sd(BTN1_WIDTH)
+            self.height = MFD.sd(BTN1_HEIGHT)
+        elif _type <= self.TYPE_SWITCH_2:	# TYPE_SWITCH_2
+            self.width  = MFD.sd(BTN2_WIDTH)
+            self.height = MFD.sd(BTN2_HEIGHT)
+        self.pos_x  = MFD.sd(_pos_x)
+        self.pos_y  = MFD.sd(_pos_y)
         self.style  = pygame.Surface((self.width, self.height))
         self.style.fill(_color)
         self.style.set_alpha(90, RLEACCEL)
         self.type   = _type
-        self.state  = state
+        self.state  = _state
         self.timer  = 0
 
     def get_offset(self):

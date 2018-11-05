@@ -17,7 +17,7 @@ class Journal:
         if journal["event"] in Journal.events_monitor:
             ship.update_event_memory(journal)
 
-    def display(panel, ship, universe):
+    def display(panel, ship, universe, buttons):
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
@@ -50,16 +50,16 @@ class Journal:
                 # Status
                 if em == "Status":
                     if emj["Flags"]:
-                        ship.update_status_flags(emj["Flags"])
+                        ship.update_status_flags(emj["Flags"], buttons)
                         #for status_flag in Status.get_ship_flags():
                         #    if ship.get_status().is_flagged(status_flag):
                         #        panel.add_text([ "Status: %s" % status_flag ])
                     if emj["Pips"]:
-                        ship.update_status_pips(emj["Pips"])
+                        ship.update_status_pips(emj["Pips"], buttons)
                     if emj["FireGroup"]:
-                        ship.update_status_firegroup(emj["FireGroup"])
+                        ship.update_status_firegroup(emj["FireGroup"], buttons)
                     if emj["GuiFocus"]:
-                        ship.update_status_guifocus(emj["GuiFocus"])
+                        ship.update_status_guifocus(emj["GuiFocus"], buttons)
                     ship.mark_event_processed(em)
 
 class JournalEventHandler(PatternMatchingEventHandler):
@@ -85,7 +85,7 @@ class JournalEventHandler(PatternMatchingEventHandler):
             self.journal_filter()
 
         elif event.event_type == "created":
-            print("%s created" % event.src_path)
+            #print("%s created" % event.src_path)
 
             if self.jfh: self.jfh.close()
             self.latest_journal = event.src_path
@@ -93,6 +93,12 @@ class JournalEventHandler(PatternMatchingEventHandler):
 
             if self.jfh:
                 self.journal_filter()
+
+        elif event.event_type == "deleted":
+            #print("%s deleted" % event.src_path)
+            pass
+        else:
+            print("other event:%s,%s" % (event.event_type, event.src_path))
 
     def journal_filter(self):
         jj = self.jfh.readline()
@@ -103,7 +109,7 @@ class JournalEventHandler(PatternMatchingEventHandler):
                     self.captured_events = []
                     self.have_update = True
                 self.captured_events.append(journal)
-                print("%s is logged" % journal['event'])
+                #print("%s is logged" % journal['event'])
                 sys.stdout.flush()
             jj = self.jfh.readline()
 

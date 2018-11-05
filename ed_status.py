@@ -4,7 +4,7 @@ class Status:
                   "supercruise"    : 0x10	, "fa_off"        : 0x20,
                   "hardpoint"      : 0x40	, "in_wing"       : 0x80,
                   "lights"         : 0x100	, "cargo_scoop"   : 0x200,
-                  "slient_run"     : 0x400	, "fuel_scooping" : 0x800,
+                  "silent_run"     : 0x400	, "fuel_scooping" : 0x800,
                   "srv_hbrake"     : 0x1000	, "srv_turret"    : 0x2000,
                   "srv_turret_off" : 0x4000	, "srv_drvassist" : 0x8000,
                   "fsd_masslock"   : 0x10000	, "fsd_charging"  : 0x20000,

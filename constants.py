@@ -61,8 +61,10 @@ MFD_MP_HEIGHT = 600
 
 # Size
 FONT_SIZE = 16
-BTN_WIDTH = 112
-BTN_HEIGHT = 50
+BTN1_WIDTH = 112
+BTN1_HEIGHT = 50
+BTN2_WIDTH = 112
+BTN2_HEIGHT = 22
 
 # Coriolis images
 IMAGE_CORIOLIS_LAYOUT = "images/coriolis-layout-clean.png"

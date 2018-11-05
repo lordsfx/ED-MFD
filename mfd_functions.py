@@ -19,18 +19,22 @@ def draw_panel(mfd, surface, panel, add_shade=False):
 # button actions
 
 def show_button_states(buttons):
-    for b in buttons:
-       if b:
-           print(str(b.state) + " ", end="")
-       else:
-           print("0 ", end="")
+    for (i, b) in enumerate(buttons):
+       if i > 0:
+          if b:
+             print("%d:%s " % (i, str(b.state)), end="")
+          else:
+             print("0 ", end="")
+          if i % 5 == 0:
+             print(" ", end="")
     print(end="\r")
 
 def switch_group_states(this_button, buttons):
     for b in buttons:
        if b and b.type == this_button.type:
           if b == this_button:
-             this_button.update_state()
+             #this_button.update_state()
+             this_button.set_state(Button.STATE_ON)
           else:
              b.reset_state()
 

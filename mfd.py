@@ -33,26 +33,30 @@ img_MFD.blit(layer_BTN, (0, 0))
 
 TIMER_LOOP = Button.TIMER_STEP * 10
 
+# ED objects
+my_ship = Ship()
+milkyway = Universe()
+
 # init buttons
 
 bm1_MFD = [ None,	# 0
-    Button("SYS Full"    , MFD_XC1, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button("ENG Full"    , MFD_XC2, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button("WEP Full"    , MFD_XC3, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
-    Button("ENG 4+SYS 2" , MFD_XC4, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
-    Button("WEP 4+SYS 2" , MFD_XC5, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
-    Button("Heat Sink"   , MFD_XR1, MFD_YC1, COLOR_GREEN),	# 6
-    Button("Silent Run"  , MFD_XR1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 7
-    Button("Chaff"       , MFD_XR1, MFD_YC3, COLOR_GREEN),	# 8
-    Button("Shield Cell" , MFD_XR1, MFD_YC4, COLOR_GREEN),	# 9
-    Button("Disco Scan"  , MFD_XR1, MFD_YC5, COLOR_ORANGE, Button.TYPE_HOLD),	# 10
-    Button("Orbit Lines" , MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
-    Button("Ship Lights" , MFD_XC4, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 12
-    Button("Landing Gear", MFD_XC3, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 13
+    Button("SYS Full"    ,  1, MFD_XC1, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG Full"    ,  2, MFD_XC2, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP Full"    ,  3, MFD_XC3, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("ENG 4+SYS 2" ,  4, MFD_XC4, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
+    Button("WEP 4+SYS 2" ,  5, MFD_XC5, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
+    Button("Heat Sink"   ,  6, MFD_XR1, MFD_YC1, COLOR_GREEN),	# 6
+    Button("Silent Run"  ,  7, MFD_XR1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 7
+    Button("Chaff"       ,  8, MFD_XR1, MFD_YC3, COLOR_GREEN),	# 8
+    Button("Shield Cell" ,  9, MFD_XR1, MFD_YC4, COLOR_GREEN),	# 9
+    Button("Disco Scan"  , 10, MFD_XR1, MFD_YC5, COLOR_ORANGE, Button.TYPE_HOLD),	# 10
+    Button("Orbit Lines" , 11, MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
+    Button("Ship Lights" , 12, MFD_XC4, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 12
+    Button("Landing Gear", 13, MFD_XC3, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 13
     None, None, None, None, 							# 14 - 17
-    Button("Docking Req" , MFD_XL1, MFD_YC3, COLOR_ORANGE),	# 18
-    Button("Cargo Scoop" , MFD_XL1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 19
-    Button("Hard Points" , MFD_XL1, MFD_YC1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 20
+    Button("Docking Req" , 18, MFD_XL1, MFD_YC3, COLOR_ORANGE),	# 18
+    Button("Cargo Scoop" , 19, MFD_XL1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 19
+    Button("Hard Points" , 20, MFD_XL1, MFD_YC1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 20
     None, None, None, None, None, None, None, None ]	# 21 - 28
 
 # init panels
@@ -101,10 +105,6 @@ journal_evh = JournalEventHandler()
 journal_obs = Observer()
 journal_obs.schedule(journal_evh, Journal.path, recursive=False)
 journal_obs.start()
-
-# ED objects
-my_ship = Ship()
-milkyway = Universe()
 
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
@@ -181,7 +181,7 @@ while True:
         for j in journal_updates:
             #print(j)
             Journal.parser(j, my_ship)
-        Journal.display(rp1_MFD, my_ship, milkyway)
+        Journal.display(rp1_MFD, my_ship, milkyway, bm1_MFD)
 
     #show_button_states(bm1_MFD)
     draw_background(mfd, img_MFD)
