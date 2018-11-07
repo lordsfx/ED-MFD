@@ -70,7 +70,7 @@ rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd
 #rp1_MFD.add_image("images/EliteDangerous_Logo.png")
 #rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
 rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
-rp1_MFD.add_text(["Elite:Dangerous MFD v1.1"])
+rp1_MFD.add_text(["Elite:Dangerous MFD v1.2"])
 #rp1_MFD.add_text(["Loading universe data ..."])
 
 # mid panel

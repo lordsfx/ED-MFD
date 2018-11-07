@@ -6,14 +6,19 @@ COLOR_WHITE  = (255, 255, 255)
 COLOR_SHADE  = ( 64,  64,  64)
 
 # MFD Layout
-#     X L C1 C2 C3 C4 C5 R       Y
-# |28|    01 02 03 04 05    |21| T
-# |27| 20                06 |22| C1
-#      19                07      C2
-#      18                08      C3
-#      17                09      C4
-# |26| 16                10 |23| C5
-# |25|    15 14 13 12 11    |24| B
+# X - L1   C1 C2 C3 C4 C5   R1     Y
+#                                  |
+#          01 02 03 04 05          T1
+# |28|                        |21| U1
+# |27|                        |22| U2
+#      20                  06      C1
+#      19                  07      C2
+#      18                  08      C3
+#      17                  09      C4
+#      16                  10      C5
+# |26|                        |23| D1
+# |25|                        |24| D2
+#          15 14 13 12 11          B1
 
 # MFD Button Map
 MFD_SYS_FULL   = 1
@@ -32,6 +37,8 @@ MFD_LANDING    = 13
 MFD_DOCKINGREQ = 18
 MFD_CARGOSCOOP = 19
 MFD_HARDPOINT  = 20
+MFD_GALAXY_MAP = 23
+MFD_SYSTEM_MAP = 24
 
 # Positions
 MFD_XL1 = 2
@@ -41,13 +48,17 @@ MFD_XC3 = 346
 MFD_XC4 = 464
 MFD_XC5 = 582
 MFD_XR1 = 676
-MFD_YC1 = 151 #158
-MFD_YC2 = 263 #270
-MFD_YC3 = 375 #382
-MFD_YC4 = 483 #490
-MFD_YC5 = 593 #600
+MFD_YC1 = 151
+MFD_YC2 = 263
+MFD_YC3 = 375
+MFD_YC4 = 483
+MFD_YC5 = 593
 MFD_YT1 = 12
 MFD_YB1 = 730
+MFD_YU1 = 66
+MFD_YU2 = 92
+MFD_YD1 = 669
+MFD_YD2 = 698
 
 MFD_RP_X = 906
 MFD_RP_Y = 0
