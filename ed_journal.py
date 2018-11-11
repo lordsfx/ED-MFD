@@ -75,6 +75,8 @@ class Journal:
                         ship.update_status_firegroup(emj["FireGroup"], buttons)
                     if emj["GuiFocus"]:
                         ship.update_status_guifocus(emj["GuiFocus"], buttons)
+                    if "Latitude" in emj:
+                        ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
                     ship.mark_event_processed(em)
 
 class JournalEventHandler(PatternMatchingEventHandler):
@@ -133,8 +135,7 @@ class JournalEventHandler(PatternMatchingEventHandler):
             journal = json.loads(jj)
             if journal['event'] in Journal.events_monitor:
                 self.captured_events.append(journal)
-                #print("%s is logged" % journal['event'])
-                #sys.stdout.flush()
+                #print("%s is logged" % journal['event'], flush=True)
             jj = self.journal_fh.readline()
 
     def get_updates(self):

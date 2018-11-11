@@ -71,7 +71,7 @@ rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd
 #rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
 rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"])
 rp1_MFD.add_text(["Elite:Dangerous MFD v1.2"])
-#rp1_MFD.add_text(["Loading universe data ..."])
+rp1_MFD.add_text(["", "Loading universe data ..."])
 
 # mid panel
 MFD_MP_SIZE = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
@@ -109,6 +109,9 @@ journal_obs.start()
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
 pygame.time.set_timer(EVENT_APP_LOOP, TIMER_LOOP)
+
+# load eddb data
+milkyway.thread_load_data(rp1_MFD)
 
 # loop
 while True:
@@ -190,8 +193,6 @@ while True:
     draw_panel(mfd, mpanel, mp1_MFD)
     pygame.display.flip()
 
-    if not milkyway.loaded:
-        milkyway.load_data()
 
 
 # End While

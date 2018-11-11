@@ -1,4 +1,5 @@
 import json
+import threading
 import errno
 from constants import *
 from ed_status import *
@@ -19,6 +20,7 @@ class Ship:
         self.pips = [0, 0, 0]
         self.pips_set = 0
         self.gui_focus = 0
+        self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -49,7 +51,7 @@ class Ship:
 
     def update_status_flags(self, _flags, buttons):
         self.status.update_flags(_flags)
-        print("update_status_flags:%s" % _flags)
+        print("Flags: %s" % _flags)
         # MFD_SILENTRUN
         if self.status.is_flagged("silent_run"):
             buttons[MFD_SILENTRUN].set_state(Button.STATE_ON)
@@ -102,13 +104,19 @@ class Ship:
 
     def update_status_firegroup(self, _firegroup, buttons):
         self.status.update_firegroup(_firegroup)
-        print("update_status_firegroup:%s" % _firegroup)
+        print("Fire Group: %s" % _firegroup)
         return
 
     def update_status_guifocus(self, _guifocus, buttons):
         self.status.update_guifocus(_guifocus)
-        print("update_status_guifocus:%s" % _guifocus)
+        print("GUI Focus: %s" % _guifocus)
         self.gui_focus = _guifocus
+        return
+
+    def update_status_bearings(self, _lat, _long, _head, _alt):
+        self.bearings = (float(_lat), float(_long), int(_head), int(_alt))
+        print("Lat / Long: %f / %f \t" % (self.bearings[0], self.bearings[1]), end="")
+        print("Head / Alt: %d / %d" % (self.bearings[2], self.bearings[3]))
         return
 
     def get_status(self):
@@ -121,13 +129,15 @@ class System:
 
     @staticmethod
     def load_systems(fn):
-        print("Loading Systems...")
         systemObj = []
         try:
             systemJSON = json.load(open(fn))
-            for s in systemJSON:
+            _total = len(systemJSON)
+            print("Loading Systems [%d] " % _total, end="", flush=True)
+            for i, s in enumerate(systemJSON):
                 systemObj.append( System(s["id"], s["name"]) )
-            print("Loading completed.")
+                if i % 1000 == 0: print(".", end="", flush=True)
+            print(" completed")
         except (OSError, IOError) as e:
             if getattr(e, 'errno', 0) == errno.ENOENT:
                 print("File %s not found, ignored..." % fn)
@@ -135,18 +145,22 @@ class System:
 
 class Universe:
     def __init__(self):
+        self.loading = False
         self.loaded = False
-        self.delay_load = True
         self.system_data = None
         self.station_data = None
 
-    def load_data(self):
-        if not self.delay_load:
-            self.system_data  = System.load_systems(EDDB_SYSTEMS_DATA)
-            self.station_data = Station.load_stations(EDDB_STATIONS_DATA)
-            self.loaded = True
-        else:
-            self.delay_load = False
+    def load_data(self, _callback):
+        self.system_data  = System.load_systems(EDDB_SYSTEMS_DATA)
+        self.station_data = Station.load_stations(EDDB_STATIONS_DATA)
+        self.loaded = True
+        self.loading = False
+        _callback.add_text(["Data loading completed", ""])
+
+    def thread_load_data(self, _callback):
+        self.loading = True
+        tld = threading.Thread(name='dataloader', target=self.load_data, args=(_callback,))
+        tld.start()
 
     def get_station_data(self, _station, _system):
         station = Station.find_station(self.station_data, self.system_data, _station, _system)
@@ -219,13 +233,15 @@ class Station:
 
     @staticmethod
     def load_stations(fn):
-        print("Loading Stations...")
         stationObj = []
         try:
             stationJSON = json.load(open(fn))
-            for s in stationJSON:
+            _total = len(stationJSON)
+            print("Loading Stations [%d] " % _total, end="", flush=True)
+            for i, s in enumerate(stationJSON):
                 stationObj.append( Station(s["id"], s["name"], s["system_id"], s["type"], s["type_id"], s["is_planetary"]) )
-            print("Loading completed.")
+                if i % 1000 == 0: print(".", end="", flush=True)
+            print(" completed")
         except (OSError, IOError) as e:
             if getattr(e, 'errno', 0) == errno.ENOENT:
                 print("File %s not found, ignored..." % fn)
