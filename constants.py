@@ -77,10 +77,6 @@ BTN1_HEIGHT = 50
 BTN2_WIDTH = 112
 BTN2_HEIGHT = 22
 
-# Coriolis images
-IMAGE_CORIOLIS_LAYOUT = "images/coriolis-layout-clean.png"
-IMAGE_CORIOLIS_PADNUM = "images/coriolis-layout-num.png"
-
 # Coriolis pad positions
 #      0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
 X = [ 40,  89, 146, 201, 255, 308, 370, 429, 489, 541, 557, 597, 626, 694, 757 ]
@@ -132,8 +128,4 @@ CORIOLIS_POS = [
     ( X[7], Y[10],  X[9], Y[11]),	# 44
     ( X[7],  Y[9],  X[8], Y[10]) 	# 45
 ]
-
-# EDDB data
-EDDB_SYSTEMS_DATA  = "eddb/systems_populated.json"
-EDDB_STATIONS_DATA = "eddb/stations_filtered.json"
 

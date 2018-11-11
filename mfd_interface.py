@@ -1,4 +1,5 @@
 import pygame
+from config import *
 from pygame.locals import *
 from constants import *
 from library import *
