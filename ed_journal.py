@@ -1,11 +1,16 @@
+import logging
 import os, sys
 import time
 import json
 import glob, io
+from config import *
 from ed_object import *
 from ed_status import *
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
+
+logging.basicConfig(level=LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 J_PATH = "./journals"
 J_LOG  = J_PATH+"/Journal.*.log"
@@ -20,12 +25,12 @@ class Journal:
     @staticmethod
     def openfile(_filename, _seek=None):
         try:
-            print("Open journal: %s" % _filename)
+            logger.debug("Open journal: %s" % _filename)
             fh = open(_filename)
             if _seek:
                 fh.seek(0, _seek)
         except (OSError, IOError) as e:
-            print("Error opening: %s, %s" % (_filename, e))
+            logger.error("Error opening: %s, %s" % (_filename, e))
         return fh
 
     def parser(journal, ship):
@@ -36,7 +41,7 @@ class Journal:
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
-                print("%s has an update" % em)
+                logger.debug("%s has an update" % em)
                 emj = event_memory[em][1]				# retrieve journal content
                 # SupercruiseExit
                 if em == "SupercruiseExit":
@@ -98,31 +103,31 @@ class JournalEventHandler(PatternMatchingEventHandler):
  
         elif event.event_type == "modified":
             if "Status" in event.src_path:
-                print("Status updated: %s" % event.src_path)
+                logger.debug("Status updated: %s" % event.src_path)
                 self.status_process()
             else:
-                print("Journal updated: %s" % event.src_path)
+                logger.debug("Journal updated: %s" % event.src_path)
                 self.journal_filter()
 
         elif event.event_type == "created":
             if "Status" in event.src_path:
-                print("Status created: %s" % event.src_path)
+                logger.debug("Status created: %s" % event.src_path)
                 if self.status_fh: self.status_fh.close()
                 self.status_json = event.src_path
                 self.status_fh = Journal.openfile(self.status_json)
                 self.status_process()
             else:
-                print("Journal created: %s" % event.src_path)
+                logger.debug("Journal created: %s" % event.src_path)
                 if self.journal_fh: self.journal_fh.close()
                 self.journal_latest = event.src_path
                 self.journal_fh = Journal.openfile(self.journal_latest)
                 self.journal_filter()
 
         elif event.event_type == "deleted":
-            #print("%s deleted" % event.src_path)
+            #logger.debug("%s deleted" % event.src_path)
             pass
         else:
-            print("other event: %s: %s" % (event.event_type, event.src_path))
+            logger.debug("other event: %s: %s" % (event.event_type, event.src_path))
 
     def status_process(self):
         self.status_fh.seek(0, io.SEEK_SET)
@@ -135,7 +140,7 @@ class JournalEventHandler(PatternMatchingEventHandler):
             journal = json.loads(jj)
             if journal['event'] in Journal.events_monitor:
                 self.captured_events.append(journal)
-                #print("%s is logged" % journal['event'], flush=True)
+                #logger.debug("%s is logged" % journal['event'], flush=True)
             jj = self.journal_fh.readline()
 
     def get_updates(self):

@@ -1,11 +1,16 @@
+import logging
 import json
 import threading
 import errno
+from config import *
 from constants import *
 from ed_status import *
 from mfd_functions import *
 from mfd_interface import Button
 from library import *
+
+logging.basicConfig(level=LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 class Ship:
     PIP_SYS = 0
@@ -37,21 +42,21 @@ class Ship:
 
     def set_at_system(self, system):
         self.at_system = system
-        print("At system: %s" % self.at_system)
+        logger.debug("At system: %s" % self.at_system)
 
     def get_at_system(self):
         return self.at_system
 
     def set_at_station(self, station):
         self.at_station = station
-        print("At station: %s" % self.at_station)
+        logger.debug("At station: %s" % self.at_station)
 
     def get_at_station(self):
         return self.at_station
 
     def update_status_flags(self, _flags, buttons):
         self.status.update_flags(_flags)
-        print("Flags: %s" % _flags)
+        logger.debug("Flags: %s" % _flags)
         # MFD_SILENTRUN
         if self.status.is_flagged("silent_run"):
             buttons[MFD_SILENTRUN].set_state(Button.STATE_ON)
@@ -80,9 +85,8 @@ class Ship:
 
     def update_status_pips(self, _pips, buttons):
         self.status.update_pips(_pips)
-        #print("update_status_pips:%s" % _pips)
         self.pips = _pips
-        print("SYS:%d ENG:%d WEP:%d" % (self.pips[Ship.PIP_SYS], self.pips[Ship.PIP_ENG], self.pips[Ship.PIP_WEP]))
+        logger.debug("SYS:%d ENG:%d WEP:%d" % (self.pips[Ship.PIP_SYS], self.pips[Ship.PIP_ENG], self.pips[Ship.PIP_WEP]))
         if self.pips[Ship.PIP_ENG] == 8 and self.pips[Ship.PIP_SYS] == 4:
             self.pips_set = MFD_ENG4_SYS2
         elif self.pips[Ship.PIP_WEP] == 8 and self.pips[Ship.PIP_SYS] == 4:
@@ -104,19 +108,18 @@ class Ship:
 
     def update_status_firegroup(self, _firegroup, buttons):
         self.status.update_firegroup(_firegroup)
-        print("Fire Group: %s" % _firegroup)
+        logger.debug("Fire Group: %s" % _firegroup)
         return
 
     def update_status_guifocus(self, _guifocus, buttons):
         self.status.update_guifocus(_guifocus)
-        print("GUI Focus: %s" % _guifocus)
+        logger.debug("GUI Focus: %s" % _guifocus)
         self.gui_focus = _guifocus
         return
 
     def update_status_bearings(self, _lat, _long, _head, _alt):
         self.bearings = (float(_lat), float(_long), int(_head), int(_alt))
-        print("Lat / Long: %f / %f \t" % (self.bearings[0], self.bearings[1]), end="")
-        print("Head / Alt: %d / %d" % (self.bearings[2], self.bearings[3]))
+        logger.debug("Lat / Long: %f / %f\tHead / Alt: %d / %d" % self.bearings)
         return
 
     def get_status(self):
@@ -140,7 +143,7 @@ class System:
             print(" completed")
         except (OSError, IOError) as e:
             if getattr(e, 'errno', 0) == errno.ENOENT:
-                print("File %s not found, ignored..." % fn)
+                logger.error("File %s not found, ignored..." % fn)
         return systemObj
 
 class Universe:
@@ -150,16 +153,16 @@ class Universe:
         self.system_data = None
         self.station_data = None
 
-    def load_data(self, _callback):
+    def load_data(self, _info_panel):
         self.system_data  = System.load_systems(EDDB_SYSTEMS_DATA)
         self.station_data = Station.load_stations(EDDB_STATIONS_DATA)
         self.loaded = True
         self.loading = False
-        _callback.add_text(["Data loading completed", ""])
+        _info_panel.add_text(["Data loading completed", ""])
 
-    def thread_load_data(self, _callback):
+    def thread_load_data(self, _info_panel):
         self.loading = True
-        tld = threading.Thread(name='dataloader', target=self.load_data, args=(_callback,))
+        tld = threading.Thread(name='dataloader', target=self.load_data, args=(_info_panel,))
         tld.start()
 
     def get_station_data(self, _station, _system):
@@ -244,7 +247,7 @@ class Station:
             print(" completed")
         except (OSError, IOError) as e:
             if getattr(e, 'errno', 0) == errno.ENOENT:
-                print("File %s not found, ignored..." % fn)
+                logger.error("File %s not found, ignored..." % fn)
         return stationObj
 
     def find_station(stn_data, sys_data, station, system):

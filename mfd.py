@@ -1,12 +1,15 @@
+import logging
 import sys, pygame
 import json
+from config import *
 from mfd_functions import *
 from mfd_interface import *
 from ed_object import *
 from ed_journal import *
 from watchdog.observers import Observer
 
-pygame.init()
+logging.basicConfig(level=LOG_LEVEL)
+logger = logging.getLogger(__name__)
 
 # param
 scale = 1
@@ -14,6 +17,7 @@ if len(sys.argv) > 1:
     scale = float(sys.argv[1])
 
 # set stage
+pygame.init()
 pygame.display.set_caption(MFD.title)
 img_MFD = pygame.image.load(MFD.image_wallpaper)
 APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
@@ -94,7 +98,7 @@ noframe = True
 
 # load last states, if any
 if load_button_states(bm1_MFD):
-    #print("Loaded last states - ")
+    #logger.debug("Loaded last states - ")
     #show_button_states(bm1_MFD)
     draw_background(mfd, img_MFD)
     draw_button_states(mfd, bm1_MFD)
@@ -172,7 +176,7 @@ while True:
                     switch_group_states(button_pressed, bm1_MFD)
                 else:
                     button_pressed.update_state()
-                #print("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
+                #logger.debug("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
             if mods & pygame.KMOD_ALT:
                 button_pressed.reset_state()
 
@@ -182,7 +186,7 @@ while True:
     journal_updates = journal_evh.get_updates()
     if journal_updates:
         for j in journal_updates:
-            #print(j)
+            #logger.debug(j)
             Journal.parser(j, my_ship)
         Journal.display(rp1_MFD, my_ship, milkyway, bm1_MFD)
 
