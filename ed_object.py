@@ -1,4 +1,5 @@
 import logging
+import os
 import json
 import threading
 import errno
@@ -8,6 +9,7 @@ from ed_status import *
 from mfd_functions import *
 from mfd_interface import Button
 from library import *
+from eddb import *
 
 logging.basicConfig(level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
@@ -147,22 +149,24 @@ class System:
         return systemObj
 
 class Universe:
+    is_loading = False
+    is_loaded = False
+    is_refreshing_db = False
+
     def __init__(self):
-        self.loading = False
-        self.loaded = False
         self.system_data = None
         self.station_data = None
 
     def load_data(self, _info_panel):
-        self.system_data  = System.load_systems(EDDB_SYSTEMS_DATA)
-        self.station_data = Station.load_stations(EDDB_STATIONS_DATA)
-        self.loaded = True
-        self.loading = False
+        self.system_data  = System.load_systems(os.path.join(EDDB_PATH, EDDB_SYSTEMS_DATA))
+        self.station_data = Station.load_stations(os.path.join(EDDB_PATH, EDDB_STATIONS_DATA))
+        Universe.is_loaded = True
+        Universe.is_loading = False
         _info_panel.add_text(["Data loading completed", ""])
 
     def thread_load_data(self, _info_panel):
-        self.loading = True
-        tld = threading.Thread(name='dataloader', target=self.load_data, args=(_info_panel,))
+        self.is_loading = True
+        tld = threading.Thread(target=self.load_data, args=(_info_panel,))
         tld.start()
 
     def get_station_data(self, _station, _system):
@@ -170,6 +174,31 @@ class Universe:
         if station:
             station.print_info()
             return station
+
+    def thread_refresh_eddb(self, _info_panel):
+        logger.debug("Loading=[%s], Loaded=[%s], RefreshingDB=[%s]" %
+            (Universe.is_loading, Universe.is_loaded, Universe.is_refreshing_db))
+        if Universe.is_loading:
+            logger.debug("Data loading in progress, request is cancelled.")
+            return
+        if Universe.is_refreshing_db:
+            logger.debug("EDDB refreshing in progress, request is cancelled.")
+            return
+
+        _info_panel.add_text(["Refreshing EDDB data ..."])
+        Universe.is_refreshing_db = True
+        _refreshed = threading.Event()
+        tre = threading.Thread(target=eddb.refresh_from_source, args=(_refreshed,))
+        nre = threading.Thread(target=self.notify_done, args=(_info_panel,"EDDB data refreshed",_refreshed,))
+        tre.start()
+        nre.start()
+
+    def notify_done(self, _info_panel, _text, _notify):
+        _notify.wait()
+        _info_panel.add_text([_text])
+        logger.debug(_text)
+        Universe.is_refreshing_db = False
+        self.thread_load_data(_info_panel)
 
 class Station:
     COR_PAD_CLOCK = [ 0,                                   # direction at N o'clock
@@ -230,9 +259,9 @@ class Station:
 
     def print_info(self):
         if self.type:
-            print("Station " + self.name + " at " + self.system_name + ", " + self.type + ", layout: " + str(self.docking_pad_layout()))
+            logger.info("Station %s at %s, %s, layout: %d" % (self.name, self.system_name, self.type, self.docking_pad_layout()))
         else:
-            print("Station " + self.name)
+            logger.info("Station %s" % self.name)
 
     @staticmethod
     def load_stations(fn):

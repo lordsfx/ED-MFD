@@ -4,6 +4,7 @@ COLOR_GREEN  = ( 51, 255,  51)
 COLOR_GREY   = (128, 128, 128)
 COLOR_WHITE  = (255, 255, 255)
 COLOR_SHADE  = ( 64,  64,  64)
+COLOR_BLACK  = (  0,   0,   0)
 
 # MFD Layout
 # X - L1   C1 C2 C3 C4 C5   R1     Y

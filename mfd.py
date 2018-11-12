@@ -145,7 +145,7 @@ while True:
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
 
-        if event.key == pygame.K_r:         # Ctrl-R : Reset all states
+        if event.key == pygame.K_x:         # Ctrl-X : Reset all states
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
                     if b: b.reset_state()
@@ -158,6 +158,8 @@ while True:
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
                 rp1_MFD.add_coriolis(0)
+        if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
+                milkyway.thread_refresh_eddb(rp1_MFD)
         if event.key == pygame.K_SPACE:
             if noframe:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)

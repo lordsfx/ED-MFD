@@ -12,9 +12,9 @@ from watchdog.events import PatternMatchingEventHandler
 logging.basicConfig(level=LOG_LEVEL)
 logger = logging.getLogger(__name__)
 
-J_PATH = "./journals"
-J_LOG  = J_PATH+"/Journal.*.log"
-J_STAT = J_PATH+"/Status.json"
+J_PATH = "journals"
+J_LOG  = os.path.join(J_PATH, "Journal.*.log")
+J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
     events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Status" ]

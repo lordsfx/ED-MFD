@@ -3,3 +3,4 @@ __pycache__*
 mfd.json
 eddb/*.json
 *.bak
+journals
