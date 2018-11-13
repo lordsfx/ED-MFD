@@ -130,9 +130,13 @@ class JournalEventHandler(PatternMatchingEventHandler):
             logger.debug("other event: %s: %s" % (event.event_type, event.src_path))
 
     def status_process(self):
-        self.status_fh.seek(0, io.SEEK_SET)
-        status = json.loads(self.status_fh.readline())
-        self.captured_events.append(status)
+        if self.status_fh:
+            try:
+                self.status_fh.seek(0, io.SEEK_SET)
+                status = json.loads(self.status_fh.readline())
+                self.captured_events.append(status)
+            except Exception as e:
+                logger.debug(e)
 
     def journal_filter(self):
         jj = self.journal_fh.readline()
