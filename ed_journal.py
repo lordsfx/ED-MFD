@@ -41,7 +41,7 @@ class Journal:
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
-                logger.debug("%s has an update" % em)
+                #logger.debug("%s has an update" % em)
                 emj = event_memory[em][1]				# retrieve journal content
                 # SupercruiseExit
                 if em == "SupercruiseExit":
@@ -69,16 +69,16 @@ class Journal:
                     ship.mark_event_processed(em)
                 # Status
                 if em == "Status":
-                    if emj["Flags"]:
+                    if "Flags" in emj:
                         ship.update_status_flags(emj["Flags"], buttons)
                         #for status_flag in Status.get_ship_flags():
                         #    if ship.get_status().is_flagged(status_flag):
                         #        panel.add_text([ "Status: %s" % status_flag ])
-                    if emj["Pips"]:
+                    if "Pips" in emj:
                         ship.update_status_pips(emj["Pips"], buttons)
-                    if emj["FireGroup"]:
+                    if "FireGroup" in emj:
                         ship.update_status_firegroup(emj["FireGroup"], buttons)
-                    if emj["GuiFocus"]:
+                    if "GuiFocus" in emj:
                         ship.update_status_guifocus(emj["GuiFocus"], buttons)
                     if "Latitude" in emj:
                         ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
