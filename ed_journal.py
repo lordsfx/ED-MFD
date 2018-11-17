@@ -60,11 +60,12 @@ class Journal:
                         panel.add_coriolis(emj["LandingPad"])
                     else:
                         station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
-                        pad_layout = station.docking_pad_layout()
-                        if pad_layout == 2:
-                            pad_info = station.outpost_pad_info()
-                            for p in pad_info:
-                                panel.add_image("images/" + p)
+                        if station:
+                            pad_layout = station.docking_pad_layout()
+                            if pad_layout == 2:
+                                pad_info = station.outpost_pad_info()
+                                for p in pad_info:
+                                    panel.add_image("images/" + p)
                     panel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
                     ship.mark_event_processed(em)
                 # Status
@@ -142,10 +143,11 @@ class JournalEventHandler(PatternMatchingEventHandler):
         jj = self.journal_fh.readline()
         while jj:
             journal = json.loads(jj)
-            if journal['event'] in Journal.events_monitor:
-                self.captured_events.append(journal)
-                #logger.debug("%s is logged" % journal['event'], flush=True)
-            jj = self.journal_fh.readline()
+            if 'event' in journal:
+                if journal['event'] in Journal.events_monitor:
+                    self.captured_events.append(journal)
+                    #logger.debug("%s is logged" % journal['event'], flush=True)
+                jj = self.journal_fh.readline()
 
     def get_updates(self):
         return_events = self.captured_events
