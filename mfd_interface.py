@@ -123,14 +123,14 @@ class Coriolis:
 
 # class Panel
 class Panel:
-    MAX_ROWS  = 40
 
-    def __init__(self, pos_x, pos_y, width, height):
+    def __init__(self, pos_x, pos_y, width, height, rows):
         self.pos_x  = pos_x
         self.pos_y  = pos_y
         self.width  = width
         self.height = height
-        self.lines  = [ ( "text", "", COLOR_BLACK ) ] * self.MAX_ROWS
+        self.rows   = rows
+        self.lines  = [ ( "text", "", COLOR_BLACK ) ] * self.rows
 
     def get_offset(self):
         return (self.pos_x, self.pos_y)
@@ -141,17 +141,17 @@ class Panel:
     def add_text(self, text_lines, _color=None):
         if not _color: _color = COLOR_ORANGE	# default panel text color
         for text in text_lines:
-            wrapped_text = wrap_text(text, MFD.font, MFD.sd(MFD_RP_WIDTH))
+            wrapped_text = wrap_text(text, MFD.font, MFD.sd(self.width))
             for t in reversed(wrapped_text):
                 self.add_lines( [ ("text", t, _color) ] )
 
     def add_lines(self, lines):
-        if len(lines) > self.MAX_ROWS: lines = lines[:self.MAX_ROWS]
-        self.lines = lines + self.lines[:(self.MAX_ROWS - len(lines))]
+        if len(lines) > self.rows: lines = lines[:self.rows]
+        self.lines = lines + self.lines[:(self.rows - len(lines))]
 
     def shift_lines(self, num_lines, _type):
-        if num_lines > self.MAX_ROWS: num_lines = self.MAX_ROWS
-        self.lines = [ ( _type, "", COLOR_BLACK ) ] * num_lines + self.lines[:(self.MAX_ROWS - num_lines)]
+        if num_lines > self.rows: num_lines = self.rows
+        self.lines = [ ( _type, "", COLOR_BLACK ) ] * num_lines + self.lines[:(self.rows - num_lines)]
 
     def add_image(self, imagefile):
         img = pygame.image.load(imagefile)
@@ -162,12 +162,12 @@ class Panel:
             img = pygame.transform.smoothscale(img, (s_width, s_height))
         num_rows = int((s_height + FONT_SIZE - 1) / FONT_SIZE)
         self.shift_lines(num_rows, "empty")
-        self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.MAX_ROWS - 1)]
+        self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
 
     def add_coriolis(self, pad):
         num_rows = int((Coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
         self.shift_lines(num_rows, "empty")
-        self.lines = [ ( "coriolis", pad, COLOR_BLACK ) ] + self.lines[:(self.MAX_ROWS - 1)]
+        self.lines = [ ( "coriolis", pad, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
 
     def render_panel(self, surface):
         for row, (_type, _content, _color) in enumerate(self.lines):

@@ -70,7 +70,7 @@ MFD_RP_SIZE = MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)
 MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
 rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
-rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT))
+rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT), MFD_RP_ROWS)
 #rp1_MFD.add_image("images/EliteDangerous_Logo.png")
 #rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
 rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"], COLOR_GREEN)
@@ -82,7 +82,7 @@ MFD_MP_SIZE = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
 MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
-mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT))
+mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT), MFD_MP_ROWS)
 mp1_MFD.add_image("images/EliteDangerous_Logo.png")
 mp1_MFD.add_text(["",""])
 
@@ -157,7 +157,7 @@ while True:
                 rp1_MFD.add_coriolis(last_pad)
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
-                rp1_MFD.add_coriolis(0)
+                mp1_MFD.add_coriolis(0)
         if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
                 milkyway.thread_refresh_eddb(rp1_MFD)
         if event.key == pygame.K_SPACE:
