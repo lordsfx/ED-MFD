@@ -83,7 +83,7 @@ MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
 mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT), MFD_MP_ROWS)
-mp1_MFD.add_image("images/EliteDangerous_Logo.png")
+mp1_MFD.add_image(IMAGE_ED_LOGO)
 mp1_MFD.add_text(["",""])
 
 # misc init
@@ -154,9 +154,11 @@ while True:
                 rp1_MFD.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
+                mp1_MFD.clear_all()
                 mp1_MFD.add_coriolis(0, Coriolis(MFD_MP_WIDTH))
+                mp1_MFD.add_text([""])
         if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
-                milkyway.thread_refresh_eddb(rp1_MFD)
+            milkyway.thread_refresh_eddb(rp1_MFD)
         if event.key == pygame.K_SPACE:
             if noframe:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
@@ -187,15 +189,14 @@ while True:
         for j in journal_updates:
             #logger.debug(j)
             Journal.parser(j, my_ship)
-        Journal.display(rp1_MFD, my_ship, milkyway, bm1_MFD)
+        Journal.display([rp1_MFD, mp1_MFD], my_ship, milkyway, bm1_MFD)
 
     #show_button_states(bm1_MFD)
     draw_background(mfd, img_MFD)
-    draw_button_states(mfd, bm1_MFD)
     draw_panel(mfd, rpanel, rp1_MFD, True)
     draw_panel(mfd, mpanel, mp1_MFD)
+    draw_button_states(mfd, bm1_MFD)
     pygame.display.flip()
-
 
 
 # End While

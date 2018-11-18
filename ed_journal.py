@@ -37,7 +37,9 @@ class Journal:
         if journal["event"] in Journal.events_monitor:
             ship.update_event_memory(journal)
 
-    def display(panel, ship, universe, buttons):
+    def display(panels, ship, universe, buttons):
+        rpanel = panels[0]
+        mpanel = panels[1]
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
@@ -45,7 +47,7 @@ class Journal:
                 emj = event_memory[em][1]				# retrieve journal content
                 # SupercruiseExit
                 if em == "SupercruiseExit":
-                    panel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
+                    rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
                     ship.set_at_system(emj["StarSystem"])
                     ship.set_at_station(emj["Body"])
                     ship.mark_event_processed(em)
@@ -57,7 +59,8 @@ class Journal:
                 # DockingGranted
                 if em == "DockingGranted":
                     if emj["StationType"] in Journal.show_coriolis_types:
-                        panel.add_coriolis(emj["LandingPad"])
+                        mpanel.add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
+                        mpanel.add_text([""])
                     else:
                         station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
                         if station:
@@ -65,8 +68,8 @@ class Journal:
                             if pad_layout == 2:
                                 pad_info = station.outpost_pad_info()
                                 for p in pad_info:
-                                    panel.add_image("images/" + p)
-                    panel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                                    rpanel.add_image("images/" + p)
+                    rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
                     ship.mark_event_processed(em)
                 # Status
                 if em == "Status":
@@ -74,7 +77,7 @@ class Journal:
                         ship.update_status_flags(emj["Flags"], buttons)
                         #for status_flag in Status.get_ship_flags():
                         #    if ship.get_status().is_flagged(status_flag):
-                        #        panel.add_text([ "Status: %s" % status_flag ])
+                        #        rpanel.add_text([ "Status: %s" % status_flag ])
                     if "Pips" in emj:
                         ship.update_status_pips(emj["Pips"], buttons)
                     if "FireGroup" in emj:

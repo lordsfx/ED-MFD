@@ -12,6 +12,7 @@ DEFAULT_FONT = "fonts/Eurostile.ttf"
 # MFD images
 IMAGE_WALLPAPER = "images/MFD-Display-wallpaper.png"
 IMAGE_BUTTON = "images/MFD-Display-button.png"
+IMAGE_ED_LOGO = "images/EliteDangerous_Logo.png"
 
 # Coriolis images
 IMAGE_CORIOLIS_LAYOUT = "images/coriolis-layout-clean.png"
