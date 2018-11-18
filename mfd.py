@@ -87,10 +87,7 @@ mp1_MFD.add_image("images/EliteDangerous_Logo.png")
 mp1_MFD.add_text(["",""])
 
 # misc init
-
-Coriolis.init()
 last_pad = 0
-#rp1_MFD.add_coriolis(last_pad)
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -154,10 +151,10 @@ while True:
             if mods & pygame.KMOD_CTRL:
                 last_pad += 1
                 if last_pad > 45: last_pad = 0
-                rp1_MFD.add_coriolis(last_pad)
+                rp1_MFD.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
-                mp1_MFD.add_coriolis(0)
+                mp1_MFD.add_coriolis(0, Coriolis(MFD_MP_WIDTH))
         if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
                 milkyway.thread_refresh_eddb(rp1_MFD)
         if event.key == pygame.K_SPACE:

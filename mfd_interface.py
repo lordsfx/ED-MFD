@@ -102,24 +102,23 @@ class Button:
 
 # class Coriolis
 class Coriolis:
-    layout = pygame.image.load(IMAGE_CORIOLIS_LAYOUT)
-    padnum = pygame.image.load(IMAGE_CORIOLIS_PADNUM)
-    width  = layout.get_width()
-    height = layout.get_height()
-    scale  = 1
 
-    @staticmethod
-    def init():
-        s_width = MFD.sd(MFD_RP_WIDTH)
-        orig_width = Coriolis.layout.get_width()
+    def __init__(self, p_width):
+        self.layout = pygame.image.load(IMAGE_CORIOLIS_LAYOUT)
+        self.padnum = pygame.image.load(IMAGE_CORIOLIS_PADNUM)
+        self.width  = self.layout.get_width()
+        self.height = self.layout.get_height()
+        self.scale  = 1
+
+        s_width = MFD.sd(p_width)
+        orig_width = self.width
         if orig_width > s_width:
-            s_height = int(s_width * Coriolis.height / Coriolis.width)
-            Coriolis.layout = pygame.transform.smoothscale(Coriolis.layout, (s_width, s_height))
-            Coriolis.padnum = pygame.transform.smoothscale(Coriolis.padnum, (s_width, s_height))
-            Coriolis.width = s_width
-            Coriolis.height = s_height
-            Coriolis.scale = s_width / orig_width
-
+            s_height = int(s_width * self.height / self.width)
+            self.layout = pygame.transform.smoothscale(self.layout, (s_width, s_height))
+            self.padnum = pygame.transform.smoothscale(self.padnum, (s_width, s_height))
+            self.width = s_width
+            self.height = s_height
+            self.scale = s_width / orig_width
 
 # class Panel
 class Panel:
@@ -164,37 +163,41 @@ class Panel:
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
 
-    def add_coriolis(self, pad):
-        num_rows = int((Coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
+    def add_coriolis(self, pad, _coriolis):
+        num_rows = int((_coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
         self.shift_lines(num_rows, "empty")
-        self.lines = [ ( "coriolis", pad, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
+        self.lines = [ ( "coriolis", pad, _coriolis ) ] + self.lines[:(self.rows - 1)]
 
     def render_panel(self, surface):
-        for row, (_type, _content, _color) in enumerate(self.lines):
+        for row, (_type, _content, _extra_attr) in enumerate(self.lines):
             if _type == "text":
                 # _content = text
-                label = MFD.font.render(_content, True, _color)
+                # _extra_attr = color
+                label = MFD.font.render(_content, True, _extra_attr)
                 surface.blit(label, (self.pos_x + 3, self.pos_y + row * FONT_SIZE))
             if _type == "image":
                 # _content = pygame surface
+                # _extra_attr = not used
                 x_offset = int((self.width - _content.get_width()) / 2)
                 num_rows = int((_content.get_height() + FONT_SIZE - 1) / FONT_SIZE)
                 y_offset = int((num_rows * FONT_SIZE - _content.get_height()) / 2)
                 surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * FONT_SIZE + y_offset))
             if _type == "coriolis":
                 # _content = pad number
-                x_offset = int((self.width - Coriolis.width) / 2)
-                num_rows = int((Coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
-                y_offset = int((num_rows * FONT_SIZE - Coriolis.height) / 2)
+                # _extra_attr = coriolis instance
+                coriolis = _extra_attr
+                x_offset = int((self.width - coriolis.width) / 2)
+                num_rows = int((coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
+                y_offset = int((num_rows * FONT_SIZE - coriolis.height) / 2)
                 position = self.pos_x + x_offset, self.pos_y + row * FONT_SIZE + y_offset
-                surface.blit(Coriolis.layout, position)
+                surface.blit(coriolis.layout, position)
                 if _content == 0:
-                    surface.blit(Coriolis.padnum, position)
+                    surface.blit(coriolis.padnum, position)
                 if _content > 0:
                     num_pos = CORIOLIS_POS[_content - 1]
-                    x = int(num_pos[0] * Coriolis.scale)
-                    y = int(num_pos[1] * Coriolis.scale)
-                    w = int((num_pos[2] - num_pos[0]) * Coriolis.scale)
-                    h = int((num_pos[3] - num_pos[1]) * Coriolis.scale)
-                    surface.blit(Coriolis.padnum, (position[0] + x, position[1] + y), (x, y, w, h))
+                    x = int(num_pos[0] * coriolis.scale)
+                    y = int(num_pos[1] * coriolis.scale)
+                    w = int((num_pos[2] - num_pos[0]) * coriolis.scale)
+                    h = int((num_pos[3] - num_pos[1]) * coriolis.scale)
+                    surface.blit(coriolis.padnum, (position[0] + x, position[1] + y), (x, y, w, h))
 
