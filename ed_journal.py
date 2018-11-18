@@ -17,7 +17,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Status" ]
+    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "Status" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -70,6 +70,15 @@ class Journal:
                                 for p in pad_info:
                                     rpanel.add_image("images/" + p)
                     rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                    ship.mark_event_processed(em)
+                # Docked
+                if em == "Docked":
+                    rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
+                    mpanel.clear_all()
+                    mpanel.add_image(IMAGE_ED_LOGO)
+                    mpanel.add_text(["",""])
+                    ship.set_at_system(emj["StarSystem"])
+                    ship.set_at_station(emj["StationName"])
                     ship.mark_event_processed(em)
                 # Status
                 if em == "Status":

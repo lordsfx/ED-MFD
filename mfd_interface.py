@@ -142,8 +142,7 @@ class Panel:
         return (self.width, self.height)
 
     def clear_all(self):
-        for i, l in enumerate(self.lines):
-            l = ( "", "", COLOR_BLACK )
+        self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
 
     def add_text(self, text_lines, _color=None):
         if not _color: _color = COLOR_ORANGE	# default panel text color
