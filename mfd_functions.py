@@ -15,6 +15,7 @@ def draw_panel(mfd, surface, panel, add_shade=False):
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
+    #print("+", end="", flush=True)
 
 # button actions
 
@@ -50,8 +51,12 @@ def draw_button_states(surface, buttons):
                 surface.blit(b.style, b.get_offset())
 
 def tick_button_states(buttons):
+    tbc = False
     for b in buttons:
-        if b: b.tick()
+        if b and b.type == Button.TYPE_HOLD:
+            if b.activated(): tbc = True
+            b.tick()
+    return tbc
 
 def load_button_states(buttons):
     try:

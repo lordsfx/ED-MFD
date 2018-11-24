@@ -100,8 +100,10 @@ class Button:
     def tick(self):
         if self.timer > 0:
             self.timer -= 1
-        if self.timer == 0:
+            return False
+        else:
             self.state = self.STATE_OFF
+            return True
 
 
 # class Coriolis

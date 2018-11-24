@@ -12,7 +12,8 @@ class Status:
                   "over_heat"      : 0x100000	, "has_lat_long"  : 0x200000,
                   "in_danger"      : 0x400000	, "interdicted"   : 0x800000,
                   "in_mainship"    : 0x1000000	, "in_fighter"    : 0x2000000,
-                  "in_srv"         : 0x4000000 }
+                  "in_srv"         : 0x4000000  , "unknown"       : 0x8000000,
+                  "nightvision"    : 0x10000000 }
 
     def __init__(self):
         self.flags = 0
