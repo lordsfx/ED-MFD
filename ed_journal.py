@@ -93,6 +93,10 @@ class Journal:
                         ship.update_status_firegroup(emj["FireGroup"], buttons)
                     if "GuiFocus" in emj:
                         ship.update_status_guifocus(emj["GuiFocus"], buttons)
+                    if "Fuel" in emj:
+                        ship.update_status_fuel(emj["Fuel"], buttons)
+                    if "Cargo" in emj:
+                        ship.update_status_cargo(emj["Cargo"], buttons)
                     if "Latitude" in emj:
                         ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
                     ship.mark_event_processed(em)

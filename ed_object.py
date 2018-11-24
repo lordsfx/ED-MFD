@@ -26,7 +26,10 @@ class Ship:
         self.at_station = None
         self.pips = [0, 0, 0]
         self.pips_set = 0
-        self.gui_focus = 0
+        self.firegroup = 0
+        self.guifocus = 0
+        self.fuel = 0
+        self.cargo = 0
         self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
 
     def update_event_memory(self, j_event):
@@ -86,7 +89,6 @@ class Ship:
             buttons[MFD_LIGHTS].set_state(Button.STATE_OFF)
 
     def update_status_pips(self, _pips, buttons):
-        self.status.update_pips(_pips)
         self.pips = _pips
         logger.debug("SYS:%d ENG:%d WEP:%d" % (self.pips[Ship.PIP_SYS], self.pips[Ship.PIP_ENG], self.pips[Ship.PIP_WEP]))
         if self.pips[Ship.PIP_ENG] == 8 and self.pips[Ship.PIP_SYS] == 4:
@@ -109,14 +111,23 @@ class Ship:
         return
 
     def update_status_firegroup(self, _firegroup, buttons):
-        self.status.update_firegroup(_firegroup)
-        logger.debug("Fire Group: %s" % _firegroup)
+        self.firegroup = _firegroup
+        logger.debug("Fire Group: %s" % self.firegroup)
         return
 
     def update_status_guifocus(self, _guifocus, buttons):
-        self.status.update_guifocus(_guifocus)
-        logger.debug("GUI Focus: %s" % _guifocus)
-        self.gui_focus = _guifocus
+        self.guifocus = _guifocus
+        logger.debug("GUI Focus: %s" % self.guifocus)
+        return
+
+    def update_status_fuel(self, _fuel, buttons):
+        self.fuel = _fuel
+        logger.debug("Fuel (tons): %s" % self.fuel)
+        return
+
+    def update_status_cargo(self, _cargo, buttons):
+        self.cargo = _cargo
+        logger.debug("Cargo (tons): %s" % self.cargo)
         return
 
     def update_status_bearings(self, _lat, _long, _head, _alt):
