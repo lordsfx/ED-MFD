@@ -83,8 +83,7 @@ MFD_MP_XY = MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y)
 
 mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
 mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT), MFD_MP_ROWS)
-mp1_MFD.add_image(IMAGE_ED_LOGO)
-mp1_MFD.add_text(["",""])
+draw_logo(mp1_MFD)
 
 # misc init
 last_pad = 0

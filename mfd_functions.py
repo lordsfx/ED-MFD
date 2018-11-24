@@ -17,6 +17,11 @@ def draw_panel(mfd, surface, panel, add_shade=False):
     panel.render_panel(mfd)
     #print("+", end="", flush=True)
 
+def draw_logo(panel):
+    panel.clear_all()
+    panel.add_image(IMAGE_ED_LOGO)
+    panel.add_text(["",""])
+
 # button actions
 
 def show_button_states(buttons):

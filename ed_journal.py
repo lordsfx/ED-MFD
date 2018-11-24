@@ -6,6 +6,7 @@ import glob, io
 from config import *
 from ed_object import *
 from ed_status import *
+from mfd_interface import *
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
@@ -17,7 +18,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "Status" ]
+    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "Status" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -74,11 +75,13 @@ class Journal:
                 # Docked
                 if em == "Docked":
                     rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
-                    mpanel.clear_all()
-                    mpanel.add_image(IMAGE_ED_LOGO)
-                    mpanel.add_text(["",""])
+                    draw_logo(mpanel)
                     ship.set_at_system(emj["StarSystem"])
                     ship.set_at_station(emj["StationName"])
+                    ship.mark_event_processed(em)
+                # DockingCancelled
+                if em == "DockingCancelled":
+                    draw_logo(mpanel)
                     ship.mark_event_processed(em)
                 # Status
                 if em == "Status":
