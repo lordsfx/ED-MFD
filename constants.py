@@ -61,20 +61,30 @@ MFD_YU2 = 92
 MFD_YD1 = 669
 MFD_YD2 = 698
 
+# RP - right panel
 MFD_RP_X = 906
 MFD_RP_Y = 0
 MFD_RP_WIDTH = 374
 MFD_RP_HEIGHT = 800
 MFD_RP_ROWS = 40
 
+# MP - mid panel
 MFD_MP_X = 115
-MFD_MP_Y = 100
+MFD_MP_Y = 118
 MFD_MP_WIDTH = 560
 MFD_MP_HEIGHT = 600
 MFD_MP_ROWS = 30
 
+# UP - upper panel
+MFD_UP_X = 115
+MFD_UP_Y = 68
+MFD_UP_WIDTH = 560
+MFD_UP_HEIGHT = 44
+MFD_UP_ROWS = 2
+MFD_UP_FONT_SIZE = 32	# override default font size
+
 # Size
-FONT_SIZE = 16
+FONT_SIZE = 18		# default font size
 BTN1_WIDTH = 112
 BTN1_HEIGHT = 50
 BTN2_WIDTH = 112

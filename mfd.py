@@ -85,6 +85,14 @@ mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
 mp1_MFD = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT), MFD_MP_ROWS)
 draw_logo(mp1_MFD)
 
+# upper panel
+MFD_UP_SIZE = MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)
+MFD_UP_XY = MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y)
+
+upanel = pygame.Surface( (MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)) )
+up1_MFD = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, MFD_UP_FONT_SIZE)
+up1_MFD.add_text([" MODE : NORMAL"], COLOR_GREEN)
+
 # misc init
 last_pad = 0
 redraw_display = True
@@ -205,6 +213,7 @@ while True:
         draw_background(mfd, img_MFD)
         draw_panel(mfd, rpanel, rp1_MFD, True)
         draw_panel(mfd, mpanel, mp1_MFD)
+        draw_panel(mfd, upanel, up1_MFD)
         draw_button_states(mfd, bm1_MFD)
         pygame.display.flip()
         redraw_display = False

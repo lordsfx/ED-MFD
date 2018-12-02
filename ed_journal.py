@@ -70,7 +70,8 @@ class Journal:
                                 pad_info = station.outpost_pad_info()
                                 for p in pad_info:
                                     rpanel.add_image("images/" + p)
-                    rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                    #rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                    rpanel.add_text([ "Docking granted at pad %s" % emj["LandingPad"] ])
                     ship.mark_event_processed(em)
                 # Docked
                 if em == "Docked":

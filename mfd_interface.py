@@ -11,19 +11,29 @@ logger = logging.getLogger(__name__)
 # class MFD
 class MFD:
     scale = 1
+    font_file = None
     font = None
     state_file = "mfd.json"
     title = "Elite:Dangerous MFD"
 
     @staticmethod
-    def set_scale(scale):
-        MFD.scale = scale
+    def set_scale(_scale):
+        MFD.scale = _scale
 
-    def set_font(font_file):
-        MFD.font = pygame.font.Font(font_file, FONT_SIZE)
+    def set_font(_file):
+        MFD.font_file = _file
 
     def sd(dim):
         return int(dim * MFD.scale)
+
+
+# class MFD_Font
+class MFD_Font:
+
+    def __init__(self, _file, _size):
+        self.font_file = _file
+        self.font_size = _size
+        self.font = pygame.font.Font(self.font_file, self.font_size)
 
 
 # class Button
@@ -129,13 +139,16 @@ class Coriolis:
 # class Panel
 class Panel:
 
-    def __init__(self, pos_x, pos_y, width, height, rows):
+    def __init__(self, pos_x, pos_y, width, height, rows, font_size=None):
         self.pos_x  = pos_x
         self.pos_y  = pos_y
         self.width  = width
         self.height = height
         self.rows   = rows
+        self.f_size = FONT_SIZE
+        if font_size: self.f_size = font_size
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
+        self.pyfont = MFD_Font(MFD.font_file, self.f_size)
 
     def get_offset(self):
         return (self.pos_x, self.pos_y)
@@ -149,7 +162,7 @@ class Panel:
     def add_text(self, text_lines, _color=None):
         if not _color: _color = COLOR_ORANGE	# default panel text color
         for text in text_lines:
-            wrapped_text = wrap_text(text, MFD.font, self.width)
+            wrapped_text = wrap_text(text, self.pyfont.font, self.width)
             for t in reversed(wrapped_text):
                 self.add_lines( [ ("text", t, _color) ] )
 
@@ -168,12 +181,12 @@ class Panel:
         if img.get_width() > s_width:
             s_height = int(s_width * img.get_height() / img.get_width())
             img = pygame.transform.smoothscale(img, (s_width, s_height))
-        num_rows = int((s_height + FONT_SIZE - 1) / FONT_SIZE)
+        num_rows = int((s_height + self.f_size - 1) / self.f_size)
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
 
     def add_coriolis(self, pad, _coriolis):
-        num_rows = int((_coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
+        num_rows = int((_coriolis.height + self.f_size - 1) / self.f_size)
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "coriolis", pad, _coriolis ) ] + self.lines[:(self.rows - 1)]
 
@@ -182,25 +195,25 @@ class Panel:
             if _type == "text":
                 # _content = text
                 # _extra_attr = color
-                label = MFD.font.render(_content, True, _extra_attr)
-                surface.blit(label, (self.pos_x + 3, self.pos_y + row * FONT_SIZE))
+                label = self.pyfont.font.render(_content, True, _extra_attr)
+                surface.blit(label, (self.pos_x + 3, self.pos_y + row * self.f_size))
             if _type == "image":
                 # _content = pygame surface
                 # _extra_attr = not used
                 x_offset = int((self.width - _content.get_width()) / 2)
-                num_rows = int((_content.get_height() + FONT_SIZE - 1) / FONT_SIZE)
-                y_offset = int((num_rows * FONT_SIZE - _content.get_height()) / 2)
-                surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * FONT_SIZE + y_offset))
+                num_rows = int((_content.get_height() + self.f_size - 1) / self.f_size)
+                y_offset = int((num_rows * self.f_size - _content.get_height()) / 2)
+                surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * self.f_size + y_offset))
             if _type == "coriolis":
                 # _content = pad number
                 # _extra_attr = coriolis instance
                 coriolis = _extra_attr
                 x_offset = int((self.width - coriolis.width) / 2)
-                num_rows = int((coriolis.height + FONT_SIZE - 1) / FONT_SIZE)
-                y_offset = int((num_rows * FONT_SIZE - coriolis.height) / 2)
-                position = self.pos_x + x_offset, self.pos_y + row * FONT_SIZE + y_offset
+                num_rows = int((coriolis.height + self.f_size - 1) / self.f_size)
+                y_offset = int((num_rows * self.f_size - coriolis.height) / 2)
+                position = self.pos_x + x_offset, self.pos_y + row * self.f_size + y_offset
                 display_rows = self.rows - row
-                display_area = (0, 0, coriolis.width - 1, display_rows * FONT_SIZE - 1)
+                display_area = (0, 0, coriolis.width - 1, display_rows * self.f_size - 1)
                 surface.blit(coriolis.layout, position, display_area)
                 if _content == 0:
                     surface.blit(coriolis.padnum, position, display_area)
