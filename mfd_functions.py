@@ -15,7 +15,7 @@ def draw_panel(mfd, surface, panel, add_shade=False):
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
-    #print("+", end="", flush=True)
+    print("+", end="", flush=True)
 
 def draw_logo(panel):
     panel.clear_all()

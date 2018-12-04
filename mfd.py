@@ -95,7 +95,6 @@ up1_MFD.add_text([" MODE : NORMAL"], COLOR_GREEN)
 
 # misc init
 last_pad = 0
-redraw_display = True
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -149,29 +148,26 @@ while True:
         if event.key == pygame.K_q:  joy_index = MFD_DOCKINGREQ	# Docking Req
         if joy_index > 0:
             button_pressed = bm1_MFD[joy_index]
-            redraw_display = True
+            MFD.set_update()
 
         if event.key == pygame.K_x:         # Ctrl-X : Reset all states
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
                     if b: b.reset_state()
                 rp1_MFD.add_text(["- reset all states"])
-                redraw_display = True
         if event.key == pygame.K_p:         # Ctrl-P : Coriolis Pad Test
             if mods & pygame.KMOD_CTRL:
                 last_pad += 1
                 if last_pad > 45: last_pad = 0
                 rp1_MFD.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
-                redraw_display = True
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
                 mp1_MFD.clear_all()
                 mp1_MFD.add_coriolis(0, Coriolis(MFD_MP_WIDTH))
                 mp1_MFD.add_text([""])
-                redraw_display = True
         if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
             milkyway.thread_refresh_eddb(rp1_MFD)
-            redraw_display = True
+            MFD.set_update()
         if event.key == pygame.K_SPACE:
             if noframe:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
@@ -179,7 +175,7 @@ while True:
             else:
                 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF)
                 noframe = True
-            redraw_display = True
+            MFD.set_update()
         if event.type == QUIT or event.key == pygame.K_ESCAPE:
             save_button_states(bm1_MFD)
             journal_obs.stop()
@@ -194,11 +190,11 @@ while True:
                 #logger.debug("MFD: " + button_pressed.name + ", State: " + str(button_pressed.state))
             if mods & pygame.KMOD_ALT:
                 button_pressed.reset_state()
-            redraw_display = True
+            MFD.set_update()
 
     if event.type == EVENT_APP_LOOP:
         if tick_button_states(bm1_MFD):
-            redraw_display = True
+            MFD.set_update()
 
     journal_updates = journal_evh.get_updates()
     if journal_updates:
@@ -206,17 +202,17 @@ while True:
             #logger.debug(j)
             Journal.parser(j, my_ship)
         Journal.display([rp1_MFD, mp1_MFD], my_ship, milkyway, bm1_MFD)
-        redraw_display = True
+        MFD.set_update()
 
     #show_button_states(bm1_MFD)
-    if redraw_display:
+    if MFD.has_update:
         draw_background(mfd, img_MFD)
         draw_panel(mfd, rpanel, rp1_MFD, True)
         draw_panel(mfd, mpanel, mp1_MFD)
         draw_panel(mfd, upanel, up1_MFD)
         draw_button_states(mfd, bm1_MFD)
         pygame.display.flip()
-        redraw_display = False
+        MFD.clear_update()
 
 
 # End While

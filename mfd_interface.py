@@ -15,6 +15,7 @@ class MFD:
     font = None
     state_file = "mfd.json"
     title = "Elite:Dangerous MFD"
+    has_update = False
 
     @staticmethod
     def set_scale(_scale):
@@ -25,6 +26,12 @@ class MFD:
 
     def sd(dim):
         return int(dim * MFD.scale)
+
+    def set_update():
+        MFD.has_update = True
+
+    def clear_update():
+        MFD.has_update = False
 
 
 # class MFD_Font
@@ -158,6 +165,7 @@ class Panel:
 
     def clear_all(self):
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
+        MFD.set_update()
 
     def add_text(self, text_lines, _color=None):
         if not _color: _color = COLOR_ORANGE	# default panel text color
@@ -165,14 +173,17 @@ class Panel:
             wrapped_text = wrap_text(text, self.pyfont.font, self.width)
             for t in reversed(wrapped_text):
                 self.add_lines( [ ("text", t, _color) ] )
+                MFD.set_update()
 
     def add_lines(self, lines):
         if len(lines) > self.rows: lines = lines[:self.rows]
         self.lines = lines + self.lines[:(self.rows - len(lines))]
+        MFD.set_update()
 
     def shift_lines(self, num_lines, _type):
         if num_lines > self.rows: num_lines = self.rows
         self.lines = [ ( _type, "", COLOR_BLACK ) ] * num_lines + self.lines[:(self.rows - num_lines)]
+        MFD.set_update()
 
     def add_image(self, imagefile):
         img = pygame.image.load(imagefile)
@@ -184,11 +195,13 @@ class Panel:
         num_rows = int((s_height + self.f_size - 1) / self.f_size)
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
+        MFD.set_update()
 
     def add_coriolis(self, pad, _coriolis):
         num_rows = int((_coriolis.height + self.f_size - 1) / self.f_size)
         self.shift_lines(num_rows, "empty")
         self.lines = [ ( "coriolis", pad, _coriolis ) ] + self.lines[:(self.rows - 1)]
+        MFD.set_update()
 
     def render_panel(self, surface):
         for row, (_type, _content, _extra_attr) in enumerate(self.lines):
