@@ -91,7 +91,7 @@ MFD_UP_XY = MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y)
 
 upanel = pygame.Surface( (MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)) )
 up1_MFD = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, MFD_UP_FONT_SIZE)
-up1_MFD.add_text([" MODE : NORMAL"], COLOR_GREEN)
+up1_MFD.add_text([" // %s" % MFD.MFD_MODE[MFD.next_mode()]], COLOR_GREEN)
 
 # misc init
 last_pad = 0
@@ -150,6 +150,9 @@ while True:
             button_pressed = bm1_MFD[joy_index]
             MFD.set_update()
 
+        if event.key == pygame.K_y:         # Ctrl-Y : Mode Switch
+            if mods & pygame.KMOD_CTRL:
+                up1_MFD.add_text([" // %s" % MFD.MFD_MODE[MFD.next_mode()]], COLOR_GREEN)
         if event.key == pygame.K_x:         # Ctrl-X : Reset all states
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
@@ -207,7 +210,7 @@ while True:
     #show_button_states(bm1_MFD)
     if MFD.has_update:
         draw_background(mfd, img_MFD)
-        draw_panel(mfd, rpanel, rp1_MFD, True)
+        draw_panel(mfd, rpanel, rp1_MFD, False)
         draw_panel(mfd, mpanel, mp1_MFD)
         draw_panel(mfd, upanel, up1_MFD)
         draw_button_states(mfd, bm1_MFD)

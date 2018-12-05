@@ -17,6 +17,9 @@ class MFD:
     title = "Elite:Dangerous MFD"
     has_update = False
 
+    MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORATION', 4:'MINING' }
+    mode = 0
+
     @staticmethod
     def set_scale(_scale):
         MFD.scale = _scale
@@ -33,6 +36,10 @@ class MFD:
     def clear_update():
         MFD.has_update = False
 
+    def next_mode():
+        MFD.mode += 1
+        if MFD.mode > len(MFD.MFD_MODE): MFD.mode = 1
+        return MFD.mode
 
 # class MFD_Font
 class MFD_Font:

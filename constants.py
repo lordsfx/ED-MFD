@@ -80,7 +80,7 @@ MFD_UP_X = 115
 MFD_UP_Y = 68
 MFD_UP_WIDTH = 560
 MFD_UP_HEIGHT = 44
-MFD_UP_ROWS = 2
+MFD_UP_ROWS = 1
 MFD_UP_FONT_SIZE = 32	# override default font size
 
 # Size
