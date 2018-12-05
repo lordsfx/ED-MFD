@@ -91,6 +91,13 @@ upanel = pygame.Surface( (MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)) )
 up1_MFD = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, font_size=MFD_UP_FONT_SIZE, bold=True)
 up1_MFD.add_text([" > %s" % MFD.MFD_MODE[MFD.next_mode()]], color=COLOR_GREEN)
 
+# lower panel
+MFD_LP_SIZE = MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT)
+MFD_LP_XY = MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y)
+
+lpanel = pygame.Surface( (MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT)) )
+lp1_MFD = Panel(MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y), MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT), MFD_LP_ROWS)
+
 # misc init
 last_pad = 0
 
@@ -168,7 +175,6 @@ while True:
             if mods & pygame.KMOD_CTRL:
                 mp1_MFD.clear_all()
                 mp1_MFD.add_coriolis(0, Coriolis(MFD_MP_WIDTH))
-                mp1_MFD.add_text([""])
         if event.key == pygame.K_r:         # Ctrl-R : Refresh EDDB data
             milkyway.thread_refresh_eddb(rp1_MFD)
             MFD.set_update()
@@ -214,6 +220,7 @@ while True:
         draw_panel(mfd, rpanel, rp1_MFD, False)
         draw_panel(mfd, mpanel, mp1_MFD)
         draw_panel(mfd, upanel, up1_MFD)
+        draw_panel(mfd, lpanel, lp1_MFD)
         draw_button_states(mfd, bm1_MFD)
         pygame.display.flip()
         MFD.clear_update()

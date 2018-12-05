@@ -72,8 +72,8 @@ MFD_RP_ROWS = 40
 MFD_MP_X = 115
 MFD_MP_Y = 118
 MFD_MP_WIDTH = 560
-MFD_MP_HEIGHT = 600
-MFD_MP_ROWS = 30
+MFD_MP_HEIGHT = 560
+MFD_MP_ROWS = 28
 
 # UP - upper panel
 MFD_UP_X = 115
@@ -82,6 +82,13 @@ MFD_UP_WIDTH = 560
 MFD_UP_HEIGHT = 44
 MFD_UP_ROWS = 1
 MFD_UP_FONT_SIZE = 32	# override default font size
+
+# LP = lower panel
+MFD_LP_X = 115
+MFD_LP_Y = 684
+MFD_LP_WIDTH = 560
+MFD_LP_HEIGHT = 44
+MFD_LP_ROWS = 2
 
 # Size
 FONT_SIZE = 18		# default font size

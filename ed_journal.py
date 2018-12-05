@@ -60,8 +60,8 @@ class Journal:
                 # DockingGranted
                 if em == "DockingGranted":
                     if emj["StationType"] in Journal.show_coriolis_types:
+                        mpanel.clear_all()
                         mpanel.add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
-                        mpanel.add_text([""])
                     else:
                         station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
                         if station:
