@@ -17,7 +17,7 @@ class MFD:
     title = "Elite:Dangerous MFD"
     has_update = False
 
-    MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORATION', 4:'MINING' }
+    MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
     mode = 0
 
     @staticmethod
@@ -41,13 +41,20 @@ class MFD:
         if MFD.mode > len(MFD.MFD_MODE): MFD.mode = 1
         return MFD.mode
 
+    def prev_mode():
+        MFD.mode -= 1
+        if MFD.mode < 1: MFD.mode = len(MFD.MFD_MODE)
+        return MFD.mode
+
+
 # class MFD_Font
 class MFD_Font:
 
-    def __init__(self, _file, _size):
+    def __init__(self, _file, _size, _bold):
         self.font_file = _file
         self.font_size = _size
         self.font = pygame.font.Font(self.font_file, self.font_size)
+        self.font.set_bold(_bold)
 
 
 # class Button
@@ -153,7 +160,7 @@ class Coriolis:
 # class Panel
 class Panel:
 
-    def __init__(self, pos_x, pos_y, width, height, rows, font_size=None):
+    def __init__(self, pos_x, pos_y, width, height, rows, font_size=None, bold=False):
         self.pos_x  = pos_x
         self.pos_y  = pos_y
         self.width  = width
@@ -162,7 +169,7 @@ class Panel:
         self.f_size = FONT_SIZE
         if font_size: self.f_size = font_size
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
-        self.pyfont = MFD_Font(MFD.font_file, self.f_size)
+        self.pyfont = MFD_Font(MFD.font_file, self.f_size, bold)
 
     def get_offset(self):
         return (self.pos_x, self.pos_y)
@@ -174,12 +181,12 @@ class Panel:
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
         MFD.set_update()
 
-    def add_text(self, text_lines, _color=None):
-        if not _color: _color = COLOR_ORANGE	# default panel text color
+    def add_text(self, text_lines, color=None):
+        if not color: color = COLOR_ORANGE	# default panel text color
         for text in text_lines:
             wrapped_text = wrap_text(text, self.pyfont.font, self.width)
             for t in reversed(wrapped_text):
-                self.add_lines( [ ("text", t, _color) ] )
+                self.add_lines( [ ("text", t, color) ] )
                 MFD.set_update()
 
     def add_lines(self, lines):

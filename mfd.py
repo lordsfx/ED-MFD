@@ -71,10 +71,8 @@ MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
 rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
 rp1_MFD = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT), MFD_RP_ROWS)
-#rp1_MFD.add_image("images/EliteDangerous_Logo.png")
-#rp1_MFD.add_text(["Hello World, the quick brown fox jumps over the lazy dog."])
-rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"], COLOR_GREEN)
-rp1_MFD.add_text(["Elite:Dangerous MFD v" + MFD_VER], COLOR_GREEN)
+rp1_MFD.add_text(["Created by CMDR Lord Shadowfax"], color=COLOR_GREEN)
+rp1_MFD.add_text(["Elite:Dangerous MFD v" + MFD_VER], color=COLOR_GREEN)
 rp1_MFD.add_text(["", "Loading universe data ..."])
 
 # mid panel
@@ -90,8 +88,8 @@ MFD_UP_SIZE = MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)
 MFD_UP_XY = MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y)
 
 upanel = pygame.Surface( (MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)) )
-up1_MFD = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, MFD_UP_FONT_SIZE)
-up1_MFD.add_text([" // %s" % MFD.MFD_MODE[MFD.next_mode()]], COLOR_GREEN)
+up1_MFD = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, font_size=MFD_UP_FONT_SIZE, bold=True)
+up1_MFD.add_text([" > %s" % MFD.MFD_MODE[MFD.next_mode()]], color=COLOR_GREEN)
 
 # misc init
 last_pad = 0
@@ -150,9 +148,12 @@ while True:
             button_pressed = bm1_MFD[joy_index]
             MFD.set_update()
 
-        if event.key == pygame.K_y:         # Ctrl-Y : Mode Switch
+        if event.key == pygame.K_PERIOD:    # Ctrl-. : Next Mode
             if mods & pygame.KMOD_CTRL:
-                up1_MFD.add_text([" // %s" % MFD.MFD_MODE[MFD.next_mode()]], COLOR_GREEN)
+                up1_MFD.add_text([" > %s" % MFD.MFD_MODE[MFD.next_mode()]], color=COLOR_GREEN)
+        if event.key == pygame.K_COMMA:     # Ctrl-, : Prev Mode
+            if mods & pygame.KMOD_CTRL:
+                up1_MFD.add_text([" > %s" % MFD.MFD_MODE[MFD.prev_mode()]], color=COLOR_GREEN)
         if event.key == pygame.K_x:         # Ctrl-X : Reset all states
             if mods & pygame.KMOD_CTRL:
                 for b in bm1_MFD:
