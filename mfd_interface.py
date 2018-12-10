@@ -20,6 +20,12 @@ class MFD:
     MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
     mode = 0
 
+    bmp = None
+    rpn = None
+    upn = None
+    mpn = [0, None, None, None, None]
+    lpn = None
+
     @staticmethod
     def set_scale(_scale):
         MFD.scale = _scale

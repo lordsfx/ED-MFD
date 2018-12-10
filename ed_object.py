@@ -118,6 +118,11 @@ class Ship:
     def update_status_guifocus(self, _guifocus, buttons):
         self.guifocus = _guifocus
         logger.debug("GUI Focus: %s" % self.guifocus)
+        # MFD_FSS
+        if self.guifocus == GUI_MODE_FSS:
+            buttons[MFD_FSS].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_FSS].set_state(Button.STATE_OFF)
         return
 
     def update_status_fuel(self, _fuel, buttons):
