@@ -43,12 +43,12 @@ SetTitleMatchMode, 2
    return
 
 ; Scan
-5Joy10::
-   send, {] down}
-   controlsend, , {Ctrl Down}j{Ctrl Up}, Elite:Dangerous MFD
-   sleep 5000
-   send, {] up}
-   return
+;5Joy10::
+;   send, {] down}
+;   controlsend, , {Ctrl Down}j{Ctrl Up}, Elite:Dangerous MFD
+;   sleep 5000
+;   send, {] up}
+;   return
 
 ;; for Elite:Dangerous MFD panel
 
