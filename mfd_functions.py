@@ -58,7 +58,7 @@ def draw_button_states(surface, buttons):
 def tick_button_states(buttons):
     tbc = False
     for b in buttons:
-        if b and b.type == Button.TYPE_HOLD:
+        if b and (b.type == Button.TYPE_HOLD or b.type == Button.TYPE_PUSH):
             if b.activated(): tbc = True
             b.tick()
     return tbc
