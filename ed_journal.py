@@ -88,7 +88,7 @@ class Journal:
                         if station:
                             pad_layout = station.docking_pad_layout()
                             if pad_layout == 2:
-                                pad_info = station.outpost_pad_info()
+                                pad_info = station.outpost_pad_info(emj["LandingPad"])
                                 for p in pad_info:
                                     rpanel.add_image("images/" + p)
                     #rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])

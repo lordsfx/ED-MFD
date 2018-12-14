@@ -256,11 +256,14 @@ class Station:
     def coriolis_pad_info(self, pad_id):
         return ( self.COR_PAD_CLOCK[pad_id], self.COR_PAD_DEPTH[pad_id], self.COR_PAD_SIZE[pad_id] )
 
-    def outpost_pad_info(self):
+    def outpost_pad_info(self, pad_id):
         img = []
         if self.type_id == 1:
-            img.append("schema_civillian.png")
-            img.append("schema_civillian_industrial.png")
+            if pad_id <= 3:
+                img.append("schema_civillian.png")
+                img.append("schema_civillian_industrial.png")
+            else:
+                img.append("schema_civillian_industrial.png")
         if self.type_id == 2:
             img.append("schema_commercial.png")
         if self.type_id == 4:
