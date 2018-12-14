@@ -15,22 +15,22 @@ logger = logging.getLogger(__name__)
 scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
+MFD.set_scale(scale)
+APP_SIZE = MFD.sd(DISPLAY_WIDTH), MFD.sd(DISPLAY_HEIGHT)
 
 # set stage
 pygame.init()
 pygame.display.set_caption(MFD.title)
 img_MFD = pygame.image.load(IMAGE_WALLPAPER)
-APP_WIDTH, APP_HEIGHT = img_MFD.get_rect().size
-APP_SIZE = APP_WIDTH, APP_HEIGHT
+img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
 MFD.set_font(DEFAULT_FONT)
-MFD.set_scale(scale)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
-layer_BTN = pygame.image.load(IMAGE_BUTTON).convert_alpha()
+layer_BTN = pygame.image.load((IMAGE_BUTTON % MFD.scale)).convert_alpha()
 
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
@@ -72,6 +72,7 @@ MFD_RP_XY = MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y)
 
 rpanel = pygame.Surface( (MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT)) )
 MFD.rpn = Panel(MFD.sd(MFD_RP_X), MFD.sd(MFD_RP_Y), MFD.sd(MFD_RP_WIDTH), MFD.sd(MFD_RP_HEIGHT), MFD_RP_ROWS)
+#MFD.rpn.add_text(["12345 67890 12345 67890 12345 67890 12345 67890 12345 67890"], color=COLOR_GREEN)
 MFD.rpn.add_text(["Created by CMDR Lord Shadowfax"], color=COLOR_GREEN)
 MFD.rpn.add_text(["Elite:Dangerous MFD v" + MFD_VER], color=COLOR_GREEN)
 MFD.rpn.add_text(["", "Loading universe data ..."])

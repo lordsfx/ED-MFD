@@ -245,7 +245,7 @@ class Panel:
                 num_rows = int((coriolis.height + self.f_size - 1) / self.f_size)
                 y_offset = int((num_rows * self.f_size - coriolis.height) / 2)
                 position = self.pos_x + x_offset, self.pos_y + row * self.f_size + y_offset
-                display_rows = self.rows - row
+                display_rows = self.rows - row + 1
                 display_area = (0, 0, coriolis.width - 1, display_rows * self.f_size - 1)
                 surface.blit(coriolis.layout, position, display_area)
                 if _content == 0:

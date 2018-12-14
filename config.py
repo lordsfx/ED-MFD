@@ -9,9 +9,13 @@ MFD_VER = "1.3"
 # Fonts
 DEFAULT_FONT = "fonts/Eurostile.ttf"
 
+# Default display size
+DISPLAY_WIDTH = 1280
+DISPLAY_HEIGHT = 800
+
 # MFD images
 IMAGE_WALLPAPER = "images/MFD-Display-wallpaper.png"
-IMAGE_BUTTON = "images/MFD-Display-button.png"
+IMAGE_BUTTON = "images/MFD-Display-button-s%s.png"
 IMAGE_ED_LOGO = "images/EliteDangerous_Logo.png"
 
 # Coriolis images
