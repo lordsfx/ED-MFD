@@ -82,7 +82,7 @@ MFD_UP_Y = 68
 MFD_UP_WIDTH = 560
 MFD_UP_HEIGHT = 44
 MFD_UP_ROWS = 1
-MFD_UP_FONT_SIZE = 32	# override default font size
+MFD_UP_FONT_SIZE = 40	# override default font size
 
 # LP = lower panel
 MFD_LP_X = 115
@@ -92,7 +92,7 @@ MFD_LP_HEIGHT = 44
 MFD_LP_ROWS = 2
 
 # Size
-FONT_SIZE = 18		# default font size
+FONT_SIZE = 22		# default font size
 BTN1_WIDTH = 112
 BTN1_HEIGHT = 50
 BTN2_WIDTH = 112

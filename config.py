@@ -4,7 +4,7 @@ import logging
 LOG_LEVEL = logging.DEBUG
 
 # Version
-MFD_VER = "1.3"
+MFD_VER = "1.4.0 (E:D 3.3)"
 
 # Fonts
 DEFAULT_FONT = "fonts/Eurostile.ttf"

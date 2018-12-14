@@ -18,7 +18,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "Commander", "Status" ]
+    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "Status" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -105,9 +105,9 @@ class Journal:
                 if em == "DockingCancelled":
                     draw_logo(mpanel)
                     ship.mark_event_processed(em)
-                # Commander
-                if em == "Commander":
-                    lpanel.add_text([ "Welcome CMDR %s" % emj["Name"] ])
+                # LoadGame
+                if em == "LoadGame":
+                    lpanel.add_text([ "Welcome CMDR %s in %s" % (emj["Commander"], emj["ShipName"]) ])
                     ship.mark_event_processed(em)
 
 class JournalEventHandler(PatternMatchingEventHandler):

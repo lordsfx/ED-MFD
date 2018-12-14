@@ -172,7 +172,7 @@ class Panel:
         self.width  = width
         self.height = height
         self.rows   = rows
-        self.f_size = FONT_SIZE
+        self.f_size = MFD.sd(FONT_SIZE)
         if font_size: self.f_size = font_size
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
         self.pyfont = MFD_Font(MFD.font_file, self.f_size, bold)

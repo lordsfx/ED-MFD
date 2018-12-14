@@ -91,7 +91,7 @@ MFD_UP_SIZE = MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)
 MFD_UP_XY = MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y)
 
 upanel = pygame.Surface( (MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)) )
-MFD.upn = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, font_size=MFD_UP_FONT_SIZE, bold=True)
+MFD.upn = Panel(MFD.sd(MFD_UP_X), MFD.sd(MFD_UP_Y), MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT), MFD_UP_ROWS, font_size=MFD.sd(MFD_UP_FONT_SIZE), bold=True)
 MFD.upn.add_text([" > %s" % MFD.MFD_MODE[MFD.next_mode()]], color=COLOR_GREEN)
 
 # lower panel
