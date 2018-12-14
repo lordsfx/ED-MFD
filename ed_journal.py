@@ -18,7 +18,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "Status" ]
+    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "Commander", "Status" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -41,11 +41,32 @@ class Journal:
     def display(panels, ship, universe, buttons):
         rpanel = panels[0]
         mpanel = panels[1]
+        lpanel = panels[2]
         event_memory = ship.get_event_memory()
         for em in event_memory:
             if ship.event_is_updated(em):				# event is updated
                 #logger.debug("%s has an update" % em)
                 emj = event_memory[em][1]				# retrieve journal content
+                # Status
+                if em == "Status":
+                    if "Flags" in emj:
+                        ship.update_status_flags(emj["Flags"], buttons)
+                        #for status_flag in Status.get_ship_flags():
+                        #    if ship.get_status().is_flagged(status_flag):
+                        #        rpanel.add_text([ "Status: %s" % status_flag ])
+                    if "Pips" in emj:
+                        ship.update_status_pips(emj["Pips"], buttons)
+                    if "FireGroup" in emj:
+                        ship.update_status_firegroup(emj["FireGroup"], buttons)
+                    if "GuiFocus" in emj:
+                        ship.update_status_guifocus(emj["GuiFocus"], buttons)
+                    if "Fuel" in emj:
+                        ship.update_status_fuel(emj["Fuel"], buttons)
+                    if "Cargo" in emj:
+                        ship.update_status_cargo(emj["Cargo"], buttons)
+                    if "Latitude" in emj:
+                        ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
+                    ship.mark_event_processed(em)
                 # SupercruiseExit
                 if em == "SupercruiseExit":
                     rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
@@ -84,25 +105,9 @@ class Journal:
                 if em == "DockingCancelled":
                     draw_logo(mpanel)
                     ship.mark_event_processed(em)
-                # Status
-                if em == "Status":
-                    if "Flags" in emj:
-                        ship.update_status_flags(emj["Flags"], buttons)
-                        #for status_flag in Status.get_ship_flags():
-                        #    if ship.get_status().is_flagged(status_flag):
-                        #        rpanel.add_text([ "Status: %s" % status_flag ])
-                    if "Pips" in emj:
-                        ship.update_status_pips(emj["Pips"], buttons)
-                    if "FireGroup" in emj:
-                        ship.update_status_firegroup(emj["FireGroup"], buttons)
-                    if "GuiFocus" in emj:
-                        ship.update_status_guifocus(emj["GuiFocus"], buttons)
-                    if "Fuel" in emj:
-                        ship.update_status_fuel(emj["Fuel"], buttons)
-                    if "Cargo" in emj:
-                        ship.update_status_cargo(emj["Cargo"], buttons)
-                    if "Latitude" in emj:
-                        ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
+                # Commander
+                if em == "Commander":
+                    lpanel.add_text([ "Welcome CMDR %s" % emj["Name"] ])
                     ship.mark_event_processed(em)
 
 class JournalEventHandler(PatternMatchingEventHandler):

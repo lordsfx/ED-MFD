@@ -213,7 +213,7 @@ while True:
         for j in journal_updates:
             #logger.debug(j)
             Journal.parser(j, my_ship)
-        Journal.display([MFD.rpn, MFD.mpn[1]], my_ship, milkyway, MFD.bmp)
+        Journal.display([MFD.rpn, MFD.mpn[1], MFD.lpn], my_ship, milkyway, MFD.bmp)
         MFD.set_update()
 
     #show_button_states(MFD.bmp)
