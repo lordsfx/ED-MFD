@@ -22,6 +22,11 @@ def draw_logo(panel):
     panel.add_image(IMAGE_ED_LOGO)
     panel.add_text([""])
 
+def draw_mode(mfd, mfd_mode, img_mode):
+    for m in range(0, len(MFD.MFD_MODE)):
+        if (m + 1) == MFD.mode:
+            mfd.blit(img_mode, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
+
 # button actions
 
 def show_button_states(buttons):

@@ -260,3 +260,18 @@ class Panel:
                     if h > self.height: h = self.height
                     surface.blit(coriolis.padnum, (position[0] + x, position[1] + y), (x, y, w, h))
 
+# class MFD_Mode
+class MFD_Mode:
+
+    def __init__(self):
+        self.ind_xy = []
+        self.ind_area = []
+        for m in range(0, len(MFD.MFD_MODE)):
+            m_pos = MFD_MODE_POS[m + 1]
+            x = MFD.sd(m_pos[0])
+            y = MFD.sd(m_pos[1])
+            w = MFD.sd(m_pos[2] - m_pos[0])
+            h = MFD.sd(m_pos[3] - m_pos[1])
+            self.ind_xy.append( (x, y) )
+            self.ind_area.append( (x, y, w, h) )
+

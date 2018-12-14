@@ -62,6 +62,18 @@ MFD_YU2 = 92
 MFD_YD1 = 669
 MFD_YD2 = 698
 
+MMX = [ 115, 260, 400, 544, 675 ]
+MMY = [ 66, 110 ]
+
+MFD_MODE_WIDTH = MMX[4] - MMX[0] + 1
+MFD_MODE_HEIGHT = MMY[1] - MMY[0] + 1
+MFD_MODE_POS = [
+    ( MMX[0], MMY[0], MMX[4], MMY[1] ),		# mode entire
+    ( MMX[0], MMY[0], MMX[1], MMY[1] ),		# mode 1
+    ( MMX[1], MMY[0], MMX[2], MMY[1] ),		# mode 2
+    ( MMX[2], MMY[0], MMX[3], MMY[1] ),		# mode 3
+    ( MMX[3], MMY[0], MMX[4], MMY[1] ) ]	# mode 4
+
 # RP - right panel
 MFD_RP_X = 906
 MFD_RP_Y = 0
