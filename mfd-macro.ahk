@@ -135,7 +135,7 @@ SetTitleMatchMode, 2
 
 ; Prev Mode
 5Joy21::
-   controlsend, , {Ctrl Down},{Ctrl Up}, Elite:Dangerous MFD
+   controlsend, , {Ctrl Down}`,{Ctrl Up}, Elite:Dangerous MFD
    return
 
 ; Next Mode
