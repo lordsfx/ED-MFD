@@ -1,4 +1,5 @@
 import logging
+from common import *
 import os
 import json
 import threading
@@ -10,9 +11,6 @@ from mfd_functions import *
 from mfd_interface import Button
 from library import *
 from eddb import *
-
-logging.basicConfig(level=LOG_LEVEL)
-logger = logging.getLogger(__name__)
 
 class Ship:
     PIP_SYS = 0

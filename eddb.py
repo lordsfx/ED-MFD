@@ -1,12 +1,10 @@
-import sys, os
 import logging
+from common import *
+import sys, os
 import json
 import requests
 import threading
 from config import *
-
-logging.basicConfig(level=LOG_LEVEL)
-logger = logging.getLogger()
 
 class eddb:
 

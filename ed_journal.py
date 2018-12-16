@@ -1,4 +1,5 @@
 import logging
+from common import *
 import os, sys
 import time
 import json
@@ -9,9 +10,6 @@ from ed_status import *
 from mfd_interface import *
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
-
-logging.basicConfig(level=LOG_LEVEL)
-logger = logging.getLogger(__name__)
 
 J_PATH = "journals"
 J_LOG  = os.path.join(J_PATH, "Journal.*.log")

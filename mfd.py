@@ -1,4 +1,5 @@
 import logging
+from common import *
 import sys, pygame
 import json
 from config import *
@@ -7,9 +8,6 @@ from mfd_interface import *
 from ed_object import *
 from ed_journal import *
 from watchdog.observers import Observer
-
-logging.basicConfig(level=LOG_LEVEL)
-logger = logging.getLogger(__name__)
 
 # param
 scale = 1

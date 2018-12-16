@@ -1,12 +1,10 @@
 import logging
+from common import *
 import pygame
 from config import *
 from pygame.locals import *
 from constants import *
 from library import *
-
-logging.basicConfig(level=LOG_LEVEL)
-logger = logging.getLogger(__name__)
 
 # class MFD
 class MFD:

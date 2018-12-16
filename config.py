@@ -2,6 +2,8 @@ import logging
 
 # Debug Level
 LOG_LEVEL = logging.DEBUG
+LOG_FILE = "mfd-debug.log"
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 
 # Version
 MFD_VER = "1.4.0 (E:D 3.3)"
