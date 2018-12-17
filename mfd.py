@@ -59,7 +59,8 @@ MFD.bmp = [ None,	# 0
     Button("Orbit Lines" , MFD_ORBITLINES, MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
     Button("Ship Lights" , MFD_LIGHTS,     MFD_XC4, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 12
     Button("Landing Gear", MFD_LANDING,    MFD_XC3, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 13
-    None, None, None, None, 							# 14 - 17
+    None, None, None, 								# 14 - 16
+    Button("In Analysis" , MFD_ANALYSIS,   MFD_XL1, MFD_YC4, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 17
     Button("Docking Req" , MFD_DOCKINGREQ, MFD_XL1, MFD_YC3, COLOR_ORANGE),	# 18
     Button("Cargo Scoop" , MFD_CARGOSCOOP, MFD_XL1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 19
     Button("Hard Points" , MFD_HARDPOINT,  MFD_XL1, MFD_YC1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 20
@@ -156,6 +157,7 @@ while True:
         if event.key == pygame.K_n:  joy_index = MFD_LIGHTS	# Ship Lights
         if event.key == pygame.K_o:  joy_index = MFD_ORBITLINES	# Orbit Lines
         if event.key == pygame.K_q:  joy_index = MFD_DOCKINGREQ	# Docking Req
+        if event.key == pygame.K_s:  joy_index = MFD_ANALYSIS	# In Analysis
         if joy_index > 0:
             button_pressed = MFD.bmp[joy_index]
             MFD.set_update()

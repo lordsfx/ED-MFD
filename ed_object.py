@@ -85,6 +85,11 @@ class Ship:
             buttons[MFD_LIGHTS].set_state(Button.STATE_ON)
         else:
             buttons[MFD_LIGHTS].set_state(Button.STATE_OFF)
+        # MFD_ANALYSIS
+        if self.status.is_flagged("in_analysis"):
+            buttons[MFD_ANALYSIS].set_state(Button.STATE_ON)
+        else:
+            buttons[MFD_ANALYSIS].set_state(Button.STATE_OFF)
 
     def update_status_pips(self, _pips, buttons):
         self.pips = _pips
@@ -110,12 +115,12 @@ class Ship:
 
     def update_status_firegroup(self, _firegroup, buttons):
         self.firegroup = _firegroup
-        logger.debug("Fire Group: %s" % self.firegroup)
+        #logger.debug("Fire Group: %s" % self.firegroup)
         return
 
     def update_status_guifocus(self, _guifocus, buttons):
         self.guifocus = _guifocus
-        logger.debug("GUI Focus: %s" % self.guifocus)
+        #logger.debug("GUI Focus: %s" % self.guifocus)
         # MFD_FSS
         if self.guifocus == GUI_MODE_FSS:
             buttons[MFD_FSS].set_state(Button.STATE_ON)
@@ -125,17 +130,17 @@ class Ship:
 
     def update_status_fuel(self, _fuel, buttons):
         self.fuel = _fuel
-        logger.debug("Fuel (tons): %s" % self.fuel)
+        #logger.debug("Fuel (tons): %s" % self.fuel)
         return
 
     def update_status_cargo(self, _cargo, buttons):
         self.cargo = _cargo
-        logger.debug("Cargo (tons): %s" % self.cargo)
+        #logger.debug("Cargo (tons): %s" % self.cargo)
         return
 
     def update_status_bearings(self, _lat, _long, _head, _alt):
         self.bearings = (float(_lat), float(_long), int(_head), int(_alt))
-        logger.debug("Lat / Long: %f / %f\tHead / Alt: %d / %d" % self.bearings)
+        #logger.debug("Lat / Long: %f / %f\tHead / Alt: %d / %d" % self.bearings)
         return
 
     def get_status(self):
