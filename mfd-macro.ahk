@@ -100,28 +100,29 @@ SetTitleMatchMode, 2
 ; Dock Request
 5Joy18::
    controlsend, , {Ctrl Down}q{Ctrl Up}, Elite:Dangerous MFD
-   send, 1ee{Space}s{Space}qq1
+;   send, 1ee{Space}s{Space}qq1
+   send, 1ee{space}d{Space}qq1
    return
 
-; NAV Panel
-5Joy17::
-   send, 1
-   return
-
-; COM Panel
-5Joy25::
-   send, 2
-   return
-
-; RDR Panel
-5Joy26::
-   send, 3
-   return
-
-; SYS Panel
-5Joy16::
-   send, 4
-   return
+;; NAV Panel
+;5Joy17::
+;   send, 1
+;   return
+;
+;; COM Panel
+;5Joy25::
+;   send, 2
+;   return
+;
+;; RDR Panel
+;5Joy26::
+;   send, 3
+;   return
+;
+;; SYS Panel
+;5Joy16::
+;   send, 4
+;   return
 
 ; Previous Panel
 5Joy15::
