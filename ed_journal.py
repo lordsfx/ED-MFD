@@ -16,7 +16,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "Status" ]
+    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "ReceiveText" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -41,72 +41,80 @@ class Journal:
         mpanel = panels[1]
         lpanel = panels[2]
         event_memory = ship.get_event_memory()
-        for em in event_memory:
-            if ship.event_is_updated(em):				# event is updated
-                #logger.debug("%s has an update" % em)
-                emj = event_memory[em][1]				# retrieve journal content
-                # Status
-                if em == "Status":
-                    if "Flags" in emj:
-                        ship.update_status_flags(emj["Flags"], buttons)
-                        #for status_flag in Status.get_ship_flags():
-                        #    if ship.get_status().is_flagged(status_flag):
-                        #        rpanel.add_text([ "Status: %s" % status_flag ])
-                    if "Pips" in emj:
-                        ship.update_status_pips(emj["Pips"], buttons)
-                    if "FireGroup" in emj:
-                        ship.update_status_firegroup(emj["FireGroup"], buttons)
-                    if "GuiFocus" in emj:
-                        ship.update_status_guifocus(emj["GuiFocus"], buttons)
-                    if "Fuel" in emj:
-                        ship.update_status_fuel(emj["Fuel"], buttons)
-                    if "Cargo" in emj:
-                        ship.update_status_cargo(emj["Cargo"], buttons)
-                    if "Latitude" in emj:
-                        ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
-                    ship.mark_event_processed(em)
-                # SupercruiseExit
-                if em == "SupercruiseExit":
-                    rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
-                    ship.set_at_system(emj["StarSystem"])
-                    ship.set_at_station(emj["Body"])
-                    ship.mark_event_processed(em)
-                # Location
-                if em == "Location":
-                    ship.set_at_system(emj["StarSystem"])
-                    ship.set_at_station(emj["StationName"])
-                    ship.mark_event_processed(em)
-                # DockingGranted
-                if em == "DockingGranted":
-                    if emj["StationType"] in Journal.show_coriolis_types:
-                        mpanel.clear_all()
-                        mpanel.add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
-                    else:
-                        station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
-                        if station:
-                            pad_layout = station.docking_pad_layout()
-                            if pad_layout == 2:
-                                pad_info = station.outpost_pad_info(emj["LandingPad"])
-                                for p in pad_info:
-                                    rpanel.add_image("images/" + p)
-                    #rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
-                    rpanel.add_text([ "Docking granted at pad %s" % emj["LandingPad"] ])
-                    ship.mark_event_processed(em)
-                # Docked
-                if em == "Docked":
-                    rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
-                    draw_logo(mpanel)
-                    ship.set_at_system(emj["StarSystem"])
-                    ship.set_at_station(emj["StationName"])
-                    ship.mark_event_processed(em)
-                # DockingCancelled
-                if em == "DockingCancelled":
-                    draw_logo(mpanel)
-                    ship.mark_event_processed(em)
-                # LoadGame
-                if em == "LoadGame":
-                    lpanel.add_text([ "Welcome CMDR %s in %s" % (emj["Commander"], emj["ShipName"]) ])
-                    ship.mark_event_processed(em)
+        try:
+            for em in event_memory:
+                if ship.event_is_updated(em):				# event is updated
+                    #logger.debug("%s has an update" % em)
+                    emj = event_memory[em][1]				# retrieve journal content
+                    # Status
+                    if em == "Status":
+                        if "Flags" in emj:
+                            ship.update_status_flags(emj["Flags"], buttons)
+                            #for status_flag in Status.get_ship_flags():
+                            #    if ship.get_status().is_flagged(status_flag):
+                            #        rpanel.add_text([ "Status: %s" % status_flag ])
+                        if "Pips" in emj:
+                            ship.update_status_pips(emj["Pips"], buttons)
+                        if "FireGroup" in emj:
+                            ship.update_status_firegroup(emj["FireGroup"], buttons)
+                        if "GuiFocus" in emj:
+                            ship.update_status_guifocus(emj["GuiFocus"], buttons)
+                        if "Fuel" in emj:
+                            ship.update_status_fuel(emj["Fuel"], buttons)
+                        if "Cargo" in emj:
+                            ship.update_status_cargo(emj["Cargo"], buttons)
+                        if "Latitude" in emj:
+                            ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
+                        ship.mark_event_processed(em)
+                    # SupercruiseExit
+                    if em == "SupercruiseExit":
+                        rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
+                        ship.set_at_system(emj["StarSystem"])
+                        ship.set_at_station(emj["Body"])
+                        ship.mark_event_processed(em)
+                    # Location
+                    if em == "Location":
+                        ship.set_at_system(emj["StarSystem"])
+                        ship.set_at_station(emj["StationName"])
+                        ship.mark_event_processed(em)
+                    # DockingGranted
+                    if em == "DockingGranted":
+                        if emj["StationType"] in Journal.show_coriolis_types:
+                            mpanel.clear_all()
+                            mpanel.add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
+                        else:
+                            station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
+                            if station:
+                                pad_layout = station.docking_pad_layout()
+                                if pad_layout == 2:
+                                    pad_info = station.outpost_pad_info(emj["LandingPad"])
+                                    for p in pad_info:
+                                        rpanel.add_image("images/" + p)
+                        #rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
+                        rpanel.add_text([ "Docking granted at pad %s" % emj["LandingPad"] ])
+                        ship.mark_event_processed(em)
+                    # Docked
+                    if em == "Docked":
+                        rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
+                        draw_logo(mpanel)
+                        ship.set_at_system(emj["StarSystem"])
+                        ship.set_at_station(emj["StationName"])
+                        ship.mark_event_processed(em)
+                    # DockingCancelled
+                    if em == "DockingCancelled":
+                        draw_logo(mpanel)
+                        ship.mark_event_processed(em)
+                    # LoadGame
+                    if em == "LoadGame":
+                        lpanel.add_text([ "Welcome CMDR %s in %s" % (emj["Commander"], emj["ShipName"]) ])
+                        ship.mark_event_processed(em)
+                    # ReceiveText
+                    if em == "ReceiveText":
+                        if "STATION_docking_" not in emj["Message"]:
+                            rpanel.add_text([ "%s: %s" % (emj["From"], emj["Message_Localised"]) ], color=COLOR_WHITE)
+                        ship.mark_event_processed(em)
+        except KeyError as e:
+            logger.error("KeyError: %s" % e)
 
 class JournalEventHandler(PatternMatchingEventHandler):
 
