@@ -75,7 +75,10 @@ class Journal:
                     # Location
                     if em == "Location":
                         ship.set_at_system(emj["StarSystem"])
-                        ship.set_at_station(emj["StationName"])
+                        if "StationName" in emj:		# if docked
+                            ship.set_at_station(emj["StationName"])
+                        else:
+                            ship.set_at_station(None)
                         ship.mark_event_processed(em)
                     # DockingGranted
                     if em == "DockingGranted":
@@ -90,7 +93,6 @@ class Journal:
                                     pad_info = station.outpost_pad_info(emj["LandingPad"])
                                     for p in pad_info:
                                         rpanel.add_image("images/" + p)
-                        #rpanel.add_text([ "Docking granted at %s pad %s" % (emj["StationName"], emj["LandingPad"]) ])
                         rpanel.add_text([ "Docking granted at pad %s" % emj["LandingPad"] ])
                         ship.mark_event_processed(em)
                     # Docked
