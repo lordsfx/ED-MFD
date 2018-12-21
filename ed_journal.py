@@ -50,9 +50,6 @@ class Journal:
                     if em == "Status":
                         if "Flags" in emj:
                             ship.update_status_flags(emj["Flags"], buttons, lpanel)
-                            #for status_flag in Status.get_ship_flags():
-                            #    if ship.get_status().is_flagged(status_flag):
-                            #        rpanel.add_text([ "Status: %s" % status_flag ])
                         if "Pips" in emj:
                             ship.update_status_pips(emj["Pips"], buttons)
                         if "FireGroup" in emj:
@@ -113,7 +110,7 @@ class Journal:
                     # ReceiveText
                     if em == "ReceiveText":
                         if "STATION_docking_" not in emj["Message"]:
-                            if "From_localised" in emj: _text_from = emj["From_localised"]
+                            if "From_Localised" in emj: _text_from = emj["From_Localised"]
                             else: _text_from = emj["From"]
                             rpanel.add_text([ "%s: %s" % (_text_from, emj["Message_Localised"]) ], color=COLOR_WHITE)
                         ship.mark_event_processed(em)

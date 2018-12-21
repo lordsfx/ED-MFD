@@ -111,7 +111,7 @@ MFD_LP_Y = 684
 MFD_LP_WIDTH = 560
 MFD_LP_HEIGHT = 44
 MFD_LP_ROWS = 1
-MFD_LP_FONT_SIZE = 40	# override default font size
+MFD_LP_FONT_SIZE = 30	# override default font size
 
 # Size
 FONT_SIZE = 22		# default font size

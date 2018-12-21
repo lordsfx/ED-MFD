@@ -60,6 +60,9 @@ class Ship:
     def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)
         logger.debug("Flags: %s" % _flags)
+        for _sf in Status.get_ship_flags():
+            if self.status.is_flagged(_sf):
+                logger.debug("- Status: %s" % _sf)
         # MFD_SILENTRUN
         if self.status.is_flagged("silent_run"):
             buttons[MFD_SILENTRUN].set_state(Button.STATE_ON)
@@ -92,9 +95,9 @@ class Ship:
             buttons[MFD_N_VISION].set_state(Button.STATE_OFF)
         # MFD_HUD
         if self.status.is_flagged("in_analysis"):
-            panel.add_text([ "ANALYSIS MODE" ], color=COLOR_WHITE)
+            panel.add_text([ "  ANALYSIS MODE" ])
         else:
-            panel.add_text([ "COMBAT MODE" ], color=COLOR_WHITE)
+            panel.add_text([ "  COMBAT MODE" ])
 
     def update_status_pips(self, _pips, buttons):
         self.pips = _pips
@@ -131,12 +134,10 @@ class Ship:
 
     def update_status_guifocus(self, _guifocus, buttons, panel):
         self.guifocus = _guifocus
-        #logger.debug("GUI Focus: %s" % self.guifocus)
+        logger.debug("GUI Focus: %s" % self.guifocus)
         # MFD_FSS
         if self.guifocus == GUI_MODE_FSS:
-            panel.add_text([ "FSS ON" ], color=COLOR_WHITE)
-        else:
-            panel.clear_all()
+            panel.add_text([ "  FSS ON" ])
         return
 
     def update_status_fuel(self, _fuel, buttons):
