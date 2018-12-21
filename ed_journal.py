@@ -49,7 +49,7 @@ class Journal:
                     # Status
                     if em == "Status":
                         if "Flags" in emj:
-                            ship.update_status_flags(emj["Flags"], buttons)
+                            ship.update_status_flags(emj["Flags"], buttons, lpanel)
                             #for status_flag in Status.get_ship_flags():
                             #    if ship.get_status().is_flagged(status_flag):
                             #        rpanel.add_text([ "Status: %s" % status_flag ])
@@ -58,7 +58,7 @@ class Journal:
                         if "FireGroup" in emj:
                             ship.update_status_firegroup(emj["FireGroup"], buttons)
                         if "GuiFocus" in emj:
-                            ship.update_status_guifocus(emj["GuiFocus"], buttons)
+                            ship.update_status_guifocus(emj["GuiFocus"], buttons, lpanel)
                         if "Fuel" in emj:
                             ship.update_status_fuel(emj["Fuel"], buttons)
                         if "Cargo" in emj:
@@ -108,12 +108,14 @@ class Journal:
                         ship.mark_event_processed(em)
                     # LoadGame
                     if em == "LoadGame":
-                        lpanel.add_text([ "Welcome CMDR %s in %s" % (emj["Commander"], emj["ShipName"]) ])
+                        rpanel.add_text([ "Welcome CMDR %s in %s" % (emj["Commander"], emj["ShipName"]) ])
                         ship.mark_event_processed(em)
                     # ReceiveText
                     if em == "ReceiveText":
                         if "STATION_docking_" not in emj["Message"]:
-                            rpanel.add_text([ "%s: %s" % (emj["From"], emj["Message_Localised"]) ], color=COLOR_WHITE)
+                            if "From_localised" in emj: _text_from = emj["From_localised"]
+                            else: _text_from = emj["From"]
+                            rpanel.add_text([ "%s: %s" % (_text_from, emj["Message_Localised"]) ], color=COLOR_WHITE)
                         ship.mark_event_processed(em)
         except KeyError as e:
             logger.error("KeyError: %s" % e)

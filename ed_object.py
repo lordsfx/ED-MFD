@@ -57,7 +57,7 @@ class Ship:
     def get_at_station(self):
         return self.at_station
 
-    def update_status_flags(self, _flags, buttons):
+    def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)
         logger.debug("Flags: %s" % _flags)
         # MFD_SILENTRUN
@@ -85,11 +85,16 @@ class Ship:
             buttons[MFD_LIGHTS].set_state(Button.STATE_ON)
         else:
             buttons[MFD_LIGHTS].set_state(Button.STATE_OFF)
-        # MFD_ANALYSIS
-        if self.status.is_flagged("in_analysis"):
-            buttons[MFD_ANALYSIS].set_state(Button.STATE_ON)
+        # MFD_N_VISION
+        if self.status.is_flagged("nightvision"):
+            buttons[MFD_N_VISION].set_state(Button.STATE_ON)
         else:
-            buttons[MFD_ANALYSIS].set_state(Button.STATE_OFF)
+            buttons[MFD_N_VISION].set_state(Button.STATE_OFF)
+        # MFD_HUD
+        if self.status.is_flagged("in_analysis"):
+            panel.add_text([ "ANALYSIS MODE" ], color=COLOR_WHITE)
+        else:
+            panel.add_text([ "COMBAT MODE" ], color=COLOR_WHITE)
 
     def update_status_pips(self, _pips, buttons):
         self.pips = _pips
@@ -104,6 +109,12 @@ class Ship:
             self.pips_set = MFD_ENG_FULL
         elif self.pips[Ship.PIP_WEP] == 8:
             self.pips_set = MFD_WEP_FULL
+        elif self.pips[Ship.PIP_SYS] == 6:
+            self.pips_set = MFD_SYS_3
+        elif self.pips[Ship.PIP_ENG] == 6:
+            self.pips_set = MFD_ENG_3
+        elif self.pips[Ship.PIP_WEP] == 6:
+            self.pips_set = MFD_WEP_3
         else:
             if self.pips_set > 0:
                 buttons[self.pips_set].set_state(Button.STATE_OFF)
@@ -118,14 +129,14 @@ class Ship:
         #logger.debug("Fire Group: %s" % self.firegroup)
         return
 
-    def update_status_guifocus(self, _guifocus, buttons):
+    def update_status_guifocus(self, _guifocus, buttons, panel):
         self.guifocus = _guifocus
         #logger.debug("GUI Focus: %s" % self.guifocus)
         # MFD_FSS
         if self.guifocus == GUI_MODE_FSS:
-            buttons[MFD_FSS].set_state(Button.STATE_ON)
+            panel.add_text([ "FSS ON" ], color=COLOR_WHITE)
         else:
-            buttons[MFD_FSS].set_state(Button.STATE_OFF)
+            panel.clear_all()
         return
 
     def update_status_fuel(self, _fuel, buttons):

@@ -45,26 +45,28 @@ milkyway = Universe()
 # init buttons
 
 MFD.bmp = [ None,	# 0
-    Button("SYS Full"    , MFD_SYS_FULL,   MFD_XC1, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
-    Button("ENG Full"    , MFD_ENG_FULL,   MFD_XC2, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
-    Button("WEP Full"    , MFD_WEP_FULL,   MFD_XC3, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
+    Button("SYS 3"       , MFD_SYS_3,      MFD_XC1, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 1
+    Button("ENG 3"       , MFD_ENG_3,      MFD_XC2, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 2
+    Button("WEP 3"       , MFD_WEP_3,      MFD_XC3, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 3
     Button("ENG 4+SYS 2" , MFD_ENG4_SYS2,  MFD_XC4, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 4
     Button("WEP 4+SYS 2" , MFD_WEP4_SYS2,  MFD_XC5, MFD_YT1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 5
     Button("Heat Sink"   , MFD_HEATSINK,   MFD_XR1, MFD_YC1, COLOR_GREEN),	# 6
     Button("Silent Run"  , MFD_SILENTRUN,  MFD_XR1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 7
     Button("Chaff"       , MFD_CHAFF,      MFD_XR1, MFD_YC3, COLOR_GREEN),	# 8
     Button("Shield Cell" , MFD_SHIELDCELL, MFD_XR1, MFD_YC4, COLOR_GREEN),	# 9
-    #Button("Disco Scan"  , MFD_DISCOSCAN,  MFD_XR1, MFD_YC5, COLOR_ORANGE, Button.TYPE_HOLD),	# 10
-    Button("FSS"         , MFD_FSS,        MFD_XR1, MFD_YC5, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 10
-    Button("Orbit Lines" , MFD_ORBITLINES, MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
+    Button("Orbit Lines" , MFD_ORBITLINES, MFD_XR1, MFD_YC5, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 10
+    Button("Night Vision", MFD_N_VISION,   MFD_XC5, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 11
     Button("Ship Lights" , MFD_LIGHTS,     MFD_XC4, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 12
-    Button("Landing Gear", MFD_LANDING,    MFD_XC3, MFD_YB1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 13
-    None, None, None, 								# 14 - 16
-    Button("In Analysis" , MFD_ANALYSIS,   MFD_XL1, MFD_YC4, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 17
+    Button("WEP FULL"    , MFD_WEP_FULL,   MFD_XC3, MFD_YB1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 13
+    Button("ENG FULL"    , MFD_ENG_FULL,   MFD_XC2, MFD_YB1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 14 
+    Button("SYS FULL"    , MFD_SYS_FULL,   MFD_XC1, MFD_YB1, COLOR_ORANGE, Button.TYPE_SWITCH_1),	# 15
+    Button("Landing Gear", MFD_LANDING,    MFD_XL1, MFD_YC5, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 16
+    Button("Disco Scan"  , MFD_DISCOSCAN,  MFD_XL1, MFD_YC4, COLOR_ORANGE, Button.TYPE_HOLD),	# 17
     Button("Docking Req" , MFD_DOCKINGREQ, MFD_XL1, MFD_YC3, COLOR_ORANGE),	# 18
     Button("Cargo Scoop" , MFD_CARGOSCOOP, MFD_XL1, MFD_YC2, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 19
     Button("Hard Points" , MFD_HARDPOINT,  MFD_XL1, MFD_YC1, COLOR_GREEN,  Button.TYPE_TOGGLE),	# 20
-    None, None, None, None, None, None, None, None ]	# 21 - 28
+    None, None,	None, None,	# 21 - 24
+    None, None, None, None ]	# 25 - 28
 
 # init panels
 
@@ -101,7 +103,7 @@ MFD_LP_SIZE = MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT)
 MFD_LP_XY = MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y)
 
 lpanel = pygame.Surface( (MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT)) )
-MFD.lpn = Panel(MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y), MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT), MFD_LP_ROWS)
+MFD.lpn = Panel(MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y), MFD.sd(MFD_LP_WIDTH), MFD.sd(MFD_LP_HEIGHT), MFD_LP_ROWS, font_size=MFD.sd(MFD_LP_FONT_SIZE), bold=True)
 
 # misc init
 last_pad = 0
@@ -141,23 +143,28 @@ while True:
         mods = pygame.key.get_mods()
         button_pressed = None
         joy_index = 0
+        #
         if event.key == pygame.K_a:  joy_index = MFD_SYS_FULL	# SYS - Full
         if event.key == pygame.K_b:  joy_index = MFD_ENG_FULL	# ENG - Full
         if event.key == pygame.K_c:  joy_index = MFD_WEP_FULL	# WEP - Full
         if event.key == pygame.K_d:  joy_index = MFD_ENG4_SYS2	# ENG 4 + SYS 2
         if event.key == pygame.K_e:  joy_index = MFD_WEP4_SYS2	# WEP 4 + SYS 2
-        if event.key == pygame.K_f:  joy_index = MFD_HEATSINK	# Heat Sink
-        if event.key == pygame.K_g:  joy_index = MFD_SILENTRUN	# Silent Run
-        if event.key == pygame.K_h:  joy_index = MFD_CHAFF	# Chaff
+        if event.key == pygame.K_t:  joy_index = MFD_SYS_3	# SYS - 3
+        if event.key == pygame.K_y:  joy_index = MFD_ENG_3	# ENG - 3
+        if event.key == pygame.K_u:  joy_index = MFD_WEP_3	# WEP - 3
+        #
+        if event.key == pygame.K_f:  joy_index = MFD_CHAFF	# Chaff
+        if event.key == pygame.K_g:  joy_index = MFD_LANDING	# Landing Gear
+        if event.key == pygame.K_h:  joy_index = MFD_HEATSINK	# Heat Sink
         if event.key == pygame.K_i:  joy_index = MFD_SHIELDCELL	# Shield Cell
-        if event.key == pygame.K_j:  joy_index = MFD_FSS	# FSS
-        if event.key == pygame.K_k:  joy_index = MFD_HARDPOINT	# Hard Points
-        if event.key == pygame.K_l:  joy_index = MFD_CARGOSCOOP	# Cargo Scoop
-        if event.key == pygame.K_m:  joy_index = MFD_LANDING	# Landing Gear
-        if event.key == pygame.K_n:  joy_index = MFD_LIGHTS	# Ship Lights
+        if event.key == pygame.K_j:  joy_index = MFD_DISCOSCAN	# Disco Scan
+        if event.key == pygame.K_l:  joy_index = MFD_LIGHTS	# Ship Lights
+        if event.key == pygame.K_m:  joy_index = MFD_SILENTRUN	# Silent Run
+        if event.key == pygame.K_n:  joy_index = MFD_N_VISION	# Night Vision
         if event.key == pygame.K_o:  joy_index = MFD_ORBITLINES	# Orbit Lines
+        if event.key == pygame.K_p:  joy_index = MFD_HARDPOINT	# Hard Points
         if event.key == pygame.K_q:  joy_index = MFD_DOCKINGREQ	# Docking Req
-        if event.key == pygame.K_s:  joy_index = MFD_ANALYSIS	# In Analysis
+        if event.key == pygame.K_s:  joy_index = MFD_CARGOSCOOP	# Cargo Scoop
         if joy_index > 0:
             button_pressed = MFD.bmp[joy_index]
             MFD.set_update()
@@ -173,11 +180,11 @@ while True:
                 for b in MFD.bmp:
                     if b: b.reset_state()
                 MFD.rpn.add_text(["- reset all states"])
-        if event.key == pygame.K_p:         # Ctrl-P : Coriolis Pad Test
-            if mods & pygame.KMOD_CTRL:
-                last_pad += 1
-                if last_pad > 45: last_pad = 0
-                MFD.rpn.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
+#        if event.key == pygame.K_p:         # Ctrl-P : Coriolis Pad Test
+#            if mods & pygame.KMOD_CTRL:
+#                last_pad += 1
+#                if last_pad > 45: last_pad = 0
+#                MFD.rpn.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
                 MFD.mpn[1].clear_all()
