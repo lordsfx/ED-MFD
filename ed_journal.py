@@ -16,7 +16,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "ReceiveText" ]
+    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -63,11 +63,22 @@ class Journal:
                         if "Latitude" in emj:
                             ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
                         ship.mark_event_processed(em)
+                    # FSDTarget
+                    if em == "FSDTarget":
+                        ship.mark_event_processed(em)
+                    # StartJump
+                    if em == "StartJump":
+                        ship.mark_event_processed(em)
+                    # FSDJump
+                    if em == "FSDJump":
+                        ship.set_at_system(emj["StarSystem"])
+                        ship.mark_event_processed(em)
                     # SupercruiseExit
                     if em == "SupercruiseExit":
                         rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
                         ship.set_at_system(emj["StarSystem"])
                         ship.set_at_station(emj["Body"])
+                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
                         ship.mark_event_processed(em)
                     # Location
                     if em == "Location":
@@ -76,12 +87,13 @@ class Journal:
                             ship.set_at_station(emj["StationName"])
                         else:
                             ship.set_at_station(None)
+                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
                         ship.mark_event_processed(em)
                     # DockingGranted
                     if em == "DockingGranted":
                         if emj["StationType"] in Journal.show_coriolis_types:
-                            mpanel.clear_all()
-                            mpanel.add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
+                            mpanel[MFD.PANEL["NORMAL"]].clear_all()
+                            mpanel[MFD.PANEL["NORMAL"]].add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
                         else:
                             station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
                             if station:
@@ -95,13 +107,14 @@ class Journal:
                     # Docked
                     if em == "Docked":
                         rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
-                        draw_logo(mpanel)
+                        draw_logo(mpanel[MFD.PANEL["NORMAL"]])
                         ship.set_at_system(emj["StarSystem"])
                         ship.set_at_station(emj["StationName"])
+                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
                         ship.mark_event_processed(em)
                     # DockingCancelled
                     if em == "DockingCancelled":
-                        draw_logo(mpanel)
+                        draw_logo(mpanel[MFD.PANEL["NORMAL"]])
                         ship.mark_event_processed(em)
                     # LoadGame
                     if em == "LoadGame":

@@ -4,3 +4,4 @@ mfd.json
 eddb/*.json
 *.bak
 journals
+*.log

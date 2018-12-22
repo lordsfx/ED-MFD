@@ -27,6 +27,17 @@ def draw_mode(mfd, mfd_mode, img_mode):
         if (m + 1) == MFD.mode:
             mfd.blit(img_mode, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
 
+def show_details_explore(panel, ship):
+    panel.clear_all()
+    _all_text = []
+    _all_text.append( ("Current Location", COLOR_GREEN) )
+    _loc = "  "
+    if ship.get_at_station(): _loc += "%s / " % ship.get_at_station()
+    _loc += ship.get_at_system()
+    _all_text.append( (_loc, COLOR_ORANGE) )
+    for _text in reversed(_all_text):
+        panel.add_text( [ _text[0] ], _text[1] )
+
 # button actions
 
 def show_button_states(buttons):
