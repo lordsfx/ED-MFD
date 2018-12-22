@@ -16,7 +16,6 @@ class MFD:
     has_update = False
 
     MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
-    PANEL = { 'NORMAL':1, 'COMBAT':2, 'EXPLORE':3, 'MINING':4 }
     mode = 0
 
     bmp = None

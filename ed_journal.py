@@ -65,6 +65,8 @@ class Journal:
                         ship.mark_event_processed(em)
                     # FSDTarget
                     if em == "FSDTarget":
+                        ship.set_fsd_target(emj["Name"])
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # StartJump
                     if em == "StartJump":
@@ -72,13 +74,15 @@ class Journal:
                     # FSDJump
                     if em == "FSDJump":
                         ship.set_at_system(emj["StarSystem"])
+                        ship.set_fsd_target(None)
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # SupercruiseExit
                     if em == "SupercruiseExit":
                         rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
                         ship.set_at_system(emj["StarSystem"])
                         ship.set_at_station(emj["Body"])
-                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # Location
                     if em == "Location":
@@ -87,15 +91,15 @@ class Journal:
                             ship.set_at_station(emj["StationName"])
                         else:
                             ship.set_at_station(None)
-                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # DockingGranted
                     if em == "DockingGranted":
                         if emj["StationType"] in Journal.show_coriolis_types:
-                            mpanel[MFD.PANEL["NORMAL"]].clear_all()
-                            mpanel[MFD.PANEL["NORMAL"]].add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
+                            mpanel[MFD_MODE_NORMAL].clear_all()
+                            mpanel[MFD_MODE_NORMAL].add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
                         else:
-                            station = universe.get_station_data(ship.get_at_station(), ship.get_at_system())
+                            station = universe.get_station_data(ship.at_station, ship.at_system)
                             if station:
                                 pad_layout = station.docking_pad_layout()
                                 if pad_layout == 2:
@@ -107,14 +111,14 @@ class Journal:
                     # Docked
                     if em == "Docked":
                         rpanel.add_text([ "Docked at %s, %s" % (emj["StationName"], emj["StarSystem"]) ])
-                        draw_logo(mpanel[MFD.PANEL["NORMAL"]])
+                        draw_logo(mpanel[MFD_MODE_NORMAL])
                         ship.set_at_system(emj["StarSystem"])
                         ship.set_at_station(emj["StationName"])
-                        show_details_explore(mpanel[MFD.PANEL["EXPLORE"]], ship)
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # DockingCancelled
                     if em == "DockingCancelled":
-                        draw_logo(mpanel[MFD.PANEL["NORMAL"]])
+                        draw_logo(mpanel[MFD_MODE_NORMAL])
                         ship.mark_event_processed(em)
                     # LoadGame
                     if em == "LoadGame":

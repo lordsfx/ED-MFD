@@ -29,6 +29,7 @@ class Ship:
         self.fuel = 0
         self.cargo = 0
         self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
+        self.fsd_target = None
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -47,15 +48,13 @@ class Ship:
         self.at_system = system
         logger.debug("At system: %s" % self.at_system)
 
-    def get_at_system(self):
-        return self.at_system
-
     def set_at_station(self, station):
         self.at_station = station
         logger.debug("At station: %s" % self.at_station)
 
-    def get_at_station(self):
-        return self.at_station
+    def set_fsd_target(self, system):
+        self.fsd_target = system
+        logger.debug("FSD target: %s" % self.fsd_target)
 
     def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)
