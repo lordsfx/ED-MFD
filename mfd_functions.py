@@ -40,7 +40,7 @@ def show_details_explore(panel, ship, star_class=None):
         _all_text.append( ("Next Jump", COLOR_GREEN) )
         _all_text.append( ("  %s" % ship.fsd_target, COLOR_ORANGE) )
         if star_class:
-            _all_text.append( ("  Class %s" % _star_class, COLOR_ORANGE) )
+            _all_text.append( ("  Class %s" % star_class, COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):

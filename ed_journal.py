@@ -85,7 +85,8 @@ class Journal:
                     if em == "SupercruiseExit":
                         rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
                         ship.set_at_system(emj["StarSystem"])
-                        ship.set_at_station(emj["Body"])
+                        if emj["BodyType"] == "Station":
+                            ship.set_at_station(emj["Body"])
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # Location
