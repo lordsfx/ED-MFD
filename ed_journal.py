@@ -16,7 +16,7 @@ J_LOG  = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump" ]
+    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT ]
@@ -70,6 +70,10 @@ class Journal:
                         ship.mark_event_processed(em)
                     # StartJump
                     if em == "StartJump":
+                        _star_class = None
+                        if emj["JumpType"] == "Hyperspace":
+                            _star_class = emj["StarClass"]
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship, star_class=_star_class)
                         ship.mark_event_processed(em)
                     # FSDJump
                     if em == "FSDJump":
@@ -116,8 +120,8 @@ class Journal:
                         ship.set_at_station(emj["StationName"])
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
-                    # DockingCancelled
-                    if em == "DockingCancelled":
+                    # DockingCancelled / DockingTimeout
+                    if em == "DockingCancelled" or em == "DockingTimeout":
                         draw_logo(mpanel[MFD_MODE_NORMAL])
                         ship.mark_event_processed(em)
                     # LoadGame
@@ -130,6 +134,11 @@ class Journal:
                             if "From_Localised" in emj: _text_from = emj["From_Localised"]
                             else: _text_from = emj["From"]
                             rpanel.add_text([ "%s: %s" % (_text_from, emj["Message_Localised"]) ], color=COLOR_WHITE)
+                        ship.mark_event_processed(em)
+                    # Cargo
+                    if em == "Cargo":
+                        ship.set_cargo(emj["Vessel"], emj["Count"])
+                        show_details_cargo(mpanel[MFD_MODE_MINING], ship)
                         ship.mark_event_processed(em)
         except KeyError as e:
             logger.error("KeyError: %s" % e)

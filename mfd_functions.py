@@ -27,7 +27,7 @@ def draw_mode(mfd, mfd_mode, img_mode):
         if (m + 1) == MFD.mode:
             mfd.blit(img_mode, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
 
-def show_details_explore(panel, ship):
+def show_details_explore(panel, ship, star_class=None):
     _all_text = []
     _all_text.append( ("Current Location", COLOR_GREEN) )
     _loc = "  "
@@ -39,6 +39,19 @@ def show_details_explore(panel, ship):
         _all_text.append( (" ", COLOR_GREEN) )
         _all_text.append( ("Next Jump", COLOR_GREEN) )
         _all_text.append( ("  %s" % ship.fsd_target, COLOR_ORANGE) )
+        if star_class:
+            _all_text.append( ("  Class %s" % _star_class, COLOR_ORANGE) )
+
+    panel.clear_all()
+    for _text in reversed(_all_text):
+        panel.add_text( [ _text[0] ], _text[1] )
+
+def show_details_cargo(panel, ship):
+    _all_text = []
+    _all_text.append( ("Cargo", COLOR_GREEN) )
+    _all_text.append( ("  In ship: %d" % ship.cargo_ship_count, COLOR_ORANGE) )
+    if ship.cargo_srv_count > 0:
+        _all_text.append( ("  In SRV: %d" % ship.cargo_srv_count, COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):

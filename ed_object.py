@@ -30,6 +30,10 @@ class Ship:
         self.cargo = 0
         self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
         self.fsd_target = None
+        self.cargo_ship_count = 0
+        self.cargo_srv_count = 0
+        self.cargo_ship = None
+        self.cargo_srv = None
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -55,6 +59,14 @@ class Ship:
     def set_fsd_target(self, system):
         self.fsd_target = system
         logger.debug("FSD target: %s" % self.fsd_target)
+
+    def set_cargo(self, vessel, count):
+        if vessel == "Ship":
+            self.cargo_ship_count = int(count)
+            logger.debug("Cargo in Ship: %d" % self.cargo_ship_count)
+        else:
+            self.cargo_srv_count = int(count)
+            logger.debug("Cargo in SRV: %d" % self.cargo_srv_count)
 
     def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)
