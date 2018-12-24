@@ -8,19 +8,21 @@ from pygame.locals import *
 def draw_background(surface, img_MFD):
     surface.blit(img_MFD, (0,0))
 
-def draw_panel(mfd, surface, panel, add_shade=False):
+def draw_panel(mfd, surface, panel, add_shade=False, img_stkbtn=None):
     panelbox = pygame.Surface(panel.get_size())
     if add_shade:
         panelbox.fill(COLOR_SHADE)
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
+    if panel.mfd_mode == MFD_MODE_NORMAL:
+        mfd.blit(img_stkbtn, panel.get_offset())
     #print("+", end="", flush=True)
 
 def draw_logo(panel):
     panel.clear_all()
     panel.add_image(IMAGE_ED_LOGO)
-    panel.add_text([""])
+    #panel.add_text([""])
 
 def draw_mode(mfd, mfd_mode, img_mode):
     for m in range(0, len(MFD.MFD_MODE)):

@@ -164,7 +164,7 @@ class Coriolis:
 # class Panel
 class Panel:
 
-    def __init__(self, pos_x, pos_y, width, height, rows, font_size=None, bold=False):
+    def __init__(self, pos_x, pos_y, width, height, rows, font_size=None, bold=False, mode=None):
         self.pos_x  = pos_x
         self.pos_y  = pos_y
         self.width  = width
@@ -174,6 +174,7 @@ class Panel:
         if font_size: self.f_size = font_size
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
         self.pyfont = MFD_Font(MFD.font_file, self.f_size, bold)
+        self.mfd_mode = mode
 
     def get_offset(self):
         return (self.pos_x, self.pos_y)

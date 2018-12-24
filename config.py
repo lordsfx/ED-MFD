@@ -21,6 +21,7 @@ IMAGE_BUTTON = "images/MFD-Display-button-s%s.png"
 IMAGE_MODE = "images/MFD-Display-mode-s%s.png"
 IMAGE_MODE_DARK = "images/MFD-Display-mode-dark-s%s.png"
 IMAGE_ED_LOGO = "images/EliteDangerous_Logo.png"
+IMAGE_STICK_BUTTON = "images/MFD-Display-stick-button.png"
 
 # Coriolis images
 IMAGE_CORIOLIS_LAYOUT = "images/coriolis-layout-clean.png"
