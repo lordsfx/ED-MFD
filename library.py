@@ -1,6 +1,7 @@
-# https://github.com/ColdrickSotK/yamlui/blob/264bf37a3697f1a3e69a42475648a3ee9afeb664/yamlui/util.py#L82-L143
+import math
 
 def wrap_text(text, font, width):
+    # https://github.com/ColdrickSotK/yamlui/blob/264bf37a3697f1a3e69a42475648a3ee9afeb664/yamlui/util.py#L82-L143
     """Wrap text to fit inside a given width when rendered.
 
     :param text: The text to be wrapped.
@@ -38,3 +39,9 @@ def wrap_text(text, font, width):
             wrapped_lines.append(line)
     return wrapped_lines
 
+def distance(c1, c2):
+    """ calculate 3d distance of c1 = (x1, y1, z1) and c2 = (x2, y2, z2)
+    """
+    x1, y1, z1 = c1
+    x2, y2, z2 = c2
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
