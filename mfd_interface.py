@@ -18,6 +18,7 @@ class MFD:
     has_update = False
     show_stkbtn = True
 
+    APP_SIZE = DISPLAY_WIDTH, DISPLAY_HEIGHT
     MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
     mode = 0
 
@@ -30,6 +31,8 @@ class MFD:
     @staticmethod
     def set_scale(_scale):
         MFD.scale = _scale
+        if MFD.scale != 1:
+            MFD.APP_SIZE = int(DISPLAY_WIDTH * MFD.scale), int(DISPLAY_HEIGHT * MFD.scale)
 
     def set_font(_file, _bold_file):
         MFD.font_file = _file
@@ -62,15 +65,21 @@ class MFD:
 class Image:
 
     def __init__(self, _scale):
+        # loaded images
+        self.BUTTON = pygame.image.load(IMAGE_BUTTON).convert_alpha()
         self.MODE = pygame.image.load(IMAGE_MODE).convert_alpha()
         self.MODEDARK = pygame.image.load(IMAGE_MODE_DARK).convert_alpha()
         self.FSS = pygame.image.load(IMAGE_FSS).convert_alpha()
         self.STKBTN = pygame.image.load(IMAGE_STICK_BUTTON).convert_alpha()
+        # created images
+        self.BLUR = pygame.Surface(MFD.APP_SIZE)
+        self.BLUR.fill(COLOR_GREY)
+        self.BLUR.set_alpha(20, RLEACCEL)
 
         if _scale != 1:
-            _mode_size = MFD.sd(DISPLAY_WIDTH), MFD.sd(DISPLAY_HEIGHT)
-            self.MODE = pygame.transform.smoothscale(self.MODE, _mode_size)
-            self.MODEDARK = pygame.transform.smoothscale(self.MODEDARK, _mode_size)
+            self.BUTTON = pygame.transform.smoothscale(self.BUTTON, MFD.APP_SIZE)
+            self.MODE = pygame.transform.smoothscale(self.MODE, MFD.APP_SIZE)
+            self.MODEDARK = pygame.transform.smoothscale(self.MODEDARK, MFD.APP_SIZE)
             _mp_size = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
             self.FSS = pygame.transform.smoothscale(self.FSS, _mp_size)
             self.STKBTN = pygame.transform.smoothscale(self.STKBTN, _mp_size)

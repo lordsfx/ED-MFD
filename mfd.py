@@ -14,25 +14,19 @@ scale = 1
 if len(sys.argv) > 1:
     scale = float(sys.argv[1])
 MFD.set_scale(scale)
-APP_SIZE = MFD.sd(DISPLAY_WIDTH), MFD.sd(DISPLAY_HEIGHT)
 
 # set stage
 pygame.init()
 pygame.display.set_caption(MFD.title)
 img_MFD = pygame.image.load(IMAGE_WALLPAPER)
-img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
-mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
+img_MFD = pygame.transform.smoothscale(img_MFD, MFD.APP_SIZE)
+mfd = pygame.display.set_mode(MFD.APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
 MFD.set_font(DEFAULT_FONT, DEFAULT_FONT_BOLD)
 
-blur_MFD = pygame.Surface(APP_SIZE)
-blur_MFD.fill(COLOR_GREY)
-blur_MFD.set_alpha(20, RLEACCEL)
-layer_BTN = pygame.image.load((IMAGE_BUTTON % MFD.scale)).convert_alpha()
 image_lib = Image(scale)
-
-img_MFD.blit(blur_MFD, (0, 0))
-img_MFD.blit(layer_BTN, (0, 0))
+img_MFD.blit(image_lib.BLUR, (0, 0))
+img_MFD.blit(image_lib.BUTTON, (0, 0))
 img_MFD.blit(image_lib.MODEDARK, (0, 0))
 
 TIMER_LOOP = Button.TIMER_STEP * 10
@@ -192,10 +186,10 @@ while True:
             MFD.set_update()
         if event.key == pygame.K_SPACE:
             if noframe:
-                mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
+                mfd = pygame.display.set_mode(MFD.APP_SIZE, DOUBLEBUF|NOFRAME)
                 noframe = False
             else:
-                mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF)
+                mfd = pygame.display.set_mode(MFD.APP_SIZE, DOUBLEBUF)
                 noframe = True
             MFD.set_update()
         if event.type == QUIT or event.key == pygame.K_ESCAPE:
