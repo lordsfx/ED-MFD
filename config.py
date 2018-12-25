@@ -9,7 +9,9 @@ LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 MFD_VER = "1.5.0 (E:D 3.3)"
 
 # Fonts
-DEFAULT_FONT = "fonts/Eurostile.ttf"
+#DEFAULT_FONT = "fonts/Eurostile.ttf"
+DEFAULT_FONT = "fonts/Calibri.ttf"
+DEFAULT_FONT_BOLD = "fonts/Calibri Bold.ttf"
 
 # Default display size
 DISPLAY_WIDTH = 1280

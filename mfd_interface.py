@@ -11,6 +11,8 @@ class MFD:
     scale = 1
     font_file = None
     font = None
+    font_bold_file = None
+    font_bold = None
     state_file = "mfd.json"
     title = "Elite:Dangerous MFD"
     has_update = False
@@ -29,8 +31,9 @@ class MFD:
     def set_scale(_scale):
         MFD.scale = _scale
 
-    def set_font(_file):
+    def set_font(_file, _bold_file):
         MFD.font_file = _file
+        MFD.font_bold_file = _bold_file
 
     def sd(dim):
         return int(dim * MFD.scale)
@@ -57,11 +60,10 @@ class MFD:
 # class MFD_Font
 class MFD_Font:
 
-    def __init__(self, _file, _size, _bold):
+    def __init__(self, _file, _size):
         self.font_file = _file
         self.font_size = _size
         self.font = pygame.font.Font(self.font_file, self.font_size)
-        self.font.set_bold(_bold)
 
 
 # class Button
@@ -176,7 +178,9 @@ class Panel:
         self.f_size = MFD.sd(FONT_SIZE)
         if font_size: self.f_size = font_size
         self.lines  = [ ( "", "", COLOR_BLACK ) ] * self.rows
-        self.pyfont = MFD_Font(MFD.font_file, self.f_size, bold)
+        self.pyfont  = MFD_Font(MFD.font_file, self.f_size)
+        self.pyfontb = MFD_Font(MFD.font_bold_file, self.f_size)
+        self.is_bold = bold
         self.mfd_mode = mode
 
     def get_offset(self):
@@ -192,7 +196,10 @@ class Panel:
     def add_text(self, text_lines, color=None):
         if not color: color = COLOR_ORANGE	# default panel text color
         for text in text_lines:
-            wrapped_text = wrap_text(text, self.pyfont.font, self.width)
+            if self.is_bold:
+                wrapped_text = wrap_text(text, self.pyfontb.font, self.width)
+            else:
+                wrapped_text = wrap_text(text, self.pyfont.font, self.width)
             for t in reversed(wrapped_text):
                 self.add_lines( [ ("text", t, color) ] )
                 MFD.set_update()
@@ -230,7 +237,10 @@ class Panel:
             if _type == "text":
                 # _content = text
                 # _extra_attr = color
-                label = self.pyfont.font.render(_content, True, _extra_attr)
+                if self.is_bold:
+                    label = self.pyfontb.font.render(_content, True, _extra_attr)
+                else:
+                    label = self.pyfont.font.render(_content, True, _extra_attr)
                 surface.blit(label, (self.pos_x + 3, self.pos_y + row * self.f_size))
             if _type == "image":
                 # _content = pygame surface

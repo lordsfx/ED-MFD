@@ -23,7 +23,7 @@ img_MFD = pygame.image.load(IMAGE_WALLPAPER)
 img_MFD = pygame.transform.smoothscale(img_MFD, APP_SIZE)
 mfd = pygame.display.set_mode(APP_SIZE, DOUBLEBUF|NOFRAME)
 img_MFD = img_MFD.convert()
-MFD.set_font(DEFAULT_FONT)
+MFD.set_font(DEFAULT_FONT, DEFAULT_FONT_BOLD)
 
 blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
