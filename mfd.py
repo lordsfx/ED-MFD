@@ -183,11 +183,10 @@ while True:
                 for b in MFD.bmp:
                     if b: b.reset_state()
                 MFD.rpn.add_text(["- reset all states"])
-#        if event.key == pygame.K_p:         # Ctrl-P : Coriolis Pad Test
-#            if mods & pygame.KMOD_CTRL:
-#                last_pad += 1
-#                if last_pad > 45: last_pad = 0
-#                MFD.rpn.add_coriolis(last_pad, Coriolis(MFD_RP_WIDTH))
+        if event.key == pygame.K_SLASH:     # Ctrl-/ : Show/Hide Stick buttons
+            if mods & pygame.KMOD_CTRL:
+                MFD.toggle_show_stick_buttons()
+                MFD.set_update()
         if event.key == pygame.K_0:         # Ctrl-0 : Coriolis All Pads
             if mods & pygame.KMOD_CTRL:
                 MFD.mpn[1].clear_all()

@@ -15,7 +15,7 @@ def draw_panel(mfd, surface, panel, add_shade=False, img_stkbtn=None):
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
-    if panel.mfd_mode == MFD_MODE_NORMAL:
+    if MFD.show_stkbtn and panel.mfd_mode == MFD_MODE_NORMAL:
         mfd.blit(img_stkbtn, panel.get_offset())
     #print("+", end="", flush=True)
 

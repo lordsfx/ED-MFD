@@ -14,6 +14,7 @@ class MFD:
     state_file = "mfd.json"
     title = "Elite:Dangerous MFD"
     has_update = False
+    show_stkbtn = True
 
     MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
     mode = 0
@@ -50,6 +51,8 @@ class MFD:
         if MFD.mode < 1: MFD.mode = len(MFD.MFD_MODE)
         return MFD.mode
 
+    def toggle_show_stick_buttons():
+        MFD.show_stkbtn = not MFD.show_stkbtn
 
 # class MFD_Font
 class MFD_Font:
