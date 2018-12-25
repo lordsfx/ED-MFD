@@ -29,13 +29,11 @@ blur_MFD = pygame.Surface(APP_SIZE)
 blur_MFD.fill(COLOR_GREY)
 blur_MFD.set_alpha(20, RLEACCEL)
 layer_BTN = pygame.image.load((IMAGE_BUTTON % MFD.scale)).convert_alpha()
-img_MODE_dark = pygame.image.load((IMAGE_MODE_DARK % MFD.scale)).convert_alpha()
-img_MODE = pygame.image.load((IMAGE_MODE % MFD.scale)).convert_alpha()
-img_STKBTN = pygame.image.load(IMAGE_STICK_BUTTON).convert_alpha()
+image_lib = Image(scale)
 
 img_MFD.blit(blur_MFD, (0, 0))
 img_MFD.blit(layer_BTN, (0, 0))
-img_MFD.blit(img_MODE_dark, (0, 0))
+img_MFD.blit(image_lib.MODEDARK, (0, 0))
 
 TIMER_LOOP = Button.TIMER_STEP * 10
 
@@ -90,8 +88,6 @@ mpanel = pygame.Surface( (MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)) )
 for m in MFD.MFD_MODE:
     MFD.mpn[m] = Panel(MFD.sd(MFD_MP_X), MFD.sd(MFD_MP_Y), MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT), MFD_MP_ROWS, mode=m)
 draw_logo(MFD.mpn[1])
-
-if scale != 1: img_STKBTN = pygame.transform.smoothscale(img_STKBTN, MFD_MP_SIZE)
 
 # upper panel
 MFD_UP_SIZE = MFD.sd(MFD_UP_WIDTH), MFD.sd(MFD_UP_HEIGHT)
@@ -233,9 +229,9 @@ while True:
     #show_button_states(MFD.bmp)
     if MFD.has_update:
         draw_background(mfd, img_MFD)
-        draw_mode(mfd, mfd_mode, img_MODE)
+        draw_mode(mfd, mfd_mode, img_lib=image_lib)
         draw_panel(mfd, rpanel, MFD.rpn, False)
-        draw_panel(mfd, mpanel, MFD.mpn[MFD.mode], img_stkbtn=img_STKBTN)
+        draw_panel(mfd, mpanel, MFD.mpn[MFD.mode], img_lib=image_lib)
         #draw_panel(mfd, upanel, MFD.upn)
         draw_panel(mfd, lpanel, MFD.lpn)
         draw_button_states(mfd, MFD.bmp)

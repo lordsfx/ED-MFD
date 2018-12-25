@@ -57,6 +57,25 @@ class MFD:
     def toggle_show_stick_buttons():
         MFD.show_stkbtn = not MFD.show_stkbtn
 
+
+# class Image
+class Image:
+
+    def __init__(self, _scale):
+        self.MODE = pygame.image.load(IMAGE_MODE).convert_alpha()
+        self.MODEDARK = pygame.image.load(IMAGE_MODE_DARK).convert_alpha()
+        self.FSS = pygame.image.load(IMAGE_FSS).convert_alpha()
+        self.STKBTN = pygame.image.load(IMAGE_STICK_BUTTON).convert_alpha()
+
+        if _scale != 1:
+            _mode_size = MFD.sd(DISPLAY_WIDTH), MFD.sd(DISPLAY_HEIGHT)
+            self.MODE = pygame.transform.smoothscale(self.MODE, _mode_size)
+            self.MODEDARK = pygame.transform.smoothscale(self.MODEDARK, _mode_size)
+            _mp_size = MFD.sd(MFD_MP_WIDTH), MFD.sd(MFD_MP_HEIGHT)
+            self.FSS = pygame.transform.smoothscale(self.FSS, _mp_size)
+            self.STKBTN = pygame.transform.smoothscale(self.STKBTN, _mp_size)
+
+
 # class MFD_Font
 class MFD_Font:
 

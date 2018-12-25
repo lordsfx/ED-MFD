@@ -8,15 +8,20 @@ from pygame.locals import *
 def draw_background(surface, img_MFD):
     surface.blit(img_MFD, (0,0))
 
-def draw_panel(mfd, surface, panel, add_shade=False, img_stkbtn=None):
+def draw_panel(mfd, surface, panel, add_shade=False, img_lib=None):
     panelbox = pygame.Surface(panel.get_size())
     if add_shade:
         panelbox.fill(COLOR_SHADE)
     panelbox.set_alpha(120, RLEACCEL)
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
-    if MFD.show_stkbtn and panel.mfd_mode == MFD_MODE_NORMAL:
-        mfd.blit(img_stkbtn, panel.get_offset())
+    if img_lib:
+        if MFD.show_stkbtn and panel.mfd_mode == MFD_MODE_NORMAL:
+            mfd.blit(img_lib.STKBTN, panel.get_offset())
+        if panel.mfd_mode == MFD_MODE_COMBAT:
+            mfd.blit(img_lib.STKBTN, panel.get_offset())
+        if panel.mfd_mode == MFD_MODE_EXPLORE:
+            mfd.blit(img_lib.FSS, panel.get_offset())
     #print("+", end="", flush=True)
 
 def draw_logo(panel):
@@ -24,10 +29,10 @@ def draw_logo(panel):
     panel.add_image(IMAGE_ED_LOGO)
     #panel.add_text([""])
 
-def draw_mode(mfd, mfd_mode, img_mode):
+def draw_mode(mfd, mfd_mode, img_lib):
     for m in range(0, len(MFD.MFD_MODE)):
         if (m + 1) == MFD.mode:
-            mfd.blit(img_mode, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
+            mfd.blit(img_lib.MODE, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
 
 def show_details_explore(panel, ship, star_class=None):
     _all_text = []
