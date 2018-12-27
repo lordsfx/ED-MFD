@@ -103,6 +103,7 @@ class Journal:
                         if emj["StationType"] in Journal.show_coriolis_types:
                             mpanel[MFD_MODE_NORMAL].clear_all()
                             mpanel[MFD_MODE_NORMAL].add_coriolis(emj["LandingPad"], Coriolis(MFD_MP_WIDTH))
+                            MFD.temp_hide_stick_buttons(True)
                         else:
                             station = universe.get_station_data(ship.at_station, ship.at_system)
                             if station:
@@ -120,10 +121,12 @@ class Journal:
                         ship.set_at_system(emj["StarSystem"])
                         ship.set_at_station(emj["StationName"])
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
+                        MFD.temp_hide_stick_buttons(False)
                         ship.mark_event_processed(em)
                     # DockingCancelled / DockingTimeout
                     if em == "DockingCancelled" or em == "DockingTimeout":
                         draw_logo(mpanel[MFD_MODE_NORMAL])
+                        MFD.temp_hide_stick_buttons(False)
                         ship.mark_event_processed(em)
                     # LoadGame
                     if em == "LoadGame":

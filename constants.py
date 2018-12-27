@@ -90,6 +90,27 @@ MFD_MODE_POS = [
     ( MMX[2], MMY[0], MMX[3], MMY[1] ),		# mode 3
     ( MMX[3], MMY[0], MMX[4], MMY[1] ) ]	# mode 4
 
+# ED status
+
+STX = [ 115, 233, 343, 400, 544, 675 ]
+STY = [ 696, 718 ]
+
+STS_ANALYSIS = 1
+STS_COMBAT = 2
+STS_FSS = 3
+STS_COOLDOWN = 4
+STS_MASSLOCK = 5
+
+STS_WIDTH = STX[5] - STX[0] + 1
+STS_HEIGHT = STY[1] - STY[0] + 1
+STS_POS = [
+    ( STX[0], STY[0], STX[5], STY[1] ),		# status entire
+    ( STX[0], STY[0], STX[1], STY[1] ),		# status 1
+    ( STX[1], STY[0], STX[2], STY[1] ),		# status 2
+    ( STX[2], STY[0], STX[3], STY[1] ),		# status 3
+    ( STX[3], STY[0], STX[4], STY[1] ),		# status 4
+    ( STX[4], STY[0], STX[5], STY[1] ) ]	# status 5
+
 # RP - right panel
 MFD_RP_X = 906
 MFD_RP_Y = 0

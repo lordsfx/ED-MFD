@@ -20,11 +20,11 @@ DISPLAY_HEIGHT = 800
 # MFD images
 IMAGE_WALLPAPER = "images/MFD-Display-wallpaper.png"
 IMAGE_BUTTON = "images/MFD-Display-button-s1.png"
-IMAGE_MODE = "images/MFD-Display-mode-s1.png"
-IMAGE_MODE_DARK = "images/MFD-Display-mode-dark-s1.png"
-IMAGE_ED_LOGO = "images/EliteDangerous_Logo.png"
+IMAGE_MODE = "images/MFD-Display-mode-status.png"
+IMAGE_MODE_DARK = "images/MFD-Display-mode-status-dark.png"
 IMAGE_STICK_BUTTON = "images/MFD-Display-stick-button.png"
 IMAGE_FSS = "images/MFD-Display-FSS.png"
+IMAGE_ED_LOGO = "images/EliteDangerous_Logo.png"
 
 # Coriolis images
 IMAGE_CORIOLIS_LAYOUT = "images/coriolis-layout-clean.png"

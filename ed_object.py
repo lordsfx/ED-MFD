@@ -107,8 +107,22 @@ class Ship:
         # MFD_HUD
         if self.status.is_flagged("in_analysis"):
             panel.add_text([ "  ANALYSIS MODE" ])
+            MFD.set_lp_status(STS_ANALYSIS, True)
+            MFD.set_lp_status(STS_COMBAT, False)
         else:
             panel.add_text([ "  COMBAT MODE" ])
+            MFD.set_lp_status(STS_ANALYSIS, False)
+            MFD.set_lp_status(STS_COMBAT, True)
+        # FSD Cooldown
+        if self.status.is_flagged("fsd_cooldown"):
+            MFD.set_lp_status(STS_COOLDOWN, True)
+        else:
+            MFD.set_lp_status(STS_COOLDOWN, False)
+        # FSD Masslock
+        if self.status.is_flagged("fsd_masslock"):
+            MFD.set_lp_status(STS_MASSLOCK, True)
+        else:
+            MFD.set_lp_status(STS_MASSLOCK, False)
 
     def update_status_pips(self, _pips, buttons):
         self.pips = _pips
@@ -149,6 +163,10 @@ class Ship:
         # MFD_FSS
         if self.guifocus == GUI_MODE_FSS:
             panel.add_text([ "  FSS ON" ])
+            MFD.set_lp_status(STS_FSS, True)
+        else:
+            panel.add_text([ " " ])
+            MFD.set_lp_status(STS_FSS, False)
         return
 
     def update_status_fuel(self, _fuel, buttons):

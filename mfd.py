@@ -100,7 +100,7 @@ MFD.lpn = Panel(MFD.sd(MFD_LP_X), MFD.sd(MFD_LP_Y), MFD.sd(MFD_LP_WIDTH), MFD.sd
 
 # misc init
 last_pad = 0
-mfd_mode = MFD_Mode()
+mfd_mode_status = MFD_Mode_Status()
 
 # set init background
 mfd.blit(img_MFD, (0, 0))
@@ -223,11 +223,11 @@ while True:
     #show_button_states(MFD.bmp)
     if MFD.has_update:
         draw_background(mfd, img_MFD)
-        draw_mode(mfd, mfd_mode, img_lib=image_lib)
+        draw_mode_status(mfd, mfd_mode_status, img_lib=image_lib)
         draw_panel(mfd, rpanel, MFD.rpn, False)
         draw_panel(mfd, mpanel, MFD.mpn[MFD.mode], img_lib=image_lib)
         #draw_panel(mfd, upanel, MFD.upn)
-        draw_panel(mfd, lpanel, MFD.lpn)
+        #draw_panel(mfd, lpanel, MFD.lpn)
         draw_button_states(mfd, MFD.bmp)
         pygame.display.flip()
         MFD.clear_update()

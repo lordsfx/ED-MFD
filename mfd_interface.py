@@ -17,10 +17,12 @@ class MFD:
     title = "Elite:Dangerous MFD"
     has_update = False
     show_stkbtn = True
+    temp_hide_stkbtn = False
 
     APP_SIZE = DISPLAY_WIDTH, DISPLAY_HEIGHT
     MFD_MODE = { 1:'NORMAL', 2:'COMBAT', 3:'EXPLORE', 4:'MINING' }
     mode = 0
+    LP_STATUS = [ None, 0, 0, 0, 0, 0 ]
 
     bmp = None
     rpn = None
@@ -57,8 +59,17 @@ class MFD:
         if MFD.mode < 1: MFD.mode = len(MFD.MFD_MODE)
         return MFD.mode
 
+    def temp_hide_stick_buttons(_on_off):
+        MFD.temp_hide_stkbtn = _on_off
+
     def toggle_show_stick_buttons():
         MFD.show_stkbtn = not MFD.show_stkbtn
+
+    def set_lp_status(_id, _on_off):
+        MFD.LP_STATUS[_id] = _on_off
+
+    def get_lp_status(_id):
+        return MFD.LP_STATUS[_id]
 
 
 # class Image
@@ -300,8 +311,8 @@ class Panel:
                     if h > self.height: h = self.height
                     surface.blit(coriolis.padnum, (position[0] + x, position[1] + y), (x, y, w, h))
 
-# class MFD_Mode
-class MFD_Mode:
+# class MFD_Mode_Status
+class MFD_Mode_Status:
 
     def __init__(self):
         self.ind_xy = []
@@ -315,3 +326,13 @@ class MFD_Mode:
             self.ind_xy.append( (x, y) )
             self.ind_area.append( (x, y, w, h) )
 
+        self.sts_xy = []
+        self.sts_area = []
+        for s in range(0, len(MFD.LP_STATUS)):
+            s_pos = STS_POS[s]
+            x = MFD.sd(s_pos[0])
+            y = MFD.sd(s_pos[1])
+            w = MFD.sd(s_pos[2] - s_pos[0])
+            h = MFD.sd(s_pos[3] - s_pos[1])
+            self.sts_xy.append( (x, y) )
+            self.sts_area.append( (x, y, w, h) )

@@ -16,7 +16,7 @@ def draw_panel(mfd, surface, panel, add_shade=False, img_lib=None):
     mfd.blit(panelbox, panel.get_offset())
     panel.render_panel(mfd)
     if img_lib:
-        if MFD.show_stkbtn and panel.mfd_mode == MFD_MODE_NORMAL:
+        if MFD.show_stkbtn and panel.mfd_mode == MFD_MODE_NORMAL and not MFD.temp_hide_stkbtn:
             mfd.blit(img_lib.STKBTN, panel.get_offset())
         if panel.mfd_mode == MFD_MODE_COMBAT:
             mfd.blit(img_lib.STKBTN, panel.get_offset())
@@ -29,10 +29,15 @@ def draw_logo(panel):
     panel.add_image(IMAGE_ED_LOGO)
     #panel.add_text([""])
 
-def draw_mode(mfd, mfd_mode, img_lib):
+def draw_mode_status(mfd, mfd_mode, img_lib):
+    # mode
     for m in range(0, len(MFD.MFD_MODE)):
         if (m + 1) == MFD.mode:
             mfd.blit(img_lib.MODE, mfd_mode.ind_xy[m], mfd_mode.ind_area[m])
+    # status
+    for s in range(0, len(MFD.LP_STATUS)):
+        if MFD.get_lp_status(s):
+            mfd.blit(img_lib.MODE, mfd_mode.sts_xy[s], mfd_mode.sts_area[s])
 
 def show_details_explore(panel, ship, star_class=None):
     _all_text = []
