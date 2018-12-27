@@ -12,14 +12,15 @@ from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
 J_PATH = "journals"
-J_LOG  = os.path.join(J_PATH, "Journal.*.log")
+J_LOG = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
+J_CARGO = os.path.join(J_PATH, "Cargo.json")
 
 class Journal:
     events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
-    patterns = [ J_LOG, J_STAT ]
+    patterns = [ J_LOG, J_STAT, J_CARGO ]
 
     @staticmethod
     def openfile(_filename, _seek=None):
@@ -141,7 +142,9 @@ class Journal:
                         ship.mark_event_processed(em)
                     # Cargo
                     if em == "Cargo":
-                        ship.set_cargo(emj["Vessel"], emj["Count"])
+                        ship.update_cargo_count(emj["Vessel"], emj["Count"])
+                        if "Inventory" in emj:
+                            ship.update_cargo_inventory(emj["Vessel"], emj["Inventory"])
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
                         ship.mark_event_processed(em)
         except KeyError as e:
@@ -159,6 +162,9 @@ class JournalEventHandler(PatternMatchingEventHandler):
         # Status json
         self.status_json = J_STAT
         self.status_fh = Journal.openfile(self.status_json)
+        # Cargo json
+        self.cargo_json = J_CARGO
+        self.cargo_fh = Journal.openfile(self.cargo_json)
 
     def on_any_event(self, event):
         if event.is_directory:
@@ -168,6 +174,9 @@ class JournalEventHandler(PatternMatchingEventHandler):
             if "Status" in event.src_path:
                 logger.debug("Status updated: %s" % event.src_path)
                 self.status_process()
+            if "Cargo" in event.src_path:
+                logger.debug("Cargo updated: %s" % event.src_path)
+                self.cargo_process()
             else:
                 logger.debug("Journal updated: %s" % event.src_path)
                 self.journal_filter()
@@ -179,6 +188,12 @@ class JournalEventHandler(PatternMatchingEventHandler):
                 self.status_json = event.src_path
                 self.status_fh = Journal.openfile(self.status_json)
                 self.status_process()
+            if "Cargo" in event.src_path:
+                logger.debug("Cargo created: %s" % event.src_path)
+                if self.cargo_fh: self.cargo_fh.close()
+                self.cargo_json = event.src_path
+                self.cargo_fh = Journal.openfile(self.cargo_json)
+                self.cargo_process()
             else:
                 logger.debug("Journal created: %s" % event.src_path)
                 if self.journal_fh: self.journal_fh.close()
@@ -198,6 +213,19 @@ class JournalEventHandler(PatternMatchingEventHandler):
                 self.status_fh.seek(0, io.SEEK_SET)
                 status = json.loads(self.status_fh.readline())
                 self.captured_events.append(status)
+            except Exception as e:
+                logger.debug(e)
+
+    def cargo_process(self):
+        if self.cargo_fh:
+            try:
+                self.cargo_fh.seek(0, io.SEEK_SET)
+                all_lines = ""
+                for line in self.cargo_fh:
+                    all_lines += line
+                #logger.debug("%s", all_lines)
+                cargo = json.loads(all_lines)
+                self.captured_events.append(cargo)
             except Exception as e:
                 logger.debug(e)
 

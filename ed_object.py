@@ -32,8 +32,8 @@ class Ship:
         self.fsd_target = None
         self.cargo_ship_count = 0
         self.cargo_srv_count = 0
-        self.cargo_ship = None
-        self.cargo_srv = None
+        self.cargo_ship_inventory = None
+        self.cargo_srv_inventory = None
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -60,13 +60,21 @@ class Ship:
         self.fsd_target = system
         logger.debug("FSD target: %s" % self.fsd_target)
 
-    def set_cargo(self, vessel, count):
+    def update_cargo_count(self, vessel, count):
         if vessel == "Ship":
             self.cargo_ship_count = int(count)
-            logger.debug("Cargo in Ship: %d" % self.cargo_ship_count)
+            logger.debug("Ship Cargo count: %d" % self.cargo_ship_count)
         else:
             self.cargo_srv_count = int(count)
-            logger.debug("Cargo in SRV: %d" % self.cargo_srv_count)
+            logger.debug("SRV Cargo count: %d" % self.cargo_srv_count)
+
+    def update_cargo_inventory(self, vessel, inventory):
+        if vessel == "Ship":
+            self.cargo_ship_inventory = inventory
+            logger.debug("Ship Cargo inventory: %s" % self.cargo_ship_inventory)
+        else:
+            self.cargo_srv_inventory = int(inventory)
+            logger.debug("SRV Cargo inventory: %s" % self.cargo_srv_inventory)
 
     def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)

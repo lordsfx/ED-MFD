@@ -61,9 +61,20 @@ def show_details_explore(panel, ship, star_class=None):
 def show_details_cargo(panel, ship):
     _all_text = []
     _all_text.append( ("Cargo", COLOR_GREEN) )
-    _all_text.append( ("  In ship: %d" % ship.cargo_ship_count, COLOR_ORANGE) )
+    _all_text.append( ("  In ship : %d" % ship.cargo_ship_count, COLOR_ORANGE) )
     if ship.cargo_srv_count > 0:
-        _all_text.append( ("  In SRV: %d" % ship.cargo_srv_count, COLOR_ORANGE) )
+        _all_text.append( ("  In SRV : %d" % ship.cargo_srv_count, COLOR_ORANGE) )
+    if ship.cargo_ship_inventory:
+        _all_text.append( (" ", COLOR_GREEN) )
+        _all_text.append( ("Ship Inventory", COLOR_GREEN) )
+        for _inv in ship.cargo_ship_inventory:
+            _name = _inv["Name"]
+            if "Name_Localised" in _inv: _name = _inv["Name_Localised"]
+            if "Stolen" in _inv:
+                _stolen = int(_inv["Stolen"])
+                if _stolen > 0: str_stolen = " (%d stolen)" % _stolen
+                else: str_stolen = ""
+            _all_text.append( ("  %s : %d%s" % (_name.capitalize(), _inv["Count"], str_stolen), COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):
