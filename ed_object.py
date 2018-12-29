@@ -90,11 +90,11 @@ class Ship:
             if "Hardpoint" in m["Slot"]:
                 logger.debug("Module: %s / %s" % (m["Slot"], m["Item"]))
                 if "Tiny" in m["Slot"]:
-                    self.hardpoint_tiny.append( (m["Slot"], m["Item"]) )
+                    self.hardpoint_tiny.append( (m["Slot"], m["Item"], m["Priority"]) )
                 if "Medium" in m["Slot"]:
-                    self.hardpoint_medium.append( (m["Slot"], m["Item"]) )
+                    self.hardpoint_medium.append( (m["Slot"], m["Item"], m["Priority"]) )
                 if "Large" in m["Slot"]:
-                    self.hardpoint_large.append( (m["Slot"], m["Item"]) )
+                    self.hardpoint_large.append( (m["Slot"], m["Item"], m["Priority"]) )
         self.hardpoint_tiny.sort()
         self.hardpoint_medium.sort()
         self.hardpoint_large.sort()

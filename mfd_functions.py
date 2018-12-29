@@ -83,24 +83,33 @@ def show_details_cargo(panel, ship):
     for _text in reversed(_all_text):
         panel.add_text( [ _text[0] ], _text[1] )
 
-def show_details_hardpoint(panel, ship):
+def show_details_hardpoint(panel, ship, ref_data):
     _all_text = []
-    _all_text.append( ("Hardpoints", COLOR_GREEN) )
-    if ship.hardpoint_large or ship.hardpoint_medium:
-        _all_text.append( (" ", COLOR_GREEN) )
     if ship.hardpoint_large:
-        _all_text.append( ("  Large", COLOR_GREEN) )
+        _all_text.append( ("Large Hardpoints", COLOR_GREEN) )
         for _hp in ship.hardpoint_large:
-            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
+            _item_name = _hp[1]
+            _full_name = ref_data.get_item_full_name(_item_name)
+            _priority = int(_hp[2]) + 1
+            if _full_name: _item_name = _full_name
+            _all_text.append( ("  %s  < %d >" % (_item_name, _priority), COLOR_ORANGE) )
     if ship.hardpoint_medium:
-        _all_text.append( ("  Medium", COLOR_GREEN) )
+        _all_text.append( ("Medium Hardpoints", COLOR_GREEN) )
         for _hp in ship.hardpoint_medium:
-            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
+            _item_name = _hp[1]
+            _full_name = ref_data.get_item_full_name(_item_name)
+            _priority = int(_hp[2]) + 1
+            if _full_name: _item_name = _full_name
+            _all_text.append( ("  %s  < %d >" % (_item_name, _priority), COLOR_ORANGE) )
     if ship.hardpoint_tiny:
         _all_text.append( (" ", COLOR_GREEN) )
-        _all_text.append( ("  Small", COLOR_GREEN) )
+        _all_text.append( ("Utility Mounts", COLOR_GREEN) )
         for _hp in ship.hardpoint_tiny:
-            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
+            _item_name = _hp[1]
+            _full_name = ref_data.get_item_full_name(_item_name)
+            _priority = int(_hp[2]) + 1
+            if _full_name: _item_name = _full_name
+            _all_text.append( ("  %s  < %d >" % (_item_name, _priority), COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):

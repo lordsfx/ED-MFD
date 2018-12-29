@@ -22,6 +22,7 @@ class Journal:
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT, J_CARGO, J_MODU ]
+    ref_data = Ref_Data()
 
     @staticmethod
     def openfile(_filename, _seek=None):
@@ -149,7 +150,7 @@ class Journal:
                     # ModuleInfo
                     if em == "ModuleInfo":
                         ship.update_modules(emj["Modules"])
-                        show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship)
+                        show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship, Journal.ref_data)
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
                         ship.mark_event_processed(em)
         except KeyError as e:

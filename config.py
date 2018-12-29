@@ -39,3 +39,7 @@ EDDB_PATH = "eddb"
 EDDB_SYSTEMS_DATA  = "systems_populated.json"
 EDDB_STATIONS_PRE  = "stations.json"
 EDDB_STATIONS_DATA = "stations_filtered.json"
+
+# Reference data
+DATA_PATH = "data"
+DATA_OUTFITTING = "outfitting.csv"

@@ -1,3 +1,9 @@
+import logging
+from common import *
+import os
+import config
+import csv
+
 GUI_NOFOCUS     = 0
 GUI_PANEL_INT   = 1	# Right hand side
 GUI_PANEL_EXT   = 2	# Left hand side
@@ -54,3 +60,18 @@ class Item_Size:
     CargoRack = { 'size1' : 2,  'size2' : 4,  'size3' : 8,   'size4' : 16,
                   'size5' : 32, 'size6' : 64, 'size7' : 128, 'size8' : 256 }
 
+class Ref_Data:
+    def __init__(self):
+        self.ref_data_outfit = []
+        try:
+            data = csv.reader(open(os.path.join(DATA_PATH, DATA_OUTFITTING), "r"))
+            for d in data:
+                self.ref_data_outfit.append(d)
+        except Exception as e:
+            logger.debug(e)
+
+    def get_item_full_name(self, item):
+        for data in self.ref_data_outfit:
+            if data[1].lower() == item.lower():
+                return "%s%s %s" % (data[7], data[8], data[3])
+        return None
