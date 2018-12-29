@@ -61,9 +61,12 @@ def show_details_explore(panel, ship, star_class=None):
 def show_details_cargo(panel, ship):
     _all_text = []
     _all_text.append( ("Cargo", COLOR_GREEN) )
-    _all_text.append( ("  In ship : %d" % ship.cargo_ship_count, COLOR_ORANGE) )
+    if ship.cargo_capacity > 0:
+        _all_text.append( ("  In ship : %dt / %dt" % (ship.cargo_ship_count, ship.cargo_capacity), COLOR_ORANGE) )
+    else:
+        _all_text.append( ("  In ship : %dt" % ship.cargo_ship_count, COLOR_ORANGE) )
     if ship.cargo_srv_count > 0:
-        _all_text.append( ("  In SRV : %d" % ship.cargo_srv_count, COLOR_ORANGE) )
+        _all_text.append( ("  In SRV : %dt" % ship.cargo_srv_count, COLOR_ORANGE) )
     if ship.cargo_ship_inventory:
         _all_text.append( (" ", COLOR_GREEN) )
         _all_text.append( ("Ship Inventory", COLOR_GREEN) )
@@ -72,9 +75,32 @@ def show_details_cargo(panel, ship):
             if "Name_Localised" in _inv: _name = _inv["Name_Localised"]
             if "Stolen" in _inv:
                 _stolen = int(_inv["Stolen"])
-                if _stolen > 0: str_stolen = " (%d stolen)" % _stolen
+                if _stolen > 0: str_stolen = " (%dt stolen)" % _stolen
                 else: str_stolen = ""
-            _all_text.append( ("  %s : %d%s" % (_name.capitalize(), _inv["Count"], str_stolen), COLOR_ORANGE) )
+            _all_text.append( ("  %s : %dt%s" % (_name.capitalize(), _inv["Count"], str_stolen), COLOR_ORANGE) )
+
+    panel.clear_all()
+    for _text in reversed(_all_text):
+        panel.add_text( [ _text[0] ], _text[1] )
+
+def show_details_hardpoint(panel, ship):
+    _all_text = []
+    _all_text.append( ("Hardpoints", COLOR_GREEN) )
+    if ship.hardpoint_large or ship.hardpoint_medium:
+        _all_text.append( (" ", COLOR_GREEN) )
+    if ship.hardpoint_large:
+        _all_text.append( ("  Large", COLOR_GREEN) )
+        for _hp in ship.hardpoint_large:
+            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
+    if ship.hardpoint_medium:
+        _all_text.append( ("  Medium", COLOR_GREEN) )
+        for _hp in ship.hardpoint_medium:
+            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
+    if ship.hardpoint_tiny:
+        _all_text.append( (" ", COLOR_GREEN) )
+        _all_text.append( ("  Small", COLOR_GREEN) )
+        for _hp in ship.hardpoint_tiny:
+            _all_text.append( ("    %s" % _hp[1], COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):

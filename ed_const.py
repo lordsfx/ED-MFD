@@ -49,3 +49,8 @@ class Status:
         for f in Status.ShipFlags:
             fl.append(f)
         return fl
+
+class Item_Size:
+    CargoRack = { 'size1' : 2,  'size2' : 4,  'size3' : 8,   'size4' : 16,
+                  'size5' : 32, 'size6' : 64, 'size7' : 128, 'size8' : 256 }
+

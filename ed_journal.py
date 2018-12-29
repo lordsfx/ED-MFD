@@ -6,7 +6,7 @@ import json
 import glob, io
 from config import *
 from ed_object import *
-from ed_status import *
+from ed_const import *
 from mfd_interface import *
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
@@ -15,12 +15,13 @@ J_PATH = "journals"
 J_LOG = os.path.join(J_PATH, "Journal.*.log")
 J_STAT = os.path.join(J_PATH, "Status.json")
 J_CARGO = os.path.join(J_PATH, "Cargo.json")
+J_MODU = os.path.join(J_PATH, "ModulesInfo.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo" ]
+    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
-    patterns = [ J_LOG, J_STAT, J_CARGO ]
+    patterns = [ J_LOG, J_STAT, J_CARGO, J_MODU ]
 
     @staticmethod
     def openfile(_filename, _seek=None):
@@ -59,8 +60,6 @@ class Journal:
                             ship.update_status_guifocus(emj["GuiFocus"], buttons, lpanel)
                         if "Fuel" in emj:
                             ship.update_status_fuel(emj["Fuel"], buttons)
-                        if "Cargo" in emj:
-                            ship.update_status_cargo(emj["Cargo"], buttons)
                         if "Latitude" in emj:
                             ship.update_status_bearings(emj["Latitude"], emj["Longitude"], emj["Heading"], emj["Altitude"])
                         ship.mark_event_processed(em)
@@ -147,6 +146,12 @@ class Journal:
                             ship.update_cargo_inventory(emj["Vessel"], emj["Inventory"])
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
                         ship.mark_event_processed(em)
+                    # ModuleInfo
+                    if em == "ModuleInfo":
+                        ship.update_modules(emj["Modules"])
+                        show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship)
+                        show_details_cargo(mpanel[MFD_MODE_MINING], ship)
+                        ship.mark_event_processed(em)
         except KeyError as e:
             logger.error("KeyError: %s" % e)
 
@@ -165,6 +170,9 @@ class JournalEventHandler(PatternMatchingEventHandler):
         # Cargo json
         self.cargo_json = J_CARGO
         self.cargo_fh = Journal.openfile(self.cargo_json)
+        # ModulesInfo json
+        self.module_json = J_MODU
+        self.module_fh = Journal.openfile(self.module_json)
 
     def on_any_event(self, event):
         if event.is_directory:
@@ -177,6 +185,9 @@ class JournalEventHandler(PatternMatchingEventHandler):
             if "Cargo" in event.src_path:
                 logger.debug("Cargo updated: %s" % event.src_path)
                 self.cargo_process()
+            if "ModulesInfo" in event.src_path:
+                logger.debug("Modules updated: %s" % event.src_path)
+                self.module_process()
             else:
                 logger.debug("Journal updated: %s" % event.src_path)
                 self.journal_filter()
@@ -194,6 +205,12 @@ class JournalEventHandler(PatternMatchingEventHandler):
                 self.cargo_json = event.src_path
                 self.cargo_fh = Journal.openfile(self.cargo_json)
                 self.cargo_process()
+            if "ModulesInfo" in event.src_path:
+                logger.debug("Modules created: %s" % event.src_path)
+                if self.module_fh: self.module_fh.close()
+                self.module_json = event.src_path
+                self.module_fh = Journal.openfile(self.module_json)
+                self.module_process()
             else:
                 logger.debug("Journal created: %s" % event.src_path)
                 if self.journal_fh: self.journal_fh.close()
@@ -226,6 +243,19 @@ class JournalEventHandler(PatternMatchingEventHandler):
                 #logger.debug("%s", all_lines)
                 cargo = json.loads(all_lines)
                 self.captured_events.append(cargo)
+            except Exception as e:
+                logger.debug(e)
+
+    def module_process(self):
+        if self.module_fh:
+            try:
+                self.module_fh.seek(0, io.SEEK_SET)
+                all_lines = ""
+                for line in self.module_fh:
+                    all_lines += line
+                #logger.debug("%s", all_lines)
+                module = json.loads(all_lines)
+                self.captured_events.append(module)
             except Exception as e:
                 logger.debug(e)
 

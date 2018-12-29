@@ -6,7 +6,7 @@ import threading
 import errno
 from config import *
 from constants import *
-from ed_status import *
+from ed_const import *
 from mfd_functions import *
 from mfd_interface import Button
 from library import *
@@ -27,13 +27,17 @@ class Ship:
         self.firegroup = 0
         self.guifocus = 0
         self.fuel = 0
-        self.cargo = 0
         self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
         self.fsd_target = None
         self.cargo_ship_count = 0
         self.cargo_srv_count = 0
         self.cargo_ship_inventory = None
         self.cargo_srv_inventory = None
+        self.modules = None
+        self.hardpoint_tiny = []
+        self.hardpoint_medium = []
+        self.hardpoint_large = []
+        self.cargo_capacity = 0
 
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
@@ -75,6 +79,32 @@ class Ship:
         else:
             self.cargo_srv_inventory = int(inventory)
             logger.debug("SRV Cargo inventory: %s" % self.cargo_srv_inventory)
+
+    def update_modules(self, modules):
+        self.modules = modules
+        self.hardpoint_tiny = []
+        self.hardpoint_medium = []
+        self.hardpoint_large = []
+        # hardpoints
+        for m in self.modules:
+            if "Hardpoint" in m["Slot"]:
+                logger.debug("Module: %s / %s" % (m["Slot"], m["Item"]))
+                if "Tiny" in m["Slot"]:
+                    self.hardpoint_tiny.append( (m["Slot"], m["Item"]) )
+                if "Medium" in m["Slot"]:
+                    self.hardpoint_medium.append( (m["Slot"], m["Item"]) )
+                if "Large" in m["Slot"]:
+                    self.hardpoint_large.append( (m["Slot"], m["Item"]) )
+        self.hardpoint_tiny.sort()
+        self.hardpoint_medium.sort()
+        self.hardpoint_large.sort()
+        # cargos
+        self.cargo_capacity = 0
+        for m in self.modules:
+            if "int_cargorack" in m["Item"]:
+                logger.debug("Module: %s / %s" % (m["Slot"], m["Item"]))
+                _item_size = m["Item"].split("_")[2]
+                self.cargo_capacity += Item_Size.CargoRack[_item_size]
 
     def update_status_flags(self, _flags, buttons, panel):
         self.status.update_flags(_flags)
@@ -180,11 +210,6 @@ class Ship:
     def update_status_fuel(self, _fuel, buttons):
         self.fuel = _fuel
         #logger.debug("Fuel (tons): %s" % self.fuel)
-        return
-
-    def update_status_cargo(self, _cargo, buttons):
-        self.cargo = _cargo
-        #logger.debug("Cargo (tons): %s" % self.cargo)
         return
 
     def update_status_bearings(self, _lat, _long, _head, _alt):
