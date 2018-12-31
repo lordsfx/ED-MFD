@@ -71,6 +71,7 @@ class Journal:
                         ship.mark_event_processed(em)
                     # StartJump
                     if em == "StartJump":
+                        ship.set_at_station(None)
                         _star_class = None
                         if emj["JumpType"] == "Hyperspace":
                             _star_class = emj["StarClass"]
@@ -79,6 +80,7 @@ class Journal:
                     # FSDJump
                     if em == "FSDJump":
                         ship.set_at_system(emj["StarSystem"])
+                        ship.set_at_station(None)
                         ship.set_fsd_target(None)
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)

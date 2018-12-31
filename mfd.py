@@ -119,6 +119,8 @@ journal_evh = JournalEventHandler()
 journal_obs = Observer()
 journal_obs.schedule(journal_evh, Journal.path, recursive=False)
 journal_obs.start()
+journal_evh.module_process()
+journal_evh.cargo_process()
 
 # user event timer
 EVENT_APP_LOOP = pygame.USEREVENT
