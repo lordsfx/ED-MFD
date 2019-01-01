@@ -65,6 +65,9 @@ class MFD:
     def toggle_show_stick_buttons():
         MFD.show_stkbtn = not MFD.show_stkbtn
 
+    def set_show_stick_buttons(_on_off):
+        MFD.show_stkbtn = _on_off
+
     def set_lp_status(_id, _on_off):
         MFD.LP_STATUS[_id] = _on_off
 

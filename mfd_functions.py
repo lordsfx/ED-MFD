@@ -156,27 +156,36 @@ def tick_button_states(buttons):
             b.tick()
     return tbc
 
-def load_mfd_states(buttons):
+def load_mfd_states(MFD):
+    buttons = MFD.bmp
     try:
         with open(MFD.state_file) as ifn:
             js = json.load(ifn)
+            logger.debug("buttons = %s" % js["buttons"])
             bi = 0
-            for state in js:
+            for b in js["buttons"]:
                 if buttons[bi]:
-                    buttons[bi].set_state(state)
+                    buttons[bi].set_state(b)
                 bi += 1
+            logger.debug("stkbtn = %s" % js["stkbtn"])
+            if js["stkbtn"]:
+                MFD.set_show_stick_buttons(True)
+            else:
+                MFD.set_show_stick_buttons(False)
         return True
     except EnvironmentError:
         return False
 
-def save_mfd_states(buttons):
+def save_mfd_states(MFD):
+    buttons = MFD.bmp
     try:
-        states = []
+        _b_states = []
         for b in buttons:
             if b:
-                states.append(b.state)
+                _b_states.append(b.state)
             else:
-                states.append(0)
+                _b_states.append(0)
+        states = { 'buttons': _b_states, 'stkbtn': MFD.show_stkbtn }
         with open(MFD.state_file, 'w') as ofn:
             json.dump(states, ofn)
         return True
