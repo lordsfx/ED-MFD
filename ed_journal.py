@@ -151,7 +151,8 @@ class Journal:
                         ship.mark_event_processed(em)
                     # ModuleInfo
                     if em == "ModuleInfo":
-                        ship.update_modules(emj["Modules"])
+                        if "Modules" in emj:
+                            ship.update_modules(emj["Modules"])
                         show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship, Journal.ref_data)
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
                         ship.mark_event_processed(em)

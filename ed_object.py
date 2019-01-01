@@ -39,6 +39,14 @@ class Ship:
         self.hardpoint_large = []
         self.cargo_capacity = 0
 
+    def export_states(self):
+        return (self.at_system, self.at_station)
+
+    def import_states(self, _states):
+        self.at_system = _states[0]
+        self.at_station = _states[1]
+        return
+
     def update_event_memory(self, j_event):
         self.event_memory[j_event["event"]] = ( True, j_event )		# New event = True, Event from Journal
 
@@ -220,6 +228,7 @@ class Ship:
     def get_status(self):
         return self.status
 
+
 class System:
     def __init__(self, _id, _name):
         self.id = _id
@@ -240,6 +249,7 @@ class System:
             if getattr(e, 'errno', 0) == errno.ENOENT:
                 logger.error("File %s not found, ignored..." % fn)
         return systemObj
+
 
 class Universe:
     is_loading = False
@@ -292,6 +302,7 @@ class Universe:
         logger.debug(_text)
         Universe.is_refreshing_db = False
         self.thread_load_data(_info_panel)
+
 
 class Station:
     COR_PAD_CLOCK = [ 0,                                   # direction at N o'clock

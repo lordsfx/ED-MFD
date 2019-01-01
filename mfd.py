@@ -107,7 +107,7 @@ mfd.blit(img_MFD, (0, 0))
 noframe = True
 
 # load last states, if any
-if load_button_states(MFD.bmp):
+if load_mfd_states(MFD.bmp):
     #logger.debug("Loaded last states - ")
     #show_button_states(MFD.bmp)
     draw_background(mfd, img_MFD)
@@ -195,7 +195,7 @@ while True:
                 noframe = True
             MFD.set_update()
         if event.type == QUIT or event.key == pygame.K_ESCAPE:
-            save_button_states(MFD.bmp)
+            save_mfd_states(MFD.bmp)
             journal_obs.stop()
             break
 

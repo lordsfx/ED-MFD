@@ -156,7 +156,7 @@ def tick_button_states(buttons):
             b.tick()
     return tbc
 
-def load_button_states(buttons):
+def load_mfd_states(buttons):
     try:
         with open(MFD.state_file) as ifn:
             js = json.load(ifn)
@@ -169,7 +169,7 @@ def load_button_states(buttons):
     except EnvironmentError:
         return False
 
-def save_button_states(buttons):
+def save_mfd_states(buttons):
     try:
         states = []
         for b in buttons:
