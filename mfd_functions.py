@@ -168,10 +168,7 @@ def load_mfd_states(MFD):
                     buttons[bi].set_state(b)
                 bi += 1
             logger.debug("stkbtn = %s" % js["stkbtn"])
-            if js["stkbtn"]:
-                MFD.set_show_stick_buttons(True)
-            else:
-                MFD.set_show_stick_buttons(False)
+            MFD.set_show_stick_buttons(js["stkbtn"])
         return True
     except EnvironmentError:
         return False
