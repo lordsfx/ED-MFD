@@ -257,16 +257,19 @@ class Panel:
         MFD.set_update()
 
     def add_image(self, imagefile):
-        img = pygame.image.load(imagefile)
-        s_height = img.get_height()
-        s_width = self.width - 16
-        if img.get_width() > s_width:
-            s_height = int(s_width * img.get_height() / img.get_width())
-            img = pygame.transform.smoothscale(img, (s_width, s_height))
-        num_rows = int((s_height + self.f_size - 1) / self.f_size)
-        self.shift_lines(num_rows, "empty")
-        self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
-        MFD.set_update()
+        try:
+            img = pygame.image.load(imagefile)
+            s_height = img.get_height()
+            s_width = self.width - 16
+            if img.get_width() > s_width:
+                s_height = int(s_width * img.get_height() / img.get_width())
+                img = pygame.transform.smoothscale(img, (s_width, s_height))
+            num_rows = int((s_height + self.f_size - 1) / self.f_size)
+            self.shift_lines(num_rows, "empty")
+            self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
+            MFD.set_update()
+        except Exception as e:
+            logger.error("Error: %s" % e)
 
     def add_coriolis(self, pad, _coriolis):
         num_rows = int((_coriolis.height + self.f_size - 1) / self.f_size)

@@ -43,3 +43,6 @@ EDDB_STATIONS_DATA = "stations_filtered.json"
 # Reference data
 DATA_PATH = "data"
 DATA_OUTFITTING = "outfitting.csv"
+
+# Screenshot path
+PATH_SCREENSHOT = "screenshot"

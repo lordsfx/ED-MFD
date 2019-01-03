@@ -1,6 +1,7 @@
 import logging
 from common import *
 import os, sys
+from pathlib import Path
 import time
 import json
 import glob, io
@@ -18,7 +19,7 @@ J_CARGO = os.path.join(J_PATH, "Cargo.json")
 J_MODU = os.path.join(J_PATH, "ModulesInfo.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo" ]
+    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo", "Screenshot" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT, J_CARGO, J_MODU ]
@@ -155,6 +156,12 @@ class Journal:
                             ship.update_modules(emj["Modules"])
                         show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship, Journal.ref_data)
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
+                        ship.mark_event_processed(em)
+                    # Screenshot
+                    if em == "Screenshot":
+                        _ss_file = emj["Filename"].replace("\\ED_Pictures", PATH_SCREENSHOT).replace("\\", os.sep)
+                        rpanel.add_image(_ss_file)
+                        rpanel.add_text([ "Screenshot captured" ])
                         ship.mark_event_processed(em)
         except KeyError as e:
             logger.error("KeyError: %s" % e)
