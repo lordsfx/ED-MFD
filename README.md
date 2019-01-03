@@ -1,8 +1,8 @@
 Custom build interactive panel for Elite:Dangerous with Thrustmaster MFD Cougar
 - required libraries
-  - pygame
-  - watchdog
-  - requests
+  - pygame (1.9.4 or up)
+  - watchdog (0.9.0 or up)
+  - requests (2.20.1 or up)
   
 How it works
 - AHK (AutoHotKey) script mfd-macro.ahk is used to interact with this application by sending Ctrl key combinations directly to it
