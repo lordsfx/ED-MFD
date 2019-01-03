@@ -19,7 +19,7 @@ J_CARGO = os.path.join(J_PATH, "Cargo.json")
 J_MODU = os.path.join(J_PATH, "ModulesInfo.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseExit", "Location", "DockingGranted", "Docked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo", "Screenshot" ]
+    events_monitor = [ "Status", "SupercruiseEntry", "SupercruiseExit", "Location", "DockingGranted", "Docked", "Undocked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo", "Screenshot" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT, J_CARGO, J_MODU ]
@@ -85,6 +85,11 @@ class Journal:
                         ship.set_fsd_target(None)
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
+                    # SupercruiseEntry
+                    if em == "SupercruiseEntry":
+                        ship.set_at_system(emj["StarSystem"])
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
+                        ship.mark_event_processed(em)
                     # SupercruiseExit
                     if em == "SupercruiseExit":
                         rpanel.add_text([ "Arrived at %s, %s" % (emj["Body"], emj["StarSystem"]) ])
@@ -126,6 +131,11 @@ class Journal:
                         ship.set_at_station(emj["StationName"])
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         MFD.temp_hide_stick_buttons(False)
+                        ship.mark_event_processed(em)
+                    # Undocked
+                    if em == "Undocked":
+                        ship.set_at_station(None)
+                        show_details_explore(mpanel[MFD_MODE_EXPLORE], ship)
                         ship.mark_event_processed(em)
                     # DockingCancelled / DockingTimeout
                     if em == "DockingCancelled" or em == "DockingTimeout":
