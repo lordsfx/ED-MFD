@@ -19,7 +19,7 @@ J_CARGO = os.path.join(J_PATH, "Cargo.json")
 J_MODU = os.path.join(J_PATH, "ModulesInfo.json")
 
 class Journal:
-    events_monitor = [ "Status", "SupercruiseEntry", "SupercruiseExit", "Location", "DockingGranted", "Docked", "Undocked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo", "Screenshot" ]
+    events_monitor = [ "Status", "SupercruiseEntry", "SupercruiseExit", "Location", "DockingGranted", "Docked", "Undocked", "DockingCancelled", "DockingTimeout", "LoadGame", "ReceiveText", "FSDTarget", "StartJump", "FSDJump", "Cargo", "ModuleInfo", "FSSDiscoveryScan", "Screenshot" ]
     show_coriolis_types = [ "Coriolis", "Orbis" ]
     path = J_PATH
     patterns = [ J_LOG, J_STAT, J_CARGO, J_MODU ]
@@ -166,6 +166,17 @@ class Journal:
                             ship.update_modules(emj["Modules"])
                         show_details_hardpoint(mpanel[MFD_MODE_COMBAT], ship, Journal.ref_data)
                         show_details_cargo(mpanel[MFD_MODE_MINING], ship)
+                        ship.mark_event_processed(em)
+                    # FSSDiscoveryScan
+                    if em == "FSSDiscoveryScan":
+                        _body_count = int(emj["BodyCount"])
+                        _non_body_count = int(emj["NonBodyCount"])
+                        _scanned = "Discovered %d new " % _body_count
+                        _scanned += "body" if _body_count == 1 else "bodies"
+                        if _non_body_count > 0:
+                            _scanned += " and %d signal" % _non_body_count
+                            if _non_body_count > 1: _scanned += "s"
+                        rpanel.add_text([ "%s" % _scanned ])
                         ship.mark_event_processed(em)
                     # Screenshot
                     if em == "Screenshot":
