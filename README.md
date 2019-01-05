@@ -14,3 +14,4 @@ Sample Screenshot(s):
 
 ![ED-MFD-1](images/ED-MFD.screenshot.1.png)
 ![ED-MFD-2](images/ED-MFD.screenshot.2.png)
+![ED-MFD-3](images/ED-MFD.screenshot.3.png)
