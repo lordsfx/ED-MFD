@@ -13,3 +13,4 @@ How it works
 Sample Screenshot(s):
 
 ![ED-MFD-1](images/ED-MFD.screenshot.1.png)
+![ED-MFD-2](images/ED-MFD.screenshot.2.png)
