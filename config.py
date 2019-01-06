@@ -40,6 +40,11 @@ EDDB_SYSTEMS_DATA  = "systems_populated.json"
 EDDB_STATIONS_PRE  = "stations.json"
 EDDB_STATIONS_DATA = "stations_filtered.json"
 
+# EDDiscovery data
+EDD_PATH = "edd"
+EDD_PLANETS = "Planets"
+EDD_STARS = "Stars"
+
 # Reference data
 DATA_PATH = "data"
 DATA_OUTFITTING = "outfitting.csv"

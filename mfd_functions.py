@@ -1,4 +1,6 @@
-import sys, pygame
+import sys
+import os
+import pygame
 import json
 from mfd_interface import *
 from pygame.locals import *
@@ -40,23 +42,28 @@ def draw_mode_status(mfd, mfd_mode, img_lib):
             mfd.blit(img_lib.MODE, mfd_mode.sts_xy[s], mfd_mode.sts_area[s])
 
 def show_details_explore(panel, ship, star_class=None):
-    _all_text = []
-    _all_text.append( ("Current Location", COLOR_GREEN) )
+    _all = []
+    _all.append( ("text", "Current Location", COLOR_GREEN) )
     _loc = "  "
     if ship.at_station: _loc += "%s / " % ship.at_station
     if ship.at_system:
         _loc += ship.at_system
-        _all_text.append( (_loc, COLOR_ORANGE) )
+        _all.append( ("text", _loc, COLOR_ORANGE) )
     if ship.fsd_target:
-        _all_text.append( (" ", COLOR_GREEN) )
-        _all_text.append( ("Next Jump", COLOR_GREEN) )
-        _all_text.append( ("  %s" % ship.fsd_target, COLOR_ORANGE) )
+        _all.append( ("text", " ", COLOR_GREEN) )
+        _all.append( ("text", "Next Jump", COLOR_GREEN) )
+        _all.append( ("text", "  %s" % ship.fsd_target, COLOR_ORANGE) )
         if star_class:
-            _all_text.append( ("  Class %s" % star_class, COLOR_ORANGE) )
-
+            _all.append( ("text", "  Class %s" % star_class, COLOR_ORANGE) )
+            _star_img = "%s/%s.png" % (os.path.join(EDD_PATH, EDD_STARS), star_class)
+            _all.append( ("image", _star_img, None) )
+            
     panel.clear_all()
-    for _text in reversed(_all_text):
-        panel.add_text( [ _text[0] ], _text[1] )
+    for _line in reversed(_all):
+        if _line[0] == "text":
+            panel.add_text( [ _line[1] ], _line[2] )
+        if _line[0] == "image":
+            panel.add_image( _line[1] )
 
 def show_details_cargo(panel, ship):
     _all_text = []
