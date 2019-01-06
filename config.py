@@ -6,7 +6,7 @@ LOG_FILE = "mfd-debug.log"
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(funcName)s - %(message)s"
 
 # Version
-MFD_VER = "1.5.0 (E:D 3.3)"
+MFD_VER = "1.5.1 (E:D 3.3)"
 
 # Fonts
 #DEFAULT_FONT = "fonts/Eurostile.ttf"

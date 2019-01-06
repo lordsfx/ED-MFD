@@ -76,7 +76,7 @@ class Journal:
                         if emj["JumpType"] == "Hyperspace":
                             _star_class = emj["StarClass"]
                             _star_img = "%s/%s.png" % (os.path.join(EDD_PATH, EDD_STARS), _star_class)
-                            rpanel.add_image(_star_img)
+                            rpanel.add_image(_star_img, attr=(10, 4))
                             rpanel.add_text([ "Next jump to star class %s" % _star_class ])
                         show_details_explore(mpanel[MFD_MODE_EXPLORE], ship, star_class=_star_class)
                         ship.mark_event_processed(em)

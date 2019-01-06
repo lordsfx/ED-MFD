@@ -56,14 +56,14 @@ def show_details_explore(panel, ship, star_class=None):
         if star_class:
             _all.append( ("text", "  Class %s" % star_class, COLOR_ORANGE) )
             _star_img = "%s/%s.png" % (os.path.join(EDD_PATH, EDD_STARS), star_class)
-            _all.append( ("image", _star_img, None) )
+            _all.append( ("image", _star_img, (10, 4)) )
             
     panel.clear_all()
     for _line in reversed(_all):
         if _line[0] == "text":
             panel.add_text( [ _line[1] ], _line[2] )
         if _line[0] == "image":
-            panel.add_image( _line[1] )
+            panel.add_image( _line[1], attr=_line[2] )
 
 def show_details_cargo(panel, ship):
     _all_text = []

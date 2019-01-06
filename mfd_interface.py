@@ -256,7 +256,7 @@ class Panel:
         self.lines = [ ( _type, "", COLOR_BLACK ) ] * num_lines + self.lines[:(self.rows - num_lines)]
         MFD.set_update()
 
-    def add_image(self, imagefile):
+    def add_image(self, imagefile, attr=None):
         try:
             img = pygame.image.load(imagefile)
             s_height = img.get_height()
@@ -266,7 +266,7 @@ class Panel:
                 img = pygame.transform.smoothscale(img, (s_width, s_height))
             num_rows = int((s_height + self.f_size - 1) / self.f_size)
             self.shift_lines(num_rows, "empty")
-            self.lines = [ ( "image", img, COLOR_BLACK ) ] + self.lines[:(self.rows - 1)]
+            self.lines = [ ( "image", img, attr ) ] + self.lines[:(self.rows - 1)]
             MFD.set_update()
         except Exception as e:
             logger.error("Error: %s" % e)
@@ -289,10 +289,16 @@ class Panel:
                 surface.blit(label, (self.pos_x + 3, self.pos_y + row * self.f_size))
             if _type == "image":
                 # _content = pygame surface
-                # _extra_attr = not used
-                x_offset = int((self.width - _content.get_width()) / 2)
-                num_rows = int((_content.get_height() + self.f_size - 1) / self.f_size)
-                y_offset = int((num_rows * self.f_size - _content.get_height()) / 2)
+                # _extra_attr = offset: (x_offset, y_offset)
+                if _extra_attr:
+                    x_offset = _extra_attr[0]
+                    _extra_height = _extra_attr[1] * 2
+                else:
+                    x_offset = int((self.width - _content.get_width()) / 2)
+                    _extra_height = 0
+                _img_height = _content.get_height()
+                num_rows = int((_img_height + _extra_height + self.f_size - 1) / self.f_size)
+                y_offset = int((num_rows * self.f_size - _img_height) / 2)
                 surface.blit(_content, (self.pos_x + x_offset, self.pos_y + row * self.f_size + y_offset))
             if _type == "coriolis":
                 # _content = pad number
