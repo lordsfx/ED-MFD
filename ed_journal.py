@@ -75,6 +75,7 @@ class Journal:
                         _star_class = None
                         if emj["JumpType"] == "Hyperspace":
                             _star_class = emj["StarClass"]
+                            ship.set_fsd_target(emj["StarSystem"], star_class=_star_class)
                             _star_img = "%s/%s.png" % (os.path.join(EDD_PATH, EDD_STARS), _star_class)
                             rpanel.add_image(_star_img, attr=(10, 4))
                             rpanel.add_text([ "Next jump to star class %s" % _star_class ])

@@ -84,7 +84,7 @@ def show_details_cargo(panel, ship):
                 _stolen = int(_inv["Stolen"])
                 if _stolen > 0: str_stolen = " (%dt stolen)" % _stolen
                 else: str_stolen = ""
-            _all_text.append( ("  %s : %dt%s" % (_name.capitalize(), _inv["Count"], str_stolen), COLOR_ORANGE) )
+            _all_text.append( ("  %s : %dt%s" % (_name.title(), _inv["Count"], str_stolen), COLOR_ORANGE) )
 
     panel.clear_all()
     for _text in reversed(_all_text):

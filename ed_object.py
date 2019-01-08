@@ -29,6 +29,7 @@ class Ship:
         self.fuel = 0
         self.bearings = (0, 0, 0, 0)	# (Latitude, Longitude, Heading, Altitude)
         self.fsd_target = None
+        self.fsd_target_class = None
         self.cargo_ship_count = 0
         self.cargo_srv_count = 0
         self.cargo_ship_inventory = None
@@ -68,9 +69,13 @@ class Ship:
         self.at_station = station
         logger.debug("At station: %s" % self.at_station)
 
-    def set_fsd_target(self, system):
-        self.fsd_target = system
-        logger.debug("FSD target: %s" % self.fsd_target)
+    def set_fsd_target(self, system, star_class=None):
+        if not star_class:
+            self.fsd_target = system
+            logger.debug("FSD target: %s" % self.fsd_target)
+        if star_class and system == self.fsd_target:
+            self.fsd_target_class = star_class
+            logger.debug("FSD target class: %s" % self.fsd_target_class)
 
     def update_cargo_count(self, vessel, count):
         if vessel == "Ship":
