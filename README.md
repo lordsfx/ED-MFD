@@ -1,3 +1,6 @@
+## NOTE: This repo is no longer being maintained. However, an updated version is coming soon!
+
+
 Custom build interactive panel for Elite:Dangerous with Thrustmaster MFD Cougar
 - required libraries
   - pygame (1.9.4 or up)
